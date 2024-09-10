@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-const Wrapper = styled.div`
+const Wrapper = styled.nav`
   position: fixed;
   top: 0;
   width: 100%;
@@ -14,7 +14,7 @@ const Wrapper = styled.div`
   a {
     height: 100%;
     text-decoration: none;
-    color: black;
+    color: whitesmoke;
   }
 `;
 
