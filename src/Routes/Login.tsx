@@ -84,12 +84,18 @@ const GithubButton = styled.div`
   color: white;
   border-radius: 10px;
   width: 100%;
+  a {
+    color: white;
+    text-decoration: none;
+  }
 `;
 
 interface IForm {
   id: string;
   pw: string;
 }
+
+const CLIENT_ID = "Ov23likK8jCwRyDMDNi8";
 
 function Login() {
   const navigate = useNavigate();
@@ -120,7 +126,11 @@ function Login() {
         </LoginForm>
         <GithubButton>
           <FontAwesomeIcon icon={faGithub} size="2x" />
-          <span>log in with a github</span>
+          <Link
+            to={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}`}
+          >
+            log in with a github
+          </Link>
         </GithubButton>
       </Popup>
     </Wrapper>
