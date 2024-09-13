@@ -127,7 +127,7 @@ function Login() {
         <GithubButton>
           <FontAwesomeIcon icon={faGithub} size="2x" />
           <Link
-            to={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}`}
+            to={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=read:user user:email`}
           >
             log in with a github
           </Link>

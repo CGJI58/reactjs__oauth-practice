@@ -10,10 +10,12 @@ function Userinfo() {
   const location = useLocation();
   const userId = new URLSearchParams(location.search).get("id");
   const userPw = new URLSearchParams(location.search).get("pw");
+  const githubCode = new URLSearchParams(location.search).get("code");
   return (
     <Wrapper>
       <span>ID : {userId}</span>
       <span>PW : {userPw}</span>
+      <span>github code : {githubCode}</span>
     </Wrapper>
   );
 }
