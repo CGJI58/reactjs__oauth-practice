@@ -4,6 +4,53 @@ import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
+const CLIENT_ID = "Ov23likK8jCwRyDMDNi8";
+
+interface IForm {
+  id: string;
+  pw: string;
+}
+
+function Login() {
+  const navigate = useNavigate();
+  const { register, handleSubmit } = useForm<IForm>();
+  const onValid = (data: IForm) => {
+    navigate(`/userinfo?id=${data.id}&pw=${data.pw}`);
+  };
+  return (
+    <Wrapper>
+      <Popup>
+        <ExitBtn>
+          <Link to="/">❌</Link>
+        </ExitBtn>
+        <Title>Log In</Title>
+        <LoginForm onSubmit={handleSubmit(onValid)}>
+          <IDPWBox>
+            <input
+              placeholder="ID"
+              {...register("id", { required: true, minLength: 4 })}
+            />
+            <input
+              type="password"
+              placeholder="PW"
+              {...register("pw", { required: true, minLength: 4 })}
+            />
+          </IDPWBox>
+          <LoginButton>log in</LoginButton>
+        </LoginForm>
+        <GithubButton>
+          <FontAwesomeIcon icon={faGithub} size="2x" />
+          <Link
+            to={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=read:user user:email`}
+          >
+            log in with a github
+          </Link>
+        </GithubButton>
+      </Popup>
+    </Wrapper>
+  );
+}
+
 const Wrapper = styled.div`
   position: fixed;
   top: 0;
@@ -89,52 +136,5 @@ const GithubButton = styled.div`
     text-decoration: none;
   }
 `;
-
-interface IForm {
-  id: string;
-  pw: string;
-}
-
-const CLIENT_ID = "Ov23likK8jCwRyDMDNi8";
-
-function Login() {
-  const navigate = useNavigate();
-  const { register, handleSubmit } = useForm<IForm>();
-  const onValid = (data: IForm) => {
-    navigate(`/userinfo?id=${data.id}&pw=${data.pw}`);
-  };
-  return (
-    <Wrapper>
-      <Popup>
-        <ExitBtn>
-          <Link to="/">❌</Link>
-        </ExitBtn>
-        <Title>Log In</Title>
-        <LoginForm onSubmit={handleSubmit(onValid)}>
-          <IDPWBox>
-            <input
-              placeholder="ID"
-              {...register("id", { required: true, minLength: 4 })}
-            />
-            <input
-              type="password"
-              placeholder="PW"
-              {...register("pw", { required: true, minLength: 4 })}
-            />
-          </IDPWBox>
-          <LoginButton>log in</LoginButton>
-        </LoginForm>
-        <GithubButton>
-          <FontAwesomeIcon icon={faGithub} size="2x" />
-          <Link
-            to={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=read:user user:email`}
-          >
-            log in with a github
-          </Link>
-        </GithubButton>
-      </Popup>
-    </Wrapper>
-  );
-}
 
 export default Login;
