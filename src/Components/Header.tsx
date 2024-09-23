@@ -1,6 +1,19 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
+function Header() {
+  return (
+    <Wrapper>
+      <Link to="/">
+        <Col>Home</Col>
+      </Link>
+      <Link to="/login">
+        <Col>Login</Col>
+      </Link>
+    </Wrapper>
+  );
+}
+
 const Wrapper = styled.nav`
   position: fixed;
   top: 0;
@@ -26,21 +39,5 @@ const Col = styled.div`
   align-items: center;
   cursor: pointer;
 `;
-
-function Header() {
-  return (
-    <Wrapper>
-      <Link to="/">
-        <Col>Home</Col>
-      </Link>
-      <Link to="/login">
-        <Col>Login</Col>
-      </Link>
-      <Link to="/userinfo">
-        <Col>Userinfo</Col>
-      </Link>
-    </Wrapper>
-  );
-}
 
 export default Header;
