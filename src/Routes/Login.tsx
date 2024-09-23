@@ -12,11 +12,6 @@ interface IForm {
 }
 
 function Login() {
-  const navigate = useNavigate();
-  const { register, handleSubmit } = useForm<IForm>();
-  const onValid = (data: IForm) => {
-    navigate(`/userinfo?id=${data.id}&pw=${data.pw}`);
-  };
   return (
     <Wrapper>
       <Popup>
@@ -24,26 +19,12 @@ function Login() {
           <Link to="/">❌</Link>
         </ExitBtn>
         <Title>Log In</Title>
-        <LoginForm onSubmit={handleSubmit(onValid)}>
-          <IDPWBox>
-            <input
-              placeholder="ID"
-              {...register("id", { required: true, minLength: 4 })}
-            />
-            <input
-              type="password"
-              placeholder="PW"
-              {...register("pw", { required: true, minLength: 4 })}
-            />
-          </IDPWBox>
-          <LoginButton>log in</LoginButton>
-        </LoginForm>
         <GithubButton>
           <FontAwesomeIcon icon={faGithub} size="2x" />
           <Link
             to={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=read:user user:email`}
           >
-            log in with a github
+            Log in with a github
           </Link>
         </GithubButton>
       </Popup>

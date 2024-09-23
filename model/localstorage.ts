@@ -4,21 +4,21 @@ interface ILocalStorage {
   user_diaries: IUserDiary[];
 }
 
-export const loadDiary = (usersGhCode: string) => {
+export const loadDiary = (userGhEmail: string) => {
   const localUserDiary = localStorage.getItem(LOCAL_USER_DIARY);
   if (localUserDiary) {
     const data: ILocalStorage = JSON.parse(localUserDiary);
-    const result = data.user_diaries.find(
-      (item) => item.ghCode === usersGhCode
+    const userData = data.user_diaries.find(
+      (item) => item.ghEmail === userGhEmail
     );
-    if (!result) return;
-    return result;
+    if (!userData) return;
+    return userData;
   }
   return;
 };
 
 interface IUserDiary {
-  ghCode: string;
+  ghEmail: string;
   diary: {
     date: number;
     memo: string;
