@@ -1,17 +1,16 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
-import { Link, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-
-const CLIENT_ID = "Ov23likK8jCwRyDMDNi8";
-
-interface IForm {
-  id: string;
-  pw: string;
-}
+import { Link } from "react-router-dom";
 
 function Login() {
+  const baseUrl = "https://github.com/login/oauth/authorize";
+  const config = {
+    client_id: process.env.REACT_APP_CLIENT_ID ?? "",
+    scope: "read:user user:email",
+  };
+  const params = new URLSearchParams(config).toString();
+  const finalUrl = `${baseUrl}?${params}`;
   return (
     <Wrapper>
       <Popup>
@@ -21,11 +20,7 @@ function Login() {
         <Title>Log In</Title>
         <GithubButton>
           <FontAwesomeIcon icon={faGithub} size="2x" />
-          <Link
-            to={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=read:user user:email`}
-          >
-            Log in with a github
-          </Link>
+          <Link to={finalUrl}>Log in with a github</Link>
         </GithubButton>
       </Popup>
     </Wrapper>
