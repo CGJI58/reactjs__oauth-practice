@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 function Login() {
   const baseUrl = "https://github.com/login/oauth/authorize";
@@ -11,6 +12,15 @@ function Login() {
   };
   const params = new URLSearchParams(config).toString();
   const finalUrl = `${baseUrl}?${params}`;
+  const location = useLocation();
+  const ghCode = new URLSearchParams(location.search).get("code");
+  useEffect(() => {
+    if (ghCode) {
+      const accessTokenUrl = getAccessTokenUrl(ghCode);
+      console.log(accessTokenUrl);
+      fetchAccessToken(accessTokenUrl);
+    }
+  }, [ghCode]);
   return (
     <Wrapper>
       <Popup>
@@ -18,10 +28,17 @@ function Login() {
           <Link to="/">❌</Link>
         </ExitBtn>
         <Title>Log In</Title>
-        <GithubButton>
-          <FontAwesomeIcon icon={faGithub} size="2x" />
-          <Link to={finalUrl}>Log in with a github</Link>
-        </GithubButton>
+        <Link to={finalUrl}>
+          <GithubButton>
+            <FontAwesomeIcon icon={faGithub} size="2x" />
+            <span>get gh code</span>
+          </GithubButton>
+        </Link>
+        {ghCode ? (
+          <LoginButton>
+            <Link to={getAccessTokenUrl(ghCode)}>Log in</Link>
+          </LoginButton>
+        ) : null}
       </Popup>
     </Wrapper>
   );
@@ -112,5 +129,24 @@ const GithubButton = styled.div`
     text-decoration: none;
   }
 `;
+
+const getAccessTokenUrl = (ghCode: string) => {
+  const baseUrl = "https://github.com/login/oauth/access_token";
+  const config = {
+    client_id: process.env.REACT_APP_CLIENT_ID ?? "",
+    client_secret: process.env.REACT_APP_CLIENT_SECRET ?? "",
+    code: ghCode,
+  };
+  const params = new URLSearchParams(config).toString();
+  const finalUrl = `${baseUrl}?${params}`;
+  return finalUrl;
+};
+
+const fetchAccessToken = async (accessTokenUrl: string) => {
+  const data = await fetch(accessTokenUrl);
+  const json = await data.json();
+  console.log(json);
+  // return json;
+};
 
 export default Login;
