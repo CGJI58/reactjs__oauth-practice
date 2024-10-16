@@ -3,15 +3,23 @@ import Header from "../Components/Header";
 import { useMatch } from "react-router-dom";
 import Login from "./Login";
 import Userinfo from "./Userinfo";
+import { useEffect, useState } from "react";
 
 function Home() {
   const loginMatch = useMatch("/login");
   const userInfoMatch = useMatch("/userinfo");
+  const [items, setItems] = useState({ message: "" });
+  useEffect(() => {
+    fetch("http://localhost:8000")
+      .then((response) => response.json())
+      .then((data) => setItems(data));
+  }, []);
   return (
     <Wrapper>
       <Header />
       {loginMatch ? <Login /> : null}
       {userInfoMatch ? <Userinfo /> : null}
+      <span>{items.message}</span>
     </Wrapper>
   );
 }
