@@ -4,8 +4,6 @@ import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
-const CLIENT_ID = "Ov23likK8jCwRyDMDNi8";
-
 interface IForm {
   id: string;
   pw: string;
@@ -22,7 +20,7 @@ function Login() {
         <GithubButton>
           <FontAwesomeIcon icon={faGithub} size="2x" />
           <Link
-            to={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=read:user user:email`}
+            to={`https://github.com/login/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&scope=read:user user:email`}
           >
             Log in with a github
           </Link>

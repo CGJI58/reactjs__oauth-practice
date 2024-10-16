@@ -8,18 +8,18 @@ import { useEffect, useState } from "react";
 function Home() {
   const loginMatch = useMatch("/login");
   const userInfoMatch = useMatch("/userinfo");
-  const [items, setItems] = useState({ message: "" });
+  const [data, setData] = useState({ clientId: "" });
   useEffect(() => {
     fetch("http://localhost:8000")
       .then((response) => response.json())
-      .then((data) => setItems(data));
+      .then((data) => setData(data));
   }, []);
   return (
     <Wrapper>
       <Header />
       {loginMatch ? <Login /> : null}
       {userInfoMatch ? <Userinfo /> : null}
-      <span>{items.message}</span>
+      <span>{data.clientId}</span>
     </Wrapper>
   );
 }
