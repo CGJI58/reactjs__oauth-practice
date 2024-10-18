@@ -1,15 +1,16 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
-import { Link, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-
-interface IForm {
-  id: string;
-  pw: string;
-}
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 function Login() {
+  const [codeRequestURL, setCodeRequestURL] = useState("");
+  useEffect(() => {
+    fetch("http://localhost:8000")
+      .then((response) => response.json())
+      .then(({ codeRequestURL }) => setCodeRequestURL(codeRequestURL));
+  }, []);
   return (
     <Wrapper>
       <Popup>
@@ -19,11 +20,7 @@ function Login() {
         <Title>Log In</Title>
         <GithubButton>
           <FontAwesomeIcon icon={faGithub} size="2x" />
-          <Link
-            to={`https://github.com/login/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&scope=read:user user:email`}
-          >
-            Log in with a github
-          </Link>
+          <Link to={codeRequestURL}>Log in with a github</Link>
         </GithubButton>
       </Popup>
     </Wrapper>
@@ -115,5 +112,24 @@ const GithubButton = styled.div`
     text-decoration: none;
   }
 `;
+
+const getAccessTokenUrl = (ghCode: string) => {
+  const baseUrl = "https://github.com/login/oauth/access_token";
+  const config = {
+    client_id: process.env.REACT_APP_CLIENT_ID ?? "",
+    client_secret: process.env.REACT_APP_CLIENT_SECRET ?? "",
+    code: ghCode,
+  };
+  const params = new URLSearchParams(config).toString();
+  const finalUrl = `${baseUrl}?${params}`;
+  return finalUrl;
+};
+
+const fetchAccessToken = async (accessTokenUrl: string) => {
+  const data = await fetch(accessTokenUrl);
+  const json = await data.json();
+  console.log(json);
+  // return json;
+};
 
 export default Login;

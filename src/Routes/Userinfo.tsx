@@ -1,18 +1,23 @@
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
-
-const CLIENT_ID = "Ov23likK8jCwRyDMDNi8";
-const CLIENT_SECRET = "";
+import { useEffect } from "react";
 
 function Userinfo() {
   const location = useLocation();
-  const githubCode = new URLSearchParams(location.search).get("code");
-  // `https://github.com/login/oauth/access_token?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&code=${githubCode}`;
-  return (
-    <Wrapper>
-      <span>github code : {githubCode}</span>
-    </Wrapper>
-  );
+  const ghCode = new URLSearchParams(location.search).get("code");
+  useEffect(() => {
+    fetch("http://localhost:8000/users/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ghCode,
+      }),
+    });
+  }, [ghCode]);
+
+  return <Wrapper></Wrapper>;
 }
 
 const Wrapper = styled.div`
