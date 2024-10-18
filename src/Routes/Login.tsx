@@ -1,15 +1,16 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
-import { Link, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-
-interface IForm {
-  id: string;
-  pw: string;
-}
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 function Login() {
+  const [codeRequestURL, setCodeRequestURL] = useState("");
+  useEffect(() => {
+    fetch("http://localhost:8000")
+      .then((response) => response.json())
+      .then(({ codeRequestURL }) => setCodeRequestURL(codeRequestURL));
+  }, []);
   return (
     <Wrapper>
       <Popup>
@@ -19,11 +20,7 @@ function Login() {
         <Title>Log In</Title>
         <GithubButton>
           <FontAwesomeIcon icon={faGithub} size="2x" />
-          <Link
-            to={`https://github.com/login/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&scope=read:user user:email`}
-          >
-            Log in with a github
-          </Link>
+          <Link to={codeRequestURL}>Log in with a github</Link>
         </GithubButton>
       </Popup>
     </Wrapper>
