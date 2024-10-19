@@ -3,11 +3,11 @@ import Header from "../Components/Header";
 import { useMatch } from "react-router-dom";
 import Login from "./Login";
 import Userinfo from "./Userinfo";
-import { useEffect, useState } from "react";
 
 function Home() {
   const loginMatch = useMatch("/login");
   const userInfoMatch = useMatch("/userinfo");
+
   return (
     <Wrapper>
       <Header />
