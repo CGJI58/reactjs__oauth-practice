@@ -8,7 +8,10 @@ function Header() {
         <Col>Home</Col>
       </Link>
       <Link to="/login">
-        <Col>Login</Col>
+        <Col>Log in</Col>
+      </Link>
+      <Link to="/userinfo">
+        <Col>User info</Col>
       </Link>
     </Wrapper>
   );

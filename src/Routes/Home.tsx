@@ -1,32 +1,31 @@
 import styled from "styled-components";
-import Header from "../Components/Header";
-import { useMatch } from "react-router-dom";
-import Login from "./Login";
-import Userinfo from "./Userinfo";
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 function Home() {
-  const loginMatch = useMatch("/login");
-  const userInfoMatch = useMatch("/userinfo");
+  const location = useLocation();
+  const ghCode =
+    new URLSearchParams(location.search).get("code") ?? "not logged in";
+  console.log(ghCode);
+  useEffect(() => {
+    fetch("http://localhost:8000/users/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ghCode,
+      }),
+    });
+  }, [ghCode]);
 
   return (
     <Wrapper>
-      <Header />
-      {loginMatch ? <Login /> : null}
-      {userInfoMatch ? <Userinfo /> : null}
+      <span>Home page</span>
     </Wrapper>
   );
 }
 
-const Wrapper = styled.div`
-  position: relative;
-  padding-top: 50px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  background-color: #374151;
-  height: 100vh;
-  color: whitesmoke;
-`;
+const Wrapper = styled.div``;
 
 export default Home;
