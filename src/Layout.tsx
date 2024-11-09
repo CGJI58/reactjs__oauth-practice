@@ -4,12 +4,13 @@ import styled from "styled-components";
 
 interface LayoutProps {
   children: ReactNode;
+  token: string;
 }
 
-const Layout: FC<LayoutProps> = ({ children }) => {
+const Layout: FC<LayoutProps> = ({ children, token }) => {
   return (
     <Wrapper>
-      <Header />
+      <Header token={token} />
       <main>{children}</main>
     </Wrapper>
   );

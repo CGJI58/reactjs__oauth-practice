@@ -1,12 +1,15 @@
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { saveNowLoggedInUser } from "../model/localstorage";
 
-function Home() {
+interface IHome {
+  setGhCode: (ghCode: string) => void;
+}
+
+function Home({ setGhCode }: IHome) {
   const location = useLocation();
-  const ghCode =
-    new URLSearchParams(location.search).get("code") ?? "not logged in";
-  console.log(ghCode);
+  const ghCode = new URLSearchParams(location.search).get("code") ?? "";
   useEffect(() => {
     fetch("http://localhost:8000/users/login", {
       method: "POST",
@@ -17,6 +20,10 @@ function Home() {
         ghCode,
       }),
     });
+    if (ghCode !== "") {
+      saveNowLoggedInUser(ghCode);
+      setGhCode(ghCode);
+    }
   }, [ghCode]);
 
   return (

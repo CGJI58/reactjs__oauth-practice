@@ -1,18 +1,30 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-function Header() {
+interface IHeader {
+  token: string;
+}
+
+function Header({ token }: IHeader) {
+  const [login, setLogin] = useState(false);
+  useEffect(() => {
+    token === "" ? setLogin(false) : setLogin(true);
+  }, [token]);
   return (
     <Wrapper>
       <Link to="/">
         <Col>Home</Col>
       </Link>
-      <Link to="/login">
-        <Col>Log in</Col>
-      </Link>
-      <Link to="/userinfo">
-        <Col>User info</Col>
-      </Link>
+      {login ? (
+        <Link to="/userinfo">
+          <Col>User info</Col>
+        </Link>
+      ) : (
+        <Link to="/login">
+          <Col>Log in</Col>
+        </Link>
+      )}
     </Wrapper>
   );
 }
