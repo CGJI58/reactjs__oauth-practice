@@ -4,25 +4,36 @@ import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+interface IfetchURL {
+  codeRequestURL: string;
+}
+
+async function getCodeRequestURL() {
+  const { codeRequestURL }: IfetchURL = await (
+    await fetch("http://localhost:8000")
+  ).json();
+  return codeRequestURL;
+}
+
 function Login() {
   const [codeRequestURL, setCodeRequestURL] = useState("");
   useEffect(() => {
-    fetch("http://localhost:8000")
-      .then((response) => response.json())
-      .then(({ codeRequestURL }) => setCodeRequestURL(codeRequestURL));
+    getCodeRequestURL().then((url) => setCodeRequestURL(url));
   }, []);
 
   return (
     <Wrapper>
       <Popup>
-        <ExitBtn>
-          <Link to="/">❌</Link>
-        </ExitBtn>
+        <Link to="/">
+          <ExitBtn>❌</ExitBtn>
+        </Link>
         <Title>Log In</Title>
-        <GithubButton>
-          <FontAwesomeIcon icon={faGithub} size="2x" />
-          <Link to={codeRequestURL}>Log in with a github</Link>
-        </GithubButton>
+        <Link to={codeRequestURL}>
+          <GithubButton>
+            <FontAwesomeIcon icon={faGithub} size="2x" />
+            <span>Log in with a github</span>
+          </GithubButton>
+        </Link>
       </Popup>
     </Wrapper>
   );
@@ -59,42 +70,20 @@ const ExitBtn = styled.div`
   right: 15px;
   width: 30px;
   height: 30px;
+  padding: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
+  font-size: 12px;
   border-radius: 50%;
   background-color: rgba(0, 0, 0, 0.8);
   cursor: pointer;
-  a {
-    text-decoration: none;
-  }
 `;
 
 const Title = styled.div`
   font-size: 34px;
   font-weight: 800;
   margin-bottom: 10px;
-`;
-
-const LoginForm = styled.form`
-  display: grid;
-  grid-template-columns: 4fr 1fr;
-  gap: 5px;
-`;
-
-const IDPWBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  input {
-    border-radius: 5px;
-    padding: 5px;
-  }
-`;
-
-const LoginButton = styled.button`
-  border-radius: 10px;
 `;
 
 const GithubButton = styled.div`

@@ -1,29 +1,41 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
-import { loadNowLoggedInUser, logOut } from "../model/localstorage";
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { defaultUserState, IUserState, userState } from "../atoms";
 
 interface IUserinfo {
-  onLogOutRerender: () => void;
+  //BE 쪽 작업 덜해서 임시 문자열 데이터 받음
+  userinfo: string;
 }
-function Userinfo({ onLogOutRerender }: IUserinfo) {
-  const [userData, setUserData] = useState();
+
+async function getUserinfo(ghCode: string) {
+  const { userinfo }: IUserinfo = await (
+    await fetch(`http://localhost:8000/users/${ghCode}`)
+  ).json();
+  return userinfo;
+}
+
+function Userinfo() {
   const navigate = useNavigate();
-  // useEffect(() => {
-  //   const token = loadNowLoggedInUser();
-  //   fetch(`http://localhost:8000/users/${token}`)
-  //     .then((response) => response?.json())
-  //     .then((userData) => setUserData(userData));
-  // }, []);
+  const [{ ghCode, userinfo }, setUser] = useRecoilState<IUserState>(userState);
+
+  useEffect(() => {
+    getUserinfo(ghCode)
+      .then((userinfo) => setUser((prev) => ({ ...prev, userinfo })))
+      .then(() => console.log("userinfo: ", userinfo));
+  }, [userinfo]);
+
   const onLogOut = () => {
+    setUser(defaultUserState);
     navigate("/");
-    logOut();
-    onLogOutRerender();
   };
   return (
     <Wrapper>
       <LogOut onClick={() => onLogOut()}>❌</LogOut>
-      <span>{userData}</span>
+      <span>
+        {"일단 userinfo만 가져오고, 제대로 되는거 확인 되면 이메일도 가져올 것"}
+      </span>
     </Wrapper>
   );
 }

@@ -1,30 +1,31 @@
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import { saveNowLoggedInUser } from "../model/localstorage";
+import { defaultUserState, IUserState, userState } from "../atoms";
+import { useRecoilState } from "recoil";
 
-interface IHome {
-  setGhCode: (ghCode: string) => void;
-}
+const postGhCode = async (ghCode: string) => {
+  await fetch("http://localhost:8000/users/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      ghCode,
+    }),
+  });
+};
 
-function Home({ setGhCode }: IHome) {
+function Home() {
   const location = useLocation();
-  const ghCode = new URLSearchParams(location.search).get("code") ?? "";
+  const ghCode = new URLSearchParams(location.search).get("code");
+  const [user, setUser] = useRecoilState<IUserState>(userState);
   useEffect(() => {
-    fetch("http://localhost:8000/users/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        ghCode,
-      }),
-    });
-    if (ghCode !== "") {
-      saveNowLoggedInUser(ghCode);
-      setGhCode(ghCode);
+    if (ghCode) {
+      postGhCode(ghCode);
+      setUser((prev) => ({ ...prev, ghCode }));
     }
-  }, [ghCode]);
+  }, [setUser, ghCode]);
 
   return (
     <Wrapper>
