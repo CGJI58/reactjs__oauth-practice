@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import { defaultUserState, IUserState, userState } from "../atoms";
-import { useRecoilState } from "recoil";
+import { IUserState, userState } from "../atoms";
+import { useSetRecoilState } from "recoil";
 
 const postGhCode = async (ghCode: string) => {
   await fetch("http://localhost:8000/users/login", {
@@ -19,7 +19,7 @@ const postGhCode = async (ghCode: string) => {
 function Home() {
   const location = useLocation();
   const ghCode = new URLSearchParams(location.search).get("code");
-  const [user, setUser] = useRecoilState<IUserState>(userState);
+  const setUser = useSetRecoilState<IUserState>(userState);
   useEffect(() => {
     if (ghCode) {
       postGhCode(ghCode);

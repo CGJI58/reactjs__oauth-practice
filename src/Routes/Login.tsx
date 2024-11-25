@@ -4,12 +4,12 @@ import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-interface IfetchURL {
+interface ICodeRequestURL {
   codeRequestURL: string;
 }
 
 async function getCodeRequestURL() {
-  const { codeRequestURL }: IfetchURL = await (
+  const { codeRequestURL }: ICodeRequestURL = await (
     await fetch("http://localhost:8000")
   ).json();
   return codeRequestURL;
