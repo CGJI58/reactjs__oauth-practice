@@ -1,13 +1,11 @@
 import { atom } from "recoil";
 
 export interface IUserState {
-  ghCode: string;
-  accessToken: string;
-  userinfo: IUserinfo;
-  id: string;
+  login: boolean;
+  userInfo: IUserInfo;
 }
 
-export interface IUserinfo {
+export interface IUserInfo {
   email: string;
   primary: boolean;
   verified: boolean;
@@ -15,15 +13,13 @@ export interface IUserinfo {
 }
 
 export const defaultUserState: IUserState = {
-  ghCode: "default",
-  accessToken: "default",
-  userinfo: {
+  login: false,
+  userInfo: {
     email: "default",
     primary: false,
     verified: false,
     visibility: "default",
   },
-  id: "default",
 };
 
 export const userState = atom<IUserState>({

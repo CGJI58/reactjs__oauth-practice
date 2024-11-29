@@ -2,24 +2,16 @@ import { Link } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { IUserState, userState } from "../atoms";
-import { useEffect, useState } from "react";
 
 function Header() {
-  const user = useRecoilValue<IUserState>(userState);
-  const [loggedIn, setLoggedIn] = useState(false);
-  useEffect(() => {
-    setLoggedIn(() => {
-      if (user.ghCode === "default") return false;
-      else return true;
-    });
-  }, [user]);
+  const { login } = useRecoilValue<IUserState>(userState);
 
   return (
     <Wrapper>
       <Link to="/">
         <Col>Home</Col>
       </Link>
-      {loggedIn ? (
+      {login ? (
         <Link to={`/userinfo`}>
           <Col>User info</Col>
         </Link>
