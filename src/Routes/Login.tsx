@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useSetRecoilState } from "recoil";
+import { IUserState, userState } from "../atoms";
 
 interface ICodeRequestURL {
   codeRequestURL: string;
@@ -15,11 +17,38 @@ async function getCodeRequestURL() {
   return codeRequestURL;
 }
 
+async function login(ghCode: string) {
+  const response = await fetch("http://localhost:8000/users/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      ghCode,
+    }),
+  });
+  const data = await response.json();
+  return data;
+}
+
 function Login() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [codeRequestURL, setCodeRequestURL] = useState("");
+  const ghCode = new URLSearchParams(location.search).get("code");
+  const setUser = useSetRecoilState<IUserState>(userState);
+
   useEffect(() => {
     getCodeRequestURL().then((url) => setCodeRequestURL(url));
   }, []);
+
+  useEffect(() => {
+    if (ghCode) {
+      login(ghCode)
+        .then((user) => setUser(user))
+        .then(() => navigate("/"));
+    }
+  }, [ghCode]);
 
   return (
     <Wrapper>
