@@ -2,7 +2,12 @@ import styled from "styled-components";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { IUserState, userState } from "../atoms";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
+import { useForm } from "react-hook-form";
+
+interface IForm {
+  nickname: string;
+}
 
 async function login(ghCode: string) {
   const response = await fetch("http://localhost:8000/users/login", {
@@ -21,7 +26,8 @@ async function login(ghCode: string) {
 function Home() {
   const location = useLocation();
   const ghCode = new URLSearchParams(location.search).get("code");
-  const setUser = useSetRecoilState<IUserState>(userState);
+  const [user, setUser] = useRecoilState<IUserState>(userState);
+  const { register, setValue, handleSubmit } = useForm<IForm>();
 
   useEffect(() => {
     if (ghCode) {
@@ -29,13 +35,34 @@ function Home() {
     }
   }, [ghCode]);
 
+  const onValid = ({ nickname }: IForm) => {
+    setUser((prev) => ({ ...prev, userInfo: { ...prev.userInfo, nickname } }));
+    //여기서 백엔드도 갱신해줘야됨.
+    setValue("nickname", "");
+  };
+
   return (
     <Wrapper>
-      <span>Home page</span>
+      {user.login && !user.userInfo.nickname ? (
+        <Form onSubmit={handleSubmit(onValid)}>
+          <input
+            {...register("nickname", { required: true })}
+            type="text"
+            placeholder="write your nickname"
+          />
+          <button>submit</button>
+        </Form>
+      ) : null}
+      {user.login && user.userInfo.nickname ? (
+        <span>{`Hello, ${user.userInfo.nickname}!`}</span>
+      ) : null}
+      {!user.login ? <div>{"로그인을 해주세요"}</div> : null}
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div``;
+
+const Form = styled.form``;
 
 export default Home;

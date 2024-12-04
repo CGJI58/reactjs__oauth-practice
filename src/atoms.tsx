@@ -10,6 +10,13 @@ export interface IUserInfo {
   primary: boolean;
   verified: boolean;
   visibility: string;
+  nickname?: string;
+  diaries?: Array<IDiary>;
+}
+
+export interface IDiary {
+  date: string;
+  text: string;
 }
 
 export const defaultUserState: IUserState = {

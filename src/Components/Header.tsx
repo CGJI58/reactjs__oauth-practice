@@ -1,20 +1,39 @@
-import { Link } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { Link, useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { IUserState, userState } from "../atoms";
 
+async function logOut(user: IUserState) {
+  await fetch(`http://localhost:8000/users/logout`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ user }),
+  });
+}
+
 function Header() {
-  const { login } = useRecoilValue<IUserState>(userState);
+  const navigate = useNavigate();
+  const [user, setUser] = useRecoilState<IUserState>(userState);
+  const onLogOut = () => {
+    logOut(user);
+    setUser((prev) => ({ ...prev, login: false }));
+    navigate("/");
+  };
 
   return (
     <Wrapper>
       <Link to="/">
         <Col>Home</Col>
       </Link>
-      {login ? (
+      {user.login ? (
         <Link to={`/userinfo`}>
           <Col>User info</Col>
         </Link>
+      ) : null}
+      {user.login ? (
+        <Col onClick={() => onLogOut()}>Log out</Col>
       ) : (
         <Link to="/login">
           <Col>Log in</Col>
@@ -42,7 +61,8 @@ const Wrapper = styled.nav`
 `;
 
 const Col = styled.div`
-  width: 100px;
+  width: 1fr;
+  padding: 0 10px;
   height: 100%;
   display: flex;
   justify-content: center;
