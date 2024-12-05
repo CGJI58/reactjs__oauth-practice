@@ -2,23 +2,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { IUserState, userState } from "../atoms";
-
-async function logOut(user: IUserState) {
-  await fetch(`http://localhost:8000/users/logout`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ user }),
-  });
-}
+import { updateUser } from "../utility/utility";
 
 function Header() {
   const navigate = useNavigate();
   const [user, setUser] = useRecoilState<IUserState>(userState);
   const onLogOut = () => {
-    logOut(user);
     setUser((prev) => ({ ...prev, login: false }));
+    updateUser(user);
     navigate("/");
   };
 

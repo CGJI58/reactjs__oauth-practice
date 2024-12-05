@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { useRecoilState } from "recoil";
 import { IDiary, IUserState, userState } from "../atoms";
 import { useForm } from "react-hook-form";
+import { useEffect } from "react";
+import { updateUser } from "../utility/utility";
 
 interface IForm {
   text: string;
@@ -9,30 +11,36 @@ interface IForm {
 
 const generateDate = () => {
   const now = new Date(Date.now());
-  const yy = String(now.getFullYear()).slice(-2);
-  const mm = String(now.getMonth() + 1).padStart(2, "0");
-  const dd = String(now.getDate()).padStart(2, "0");
-  const hh = String(now.getHours()).padStart(2, "0");
-  const mi = String(now.getMinutes()).padStart(2, "0");
-  return `${yy}${mm}${dd} ${hh}:${mi}`;
+  const year = String(now.getFullYear()).slice(-2);
+  const mon = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  const hour = String(now.getHours()).padStart(2, "0");
+  const min = String(now.getMinutes()).padStart(2, "0");
+  const sec = String(now.getSeconds()).padStart(2, "0");
+  return `${year}${mon}${day} ${hour}:${min}:${sec}`;
 };
-
+//이후에 파일명을 적절한걸로 바꾸거나, Home에 넣을컴포넌트로 대체할 것
 function Userinfo() {
   const [user, setUser] = useRecoilState<IUserState>(userState);
   const { register, setValue, handleSubmit } = useForm<IForm>();
+
+  useEffect(() => {
+    updateUser(user);
+  }, [user]);
+
   const onValid = ({ text }: IForm) => {
+    const newDiary: IDiary = { date: generateDate(), text };
     setUser((prev) => {
-      const newDiary: IDiary = { date: generateDate(), text };
       const prevDiaries = prev.userInfo.diaries ?? [];
       const newUser: IUserState = {
-        login: prev.login,
-        userInfo: { ...prev.userInfo, diaries: [...prevDiaries, newDiary] },
+        ...prev,
+        userInfo: { ...prev.userInfo, diaries: [newDiary, ...prevDiaries] },
       };
       return newUser;
     });
-    //여기서 백엔드도 갱신해줘야됨.
     setValue("text", "");
   };
+
   return (
     <Wrapper>
       <span>{`Hello, ${user.userInfo.nickname ?? user.userInfo.email}!`}</span>
@@ -43,12 +51,6 @@ function Userinfo() {
         />
         <input type="submit" value="저장" />
       </Form>
-      <Diaries>
-        {user.userInfo.diaries?.map((diary, index) => (
-          <div key={index}>{`${diary.text}, ${diary.date}`}</div>
-        ))}
-      </Diaries>
-      <SaveBtn onClick={() => console.log(user)}>저장</SaveBtn>
     </Wrapper>
   );
 }
@@ -64,13 +66,6 @@ const Form = styled.form`
     width: 300px;
     height: 200px;
   }
-`;
-
-const Diaries = styled.div``; //이거 나중에 컴포넌트로 따로 빼자
-
-const SaveBtn = styled.button`
-  //Diaries 컴포넌트에 포함시킬 것
-  width: 100px;
 `;
 
 export default Userinfo;
