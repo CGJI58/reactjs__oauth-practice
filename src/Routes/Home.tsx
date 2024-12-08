@@ -6,9 +6,13 @@ import LoggedInHome from "../Components/LoggedInHome";
 function Home() {
   const { login } = useRecoilValue<IUserState>(userState);
 
-  return <Wrapper>{login ? <LoggedInHome /> : null}</Wrapper>;
+  return (
+    <Wrapper>{login ? <LoggedInHome /> : <span>로그인 하세요</span>}</Wrapper>
+  );
 }
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  padding: 10px;
+`;
 
 export default Home;

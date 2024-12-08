@@ -2,7 +2,7 @@ import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import Layout from "./Layout";
 import Home from "./Routes/Home";
 import Login from "./Routes/Login";
-import Userinfo from "./Routes/Userinfo";
+import Write from "./Routes/Write";
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path={`/userinfo`} element={<Userinfo />} />
+          <Route path={`/write`} element={<Write />} />
         </Routes>
       </Layout>
     </Router>

@@ -3,10 +3,36 @@ import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { IUserState, userState } from "../atoms";
 import { updateUser } from "../utility/utility";
+import {
+  motion,
+  useAnimation,
+  useMotionValueEvent,
+  useScroll,
+} from "framer-motion";
+
+const navVariants = {
+  top: {
+    backgroundColor: "rgba(0, 0, 0, 0.2)",
+  },
+  scroll: {
+    backgroundColor: "rgba(0, 0, 0, 1)",
+  },
+};
 
 function Header() {
   const navigate = useNavigate();
+  const { scrollY } = useScroll();
+  const navAnimation = useAnimation();
   const [user, setUser] = useRecoilState<IUserState>(userState);
+
+  useMotionValueEvent(scrollY, "change", (scroll) => {
+    if (scroll > 80) {
+      navAnimation.start("scroll");
+    } else {
+      navAnimation.start("top");
+    }
+  });
+
   const onLogOut = () => {
     setUser((prev) => ({ ...prev, login: false }));
     updateUser(user);
@@ -14,13 +40,13 @@ function Header() {
   };
 
   return (
-    <Wrapper>
+    <Wrapper variants={navVariants} initial="top" animate={navAnimation}>
       <Link to="/">
         <Col>Home</Col>
       </Link>
       {user.login ? (
-        <Link to={`/userinfo`}>
-          <Col>User info</Col>
+        <Link to={`/write`}>
+          <Col>Write</Col>
         </Link>
       ) : null}
       {user.login ? (
@@ -34,7 +60,7 @@ function Header() {
   );
 }
 
-const Wrapper = styled.nav`
+const Wrapper = styled(motion.div)`
   position: fixed;
   top: 0;
   width: 100%;
@@ -43,7 +69,6 @@ const Wrapper = styled.nav`
   justify-content: space-around;
   align-items: center;
   font-size: 24px;
-  background-color: rgba(0, 0, 0, 0.2);
   a {
     height: 100%;
     text-decoration: none;

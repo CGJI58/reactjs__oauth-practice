@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { IDiary } from "../atoms";
+import Diary from "./Diary";
 
 interface IDiaries {
   diaries: IDiary[];
@@ -8,15 +9,20 @@ interface IDiaries {
 function Diaries({ diaries }: IDiaries) {
   return (
     <Wrapper>
-      {diaries.map(({ text, date }) => (
-        <Diary key={date}>{text}</Diary>
+      {diaries.map((diary) => (
+        <Diary key={diary.date} diary={diary} />
       ))}
     </Wrapper>
   );
 }
 
-const Wrapper = styled.div``;
-
-const Diary = styled.div``; //나중에 카드형식으로, 제목이랑 날짜만 보이게 하고, 클릭하면 내용 보이게
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+  padding-bottom: 10px;
+`;
 
 export default Diaries;

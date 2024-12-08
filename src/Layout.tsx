@@ -23,7 +23,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   gap: 20px;
   background-color: #374151;
-  height: 100vh;
+  min-height: 100vh;
   color: whitesmoke;
 `;
 

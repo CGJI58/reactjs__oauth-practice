@@ -4,8 +4,10 @@ import { IDiary, IUserState, userState } from "../atoms";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { updateUser } from "../utility/utility";
+import { useNavigate } from "react-router-dom";
 
 interface IForm {
+  title: string;
   text: string;
 }
 
@@ -19,8 +21,9 @@ const generateDate = () => {
   const sec = String(now.getSeconds()).padStart(2, "0");
   return `${year}${mon}${day} ${hour}:${min}:${sec}`;
 };
-//이후에 파일명을 적절한걸로 바꾸거나, Home에 넣을컴포넌트로 대체할 것
-function Userinfo() {
+
+function Write() {
+  const navigate = useNavigate();
   const [user, setUser] = useRecoilState<IUserState>(userState);
   const { register, setValue, handleSubmit } = useForm<IForm>();
 
@@ -28,8 +31,8 @@ function Userinfo() {
     updateUser(user);
   }, [user]);
 
-  const onValid = ({ text }: IForm) => {
-    const newDiary: IDiary = { date: generateDate(), text };
+  const onValid = ({ title, text }: IForm) => {
+    const newDiary: IDiary = { date: generateDate(), title, text };
     setUser((prev) => {
       const prevDiaries = prev.userInfo.diaries ?? [];
       const newUser: IUserState = {
@@ -38,13 +41,15 @@ function Userinfo() {
       };
       return newUser;
     });
+    setValue("title", "");
     setValue("text", "");
+    navigate("/");
   };
 
   return (
     <Wrapper>
-      <span>{`Hello, ${user.userInfo.nickname ?? user.userInfo.email}!`}</span>
       <Form onSubmit={handleSubmit(onValid)}>
+        <input {...register("title", { required: true })} placeholder="Title" />
         <textarea
           {...register("text", { required: true })}
           placeholder="write your diary"
@@ -56,16 +61,23 @@ function Userinfo() {
 }
 
 const Wrapper = styled.div`
-  display: flex;
-  position: relative;
-  flex-direction: column;
+  width: 80%;
+  align-self: center;
+  justify-self: center;
+  padding: 10px 0;
 `;
 
 const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  * {
+    padding: 5px;
+  }
   textarea {
-    width: 300px;
     height: 200px;
+    resize: none;
   }
 `;
 
-export default Userinfo;
+export default Write;

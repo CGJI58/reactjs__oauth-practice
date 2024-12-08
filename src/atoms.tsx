@@ -16,6 +16,7 @@ export interface IUserInfo {
 
 export interface IDiary {
   date: string;
+  title: string;
   text: string;
 }
 
