@@ -20,7 +20,6 @@ function Diary({ diary: { date, title, text } }: { diary: IDiary }) {
 
 const Wrapper = styled.div`
   width: 80%;
-  padding: 10px;
   border: 1px solid black;
   border-radius: 5px;
 `;
@@ -29,6 +28,10 @@ const Preview = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 10px;
+  transition: all 0.3s;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
   cursor: pointer;
 `;
 
