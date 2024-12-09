@@ -14,14 +14,25 @@ interface INickname {
 function Nickname({ nickname }: INickname) {
   const setUser = useSetRecoilState(userState);
   const { register, setValue, handleSubmit } = useForm<IForm>();
+
+  const EditNickname = () => {
+    setUser((prev) => ({
+      ...prev,
+      userInfo: { ...prev.userInfo, nickname: undefined },
+    }));
+  };
+
   const onValid = ({ nickname }: IForm) => {
     setUser((prev) => ({ ...prev, userInfo: { ...prev.userInfo, nickname } }));
     setValue("nickname", "");
   };
   return (
-    <Wrapper className="Nickname">
+    <Wrapper>
       {nickname ? (
-        <span>{`hello, ${nickname}!`}</span>
+        <Greeting>
+          <div>{`hello, ${nickname}!`}</div>
+          <EditNicknameBtn onClick={() => EditNickname()}>edit</EditNicknameBtn>
+        </Greeting>
       ) : (
         <Form onSubmit={handleSubmit(onValid)}>
           <input
@@ -37,9 +48,15 @@ function Nickname({ nickname }: INickname) {
 }
 
 const Wrapper = styled.div`
-  padding: 10px;
   font-size: 18px;
 `;
+
+const Greeting = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const EditNicknameBtn = styled.button``;
 
 const Form = styled.form``;
 

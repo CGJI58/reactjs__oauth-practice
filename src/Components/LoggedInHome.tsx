@@ -24,6 +24,8 @@ function LoggedInHome() {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  padding: 10px;
+  gap: 10px;
 `;
 
 export default LoggedInHome;
