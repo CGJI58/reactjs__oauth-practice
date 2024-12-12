@@ -9,6 +9,7 @@ import {
   useMotionValueEvent,
   useScroll,
 } from "framer-motion";
+import { useEffect, useState } from "react";
 
 const navVariants = {
   top: {
@@ -24,6 +25,7 @@ function Header() {
   const { scrollY } = useScroll();
   const navAnimation = useAnimation();
   const [user, setUser] = useRecoilState<IUserState>(userState);
+  const [logoutClicked, setLogoutClicked] = useState(false);
 
   useMotionValueEvent(scrollY, "change", (scroll) => {
     if (scroll > 80) {
@@ -33,11 +35,19 @@ function Header() {
     }
   });
 
-  const onLogOut = () => {
-    setUser((prev) => ({ ...prev, login: false }));
-    updateUser(user);
-    navigate("/");
-  };
+  useEffect(() => {
+    if (logoutClicked) {
+      setUser((prev) => ({ ...prev, login: false }));
+      navigate("/");
+    }
+  }, [logoutClicked]);
+
+  useEffect(() => {
+    if (logoutClicked) {
+      updateUser(user);
+      setLogoutClicked(false);
+    }
+  }, [user]);
 
   return (
     <Wrapper variants={navVariants} initial="top" animate={navAnimation}>
@@ -50,7 +60,7 @@ function Header() {
         </Link>
       ) : null}
       {user.login ? (
-        <Col onClick={() => onLogOut()}>Log out</Col>
+        <Col onClick={() => setLogoutClicked(true)}>Log out</Col>
       ) : (
         <Link to="/login">
           <Col>Log in</Col>
