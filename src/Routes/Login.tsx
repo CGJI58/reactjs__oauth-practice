@@ -5,31 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { IUserState, userState } from "../atoms";
-
-interface ICodeRequestURL {
-  codeRequestURL: string;
-}
-
-async function getCodeRequestURL() {
-  const { codeRequestURL }: ICodeRequestURL = await (
-    await fetch("http://localhost:8000")
-  ).json();
-  return codeRequestURL;
-}
-
-async function login(ghCode: string) {
-  const response = await fetch("http://localhost:8000/users/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      ghCode,
-    }),
-  });
-  const data = await response.json();
-  return data;
-}
+import { getCodeRequestURL, login } from "../utility/utility";
 
 function Login() {
   const navigate = useNavigate();
