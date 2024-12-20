@@ -1,22 +1,18 @@
 import styled from "styled-components";
-import { IUserState, userState } from "../atoms";
-import { useRecoilValue } from "recoil";
+import { IUserState } from "../atoms";
 import Diaries from "./Diaries";
+import Nickname from "./Nickname";
 import { useEffect } from "react";
 import { updateUser } from "../utility/utility";
-import Nickname from "./Nickname";
 
-function LoggedInHome() {
-  const user = useRecoilValue<IUserState>(userState);
-
+function UserRecord({ user }: { user: IUserState }) {
   useEffect(() => {
     updateUser(user);
   }, [user]);
-
   return (
     <Wrapper>
-      <Nickname nickname={user.userInfo.nickname} />
-      <Diaries diaries={user.userInfo.diaries ?? []} />
+      <Nickname nickname={user.userRecord.nickname} />
+      <Diaries diaries={user.userRecord.diaries} />
     </Wrapper>
   );
 }
@@ -28,4 +24,4 @@ const Wrapper = styled.div`
   gap: 10px;
 `;
 
-export default LoggedInHome;
+export default UserRecord;

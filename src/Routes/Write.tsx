@@ -1,9 +1,7 @@
 import styled from "styled-components";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { IDiary, IUserState, userState } from "../atoms";
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
-import { updateUser } from "../utility/utility";
 import { useNavigate } from "react-router-dom";
 
 interface IForm {
@@ -24,20 +22,16 @@ const generateDate = () => {
 
 function Write() {
   const navigate = useNavigate();
-  const [user, setUser] = useRecoilState<IUserState>(userState);
+  const setUser = useSetRecoilState<IUserState>(userState);
   const { register, setValue, handleSubmit } = useForm<IForm>();
-
-  useEffect(() => {
-    updateUser(user);
-  }, [user]);
 
   const onValid = ({ title, text }: IForm) => {
     const newDiary: IDiary = { date: generateDate(), title, text };
     setUser((prev) => {
-      const prevDiaries = prev.userInfo.diaries ?? [];
+      const prevDiaries = prev.userRecord.diaries;
       const newUser: IUserState = {
         ...prev,
-        userInfo: { ...prev.userInfo, diaries: [newDiary, ...prevDiaries] },
+        userRecord: { ...prev.userRecord, diaries: [newDiary, ...prevDiaries] },
       };
       return newUser;
     });

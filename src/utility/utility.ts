@@ -1,10 +1,39 @@
-import { IUserState } from "../atoms";
+import { defaultUserState, IUserState } from "../atoms";
 
 const BASE_URL = "http://localhost:8000";
 // const BASE_URL = process.env.REACT_APP_BACK_END_URL;
 
+export const getUserByGhCode = async (ghCode: string) => {
+  const response = await fetch(`${BASE_URL}/users/ghcode`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      ghCode,
+    }),
+  });
+  const userData: IUserState = await response.json();
+  return userData;
+};
+
+export const getUserByHashCode = async (hashCode: string) => {
+  const response = await fetch(`${BASE_URL}/users/hashcode`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      hashCode,
+      default: defaultUserState,
+    }),
+  });
+  const userData: IUserState = await response.json();
+  return userData;
+};
+
 export const updateUser = async (user: IUserState) => {
-  await fetch("http://localhost:8000/users/update", {
+  await fetch(`${BASE_URL}/users/update`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -18,23 +47,4 @@ export const getCodeRequestURL = async () => {
     await fetch(`${BASE_URL}`)
   ).json();
   return codeRequestURL;
-};
-
-/**
- *
- * @param ghCode
- * @returns user object : IUserState
- */
-export const login = async (ghCode: string) => {
-  const response = await fetch(`${BASE_URL}/users/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      ghCode,
-    }),
-  });
-  const data = await response.json();
-  return data;
 };

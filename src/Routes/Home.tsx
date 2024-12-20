@@ -1,13 +1,25 @@
 import styled from "styled-components";
 import { IUserState, userState } from "../atoms";
-import { useRecoilValue } from "recoil";
-import LoggedInHome from "../Components/LoggedInHome";
+import { useRecoilState } from "recoil";
+import Blind from "../Components/Blind";
+import { useEffect } from "react";
+import { getUserByHashCode } from "../utility/utility";
+import UserRecord from "../Components/Userrecord";
 
 function Home() {
-  const { login } = useRecoilValue<IUserState>(userState);
+  const [user, setUser] = useRecoilState<IUserState>(userState);
+
+  useEffect(() => {
+    const hashCode = localStorage.getItem("hashCode");
+    if (user.hashCode === "" && hashCode) {
+      getUserByHashCode(hashCode).then((userData) => setUser(userData));
+    }
+  }, []);
 
   return (
-    <Wrapper>{login ? <LoggedInHome /> : <span>로그인 하세요</span>}</Wrapper>
+    <Wrapper>
+      {user.hashCode !== "" ? <UserRecord user={user} /> : <Blind />}
+    </Wrapper>
   );
 }
 

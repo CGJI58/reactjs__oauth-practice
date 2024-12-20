@@ -8,22 +8,30 @@ interface IForm {
 }
 
 interface INickname {
-  nickname?: string;
+  nickname: string;
 }
 
 function Nickname({ nickname }: INickname) {
   const setUser = useSetRecoilState(userState);
-  const { register, setValue, handleSubmit } = useForm<IForm>();
+  const {
+    register,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IForm>();
 
-  const EditNickname = () => {
+  const resetNickname = () => {
     setUser((prev) => ({
       ...prev,
-      userInfo: { ...prev.userInfo, nickname: undefined },
+      userRecord: { ...prev.userRecord, nickname: "" },
     }));
   };
 
   const onValid = ({ nickname }: IForm) => {
-    setUser((prev) => ({ ...prev, userInfo: { ...prev.userInfo, nickname } }));
+    setUser((prev) => ({
+      ...prev,
+      userRecord: { ...prev.userRecord, nickname },
+    }));
     setValue("nickname", "");
   };
   return (
@@ -31,16 +39,24 @@ function Nickname({ nickname }: INickname) {
       {nickname ? (
         <Greeting>
           <div>{`hello, ${nickname}!`}</div>
-          <EditNicknameBtn onClick={() => EditNickname()}>edit</EditNicknameBtn>
+          <ResetNicknameBtn onClick={() => resetNickname()}>
+            edit
+          </ResetNicknameBtn>
         </Greeting>
       ) : (
         <Form onSubmit={handleSubmit(onValid)}>
+          <label htmlFor="nickname">nickname: </label>
           <input
-            {...register("nickname", { required: true, minLength: 2 })}
+            id="nickname"
+            {...register("nickname", {
+              required: true,
+              minLength: { value: 2, message: "2글자 이상 작성해주세요." },
+            })}
             type="text"
             placeholder="write your nickname"
           />
           <button>submit</button>
+          {errors.nickname && <span>{errors.nickname.message}</span>}
         </Form>
       )}
     </Wrapper>
@@ -56,8 +72,11 @@ const Greeting = styled.div`
   gap: 10px;
 `;
 
-const EditNicknameBtn = styled.button``;
+const ResetNicknameBtn = styled.button``;
 
-const Form = styled.form``;
+const Form = styled.form`
+  display: flex;
+  gap: 5px;
+`;
 
 export default Nickname;

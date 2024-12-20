@@ -2,30 +2,18 @@ import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { IUserState, userState } from "../atoms";
-import { updateUser } from "../utility/utility";
 import {
   motion,
   useAnimation,
   useMotionValueEvent,
   useScroll,
 } from "framer-motion";
-import { useEffect, useState } from "react";
-
-const navVariants = {
-  top: {
-    backgroundColor: "rgba(0, 0, 0, 0.2)",
-  },
-  scroll: {
-    backgroundColor: "rgba(0, 0, 0, 1)",
-  },
-};
 
 function Header() {
   const navigate = useNavigate();
   const { scrollY } = useScroll();
   const navAnimation = useAnimation();
   const [user, setUser] = useRecoilState<IUserState>(userState);
-  const [logoutClicked, setLogoutClicked] = useState(false);
 
   useMotionValueEvent(scrollY, "change", (scroll) => {
     if (scroll > 80) {
@@ -35,32 +23,24 @@ function Header() {
     }
   });
 
-  useEffect(() => {
-    if (logoutClicked) {
-      setUser((prev) => ({ ...prev, login: false }));
-      navigate("/");
-    }
-  }, [logoutClicked]);
-
-  useEffect(() => {
-    if (logoutClicked) {
-      updateUser(user);
-      setLogoutClicked(false);
-    }
-  }, [user]);
+  function onLogOutClick() {
+    localStorage.removeItem("hashCode");
+    setUser((prev) => ({ ...prev, hashCode: "" }));
+    navigate("/");
+  }
 
   return (
     <Wrapper variants={navVariants} initial="top" animate={navAnimation}>
       <Link to="/">
         <Col>Home</Col>
       </Link>
-      {user.login ? (
+      {user.hashCode !== "" ? (
         <Link to={`/write`}>
           <Col>Write</Col>
         </Link>
       ) : null}
-      {user.login ? (
-        <Col onClick={() => setLogoutClicked(true)}>Log out</Col>
+      {user.hashCode !== "" ? (
+        <Col onClick={() => onLogOutClick()}>Log out</Col>
       ) : (
         <Link to="/login">
           <Col>Log in</Col>
@@ -69,6 +49,15 @@ function Header() {
     </Wrapper>
   );
 }
+
+const navVariants = {
+  top: {
+    backgroundColor: "rgba(0, 0, 0, 0.2)",
+  },
+  scroll: {
+    backgroundColor: "rgba(0, 0, 0, 1)",
+  },
+};
 
 const Wrapper = styled(motion.div)`
   position: fixed;

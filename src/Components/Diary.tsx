@@ -19,10 +19,13 @@ function Diary({ diary: { date, title, text }, editMode }: IDiaryComponent) {
 
   const onDeleteClicked = () => {
     setUser((prev) => {
-      const newDiaries = prev.userInfo.diaries?.filter(
+      const newDiaries = prev.userRecord.diaries.filter(
         (diary) => diary.date !== date
       );
-      return { ...prev, userInfo: { ...prev.userInfo, diaries: newDiaries } };
+      return {
+        ...prev,
+        userRecord: { ...prev.userRecord, diaries: newDiaries },
+      };
     });
   };
 
