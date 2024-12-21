@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import { IUserState, userState } from "../atoms";
 import { useRecoilState } from "recoil";
-import Blind from "../Components/Blind";
+import Blind from "../Components/blind";
 import { useEffect } from "react";
 import { getUserByHashCode } from "../utility/utility";
-import UserRecord from "../Components/Userrecord";
+import UserRecord from "../Components/userrecord";
 
 function Home() {
   const [user, setUser] = useRecoilState<IUserState>(userState);
