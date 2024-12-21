@@ -4,9 +4,11 @@ import Home from "./Routes/Home";
 import Login from "./Routes/Login";
 import Write from "./Routes/Write";
 
+const FE_BASE_URL = "/reactjs__oauth-practice";
+
 function App() {
   return (
-    <Router>
+    <Router basename={`${FE_BASE_URL}`}>
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
