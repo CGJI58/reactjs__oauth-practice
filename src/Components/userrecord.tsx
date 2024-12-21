@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { IUserState } from "../atoms";
-import Diaries from "./Diaries";
-import Nickname from "./Nickname";
+import Diaries from "./diaries";
+import Nickname from "./nickname";
 import { useEffect } from "react";
 import { updateUser } from "../utility/utility";
 
