@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { IDiary } from "../atoms";
-import Diary from "./Diary";
+import Diary from "./diary";
 import { useState } from "react";
 
 interface IDiaries {

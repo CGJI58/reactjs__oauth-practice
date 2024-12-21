@@ -1,8 +1,8 @@
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
-import Layout from "./Layout";
-import Home from "./Routes/Home";
-import Login from "./Routes/Login";
-import Write from "./Routes/Write";
+import Layout from "./layout";
+import Home from "./Routes/home";
+import Login from "./Routes/login";
+import Write from "./Routes/write";
 
 const FE_BASE_URL = "/reactjs__oauth-practice";
 
