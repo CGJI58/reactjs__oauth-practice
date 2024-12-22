@@ -33,13 +33,15 @@ export const getUserByHashCode = async (hashCode: string) => {
 };
 
 export const updateUser = async (user: IUserState) => {
-  await fetch(`${BE_BASE_URL}/users/update`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ user }),
-  });
+  if (user.hashCode) {
+    await fetch(`${BE_BASE_URL}/users/update`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ user }),
+    });
+  }
 };
 
 export const getCodeRequestURL = async () => {

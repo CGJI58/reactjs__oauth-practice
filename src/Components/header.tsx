@@ -1,7 +1,7 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { IUserState, userState } from "../atoms";
+import { defaultUserState, IUserState, userState } from "../atoms";
 import {
   motion,
   useAnimation,
@@ -10,7 +10,6 @@ import {
 } from "framer-motion";
 
 function Header() {
-  const navigate = useNavigate();
   const { scrollY } = useScroll();
   const navAnimation = useAnimation();
   const [user, setUser] = useRecoilState<IUserState>(userState);
@@ -25,8 +24,7 @@ function Header() {
 
   function onLogOutClick() {
     localStorage.removeItem("hashCode");
-    setUser((prev) => ({ ...prev, hashCode: "" }));
-    navigate("/");
+    setUser(() => defaultUserState);
   }
 
   return (
