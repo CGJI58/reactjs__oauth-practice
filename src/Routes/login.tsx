@@ -15,10 +15,6 @@ function Login() {
   const setUser = useSetRecoilState<IUserState>(userState);
 
   useEffect(() => {
-    getCodeRequestURL().then((url) => setCodeRequestURL(url));
-  }, []);
-
-  useEffect(() => {
     if (ghCode) {
       getUserByGhCode(ghCode)
         .then((user) => {
@@ -26,6 +22,8 @@ function Login() {
           localStorage.setItem("hashCode", user.hashCode);
         })
         .then(() => navigate("/"));
+    } else {
+      getCodeRequestURL().then((url) => setCodeRequestURL(url));
     }
   }, [ghCode]);
 
