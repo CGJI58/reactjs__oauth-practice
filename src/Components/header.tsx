@@ -8,6 +8,7 @@ import {
   useMotionValueEvent,
   useScroll,
 } from "framer-motion";
+import { logOut } from "../utility/utility";
 
 function Header() {
   const navigate = useNavigate();
@@ -24,8 +25,7 @@ function Header() {
   });
 
   function onLogOutClick() {
-    localStorage.removeItem("hashCode");
-    setUser((prev) => ({ ...prev, hashCode: "" }));
+    logOut();
     navigate("/");
   }
 
@@ -34,12 +34,12 @@ function Header() {
       <Link to="/">
         <Col>Home</Col>
       </Link>
-      {user.hashCode !== "" ? (
+      {user.userInfo?.email !== "" ? (
         <Link to={`/write`}>
           <Col>Write</Col>
         </Link>
       ) : null}
-      {user.hashCode !== "" ? (
+      {user.userInfo?.email !== "" ? (
         <Col onClick={() => onLogOutClick()}>Log out</Col>
       ) : (
         <Link to="/login">

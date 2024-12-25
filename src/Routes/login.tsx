@@ -21,10 +21,7 @@ function Login() {
   useEffect(() => {
     if (ghCode) {
       getUserByGhCode(ghCode)
-        .then((user) => {
-          setUser(user);
-          localStorage.setItem("hashCode", user.hashCode);
-        })
+        .then((user) => setUser(user))
         .then(() => navigate("/"));
     }
   }, [ghCode]);

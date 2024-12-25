@@ -1,24 +1,22 @@
 import styled from "styled-components";
-import { defaultUserState, IUserState, userState } from "../atoms";
+import { IUserState, userState } from "../atoms";
 import { useRecoilState } from "recoil";
 import Blind from "../Components/blind";
 import { useEffect } from "react";
-import { getUserByHashCode } from "../utility/utility";
 import UserRecord from "../Components/userrecord";
 
 function Home() {
   const [user, setUser] = useRecoilState<IUserState>(userState);
 
   useEffect(() => {
-    const hashCode = localStorage.getItem("hashCode");
-    if (user === defaultUserState && hashCode) {
-      getUserByHashCode(hashCode).then((userData) => setUser(userData));
+    if (user.userInfo.email === "") {
+      // BE로 쿠키를 보내 인증을 하여 사용자 정보를 가져오는 알고리즘
     }
   }, []);
 
   return (
     <Wrapper>
-      {user === defaultUserState ? <Blind /> : <UserRecord user={user} />}
+      {user.userInfo.email === "" ? <Blind /> : <UserRecord user={user} />}
     </Wrapper>
   );
 }
