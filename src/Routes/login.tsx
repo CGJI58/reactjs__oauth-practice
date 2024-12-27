@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { IUserState, userState } from "../atoms";
-import { getCodeRequestURL, getUserByGhCode } from "../utility/utility";
+import { getCodeRequestURL, loginByGhCode } from "../utility/utility";
 
 function Login() {
   const navigate = useNavigate();
@@ -16,9 +16,7 @@ function Login() {
 
   useEffect(() => {
     if (ghCode) {
-      getUserByGhCode(ghCode)
-        .then((user) => setUser(user))
-        .then(() => navigate("/"));
+      loginByGhCode(ghCode).then(() => navigate("/"));
     } else {
       getCodeRequestURL().then((url) => setCodeRequestURL(url));
     }

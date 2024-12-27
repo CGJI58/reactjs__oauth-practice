@@ -4,15 +4,19 @@ import { useRecoilState } from "recoil";
 import Blind from "../Components/blind";
 import { useEffect } from "react";
 import UserRecord from "../Components/userrecord";
+import { getUserByCookie } from "../utility/utility";
 
 function Home() {
   const [user, setUser] = useRecoilState<IUserState>(userState);
 
   useEffect(() => {
     if (user.userInfo.email === "") {
-      // BE로 쿠키를 보내 인증을 하여 사용자 정보를 가져오는 알고리즘
+      if (true) {
+        // 이 조건문은 브라우저의 쿠키가 있으면 실행, 없으면 패스할 것.
+        getUserByCookie().then((user) => setUser(user));
+      }
     }
-  }, []);
+  }, [user]);
 
   return (
     <Wrapper>

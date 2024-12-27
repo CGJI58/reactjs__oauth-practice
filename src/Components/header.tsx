@@ -1,14 +1,14 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { IUserState, userState } from "../atoms";
+import { defaultUserState, IUserState, userState } from "../atoms";
 import {
   motion,
   useAnimation,
   useMotionValueEvent,
   useScroll,
 } from "framer-motion";
-import { logOut } from "../utility/utility";
+import { deleteCookie } from "../utility/utility";
 
 function Header() {
   const navigate = useNavigate();
@@ -25,7 +25,8 @@ function Header() {
   });
 
   function onLogOutClick() {
-    logOut();
+    deleteCookie();
+    setUser(() => defaultUserState);
     navigate("/");
   }
 
