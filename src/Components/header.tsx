@@ -24,8 +24,8 @@ function Header() {
     }
   });
 
-  function onLogOutClick() {
-    deleteCookie();
+  async function onLogOutClick() {
+    await deleteCookie();
     setUser(() => defaultUserState);
     navigate("/");
   }

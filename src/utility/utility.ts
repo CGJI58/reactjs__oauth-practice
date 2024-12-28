@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import { defaultUserState, IUserState } from "../atoms";
 
 const BE_BASE_URL = process.env.REACT_APP_BACK_END_URL;
@@ -9,7 +10,7 @@ export const loginByGhCode = async (ghCode: string) => {
       headers: {
         "Content-Type": "application/json",
       },
-      // credentials: "include",
+      credentials: "include",
       body: JSON.stringify({
         ghCode,
       }),
@@ -22,15 +23,32 @@ export const loginByGhCode = async (ghCode: string) => {
   }
 };
 
-export const getUserByCookie = async (): Promise<IUserState> => {
+export const getUserByCookie = async (
+  jwtToken: string
+): Promise<IUserState> => {
   try {
     const response = await fetch(`${BE_BASE_URL}/auth/get-user-by-cookie`, {
       method: "GET",
-      // credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${jwtToken}`,
+      },
+      credentials: "include",
     });
-    return defaultUserState; // 임시
+    if (response.ok) {
+      console.log("get user by cookie complete.");
+      const userData: IUserState = await response.json();
+      return userData;
+    } else {
+      console.error(
+        "Authentication failed:",
+        response.status,
+        await response.text()
+      );
+      return defaultUserState;
+    }
   } catch (error) {
-    console.error("fail to get user by cookie. Error:", error);
+    console.error(error);
     return defaultUserState;
   }
 };
@@ -38,12 +56,24 @@ export const getUserByCookie = async (): Promise<IUserState> => {
 export const deleteCookie = async () => {
   try {
     const response = await fetch(`${BE_BASE_URL}/auth/delete-cookie`, {
-      method: "GET",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       credentials: "include",
     });
-    if (response.ok) console.log("Cookie has been deleted.");
+    if (response.ok) {
+      Cookies.remove("jwt");
+      console.log("Cookie has been deleted.");
+    } else {
+      console.error(
+        "fail to delete cookie on server:",
+        response.status,
+        await response.text()
+      );
+    }
   } catch (error) {
-    console.error("fail to delete Cookie. Error:", error);
+    console.error(error);
   }
 };
 
