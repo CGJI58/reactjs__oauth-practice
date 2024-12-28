@@ -7,6 +7,7 @@ export const loginByGhCode = async (ghCode: string) => {
   try {
     const response = await fetch(`${BE_BASE_URL}/auth/login-by-ghcode`, {
       method: "POST",
+      mode: "cors",
       headers: {
         "Content-Type": "application/json",
       },
@@ -29,6 +30,7 @@ export const getUserByCookie = async (
   try {
     const response = await fetch(`${BE_BASE_URL}/auth/get-user-by-cookie`, {
       method: "GET",
+      mode: "cors",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${jwtToken}`,
@@ -57,6 +59,7 @@ export const deleteCookie = async () => {
   try {
     const response = await fetch(`${BE_BASE_URL}/auth/delete-cookie`, {
       method: "POST",
+      mode: "cors",
       headers: {
         "Content-Type": "application/json",
       },
@@ -80,6 +83,7 @@ export const deleteCookie = async () => {
 export const updateUser = async (user: IUserState) => {
   await fetch(`${BE_BASE_URL}/users/update`, {
     method: "POST",
+    mode: "cors",
     headers: {
       "Content-Type": "application/json",
     },

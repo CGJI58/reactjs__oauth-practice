@@ -2,7 +2,7 @@
   "name": "reactjs__oauth-practice",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://CGJI58.github.io/reactjs__oauth-practice",
+  "homepage": "https://cgji58.github.io/reactjs__oauth-practice/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

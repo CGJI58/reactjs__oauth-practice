@@ -3,8 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useSetRecoilState } from "recoil";
-import { IUserState, userState } from "../atoms";
 import { getCodeRequestURL, loginByGhCode } from "../utility/utility";
 
 function Login() {
@@ -12,7 +10,6 @@ function Login() {
   const location = useLocation();
   const [codeRequestURL, setCodeRequestURL] = useState("");
   const ghCode = new URLSearchParams(location.search).get("code");
-  const setUser = useSetRecoilState<IUserState>(userState);
 
   useEffect(() => {
     if (ghCode) {
