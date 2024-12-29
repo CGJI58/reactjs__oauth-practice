@@ -11,14 +11,14 @@ function Home() {
 
   useEffect(() => {
     const hashCode = localStorage.getItem("hashCode");
-    if (user === defaultUserState && hashCode) {
+    if (user.hashCode === "" && hashCode) {
       getUserByHashCode(hashCode).then((userData) => setUser(userData));
     }
   }, []);
 
   return (
     <Wrapper>
-      {user === defaultUserState ? <Blind /> : <UserRecord user={user} />}
+      {user.hashCode === "" ? <Blind /> : <UserRecord user={user} />}
     </Wrapper>
   );
 }
