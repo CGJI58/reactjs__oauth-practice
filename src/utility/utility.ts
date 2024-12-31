@@ -17,6 +17,14 @@ export const loginByGhCode = async (ghCode: string) => {
       }),
     });
     if (response.ok) {
+      const cookies = document.cookie.split("; ");
+      const jwtCookie = cookies.find((cookie) => cookie.startsWith("jwt="));
+
+      if (jwtCookie) {
+        console.log("JWT Cookie recieved:", jwtCookie);
+      } else {
+        console.log("Fail to get JWT Cookie.");
+      }
       console.log("Login complete.");
     }
   } catch (error) {
