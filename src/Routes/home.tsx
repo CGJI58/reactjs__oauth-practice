@@ -1,11 +1,18 @@
 import styled from "styled-components";
-import { IUserState, userState } from "../atoms";
-import { useRecoilValue } from "recoil";
+import { defaultUserState, IUserState, userState } from "../atoms";
+import { useRecoilState, useRecoilValue } from "recoil";
 import Blind from "../Components/blind";
 import UserRecord from "../Components/userrecord";
+import { useEffect } from "react";
+import { getUserByCookie } from "../utility/utility";
 
 function Home() {
-  const user = useRecoilValue<IUserState>(userState);
+  const [user, setUser] = useRecoilState<IUserState>(userState);
+  useEffect(() => {
+    if (user === defaultUserState) {
+      getUserByCookie().then((user) => setUser(user));
+    }
+  }, []);
 
   return (
     <Wrapper>

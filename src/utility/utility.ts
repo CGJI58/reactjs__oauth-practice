@@ -1,4 +1,3 @@
-import Cookies from "js-cookie";
 import { defaultUserState, IUserState } from "../atoms";
 
 const BE_BASE_URL = process.env.REACT_APP_BACK_END_URL;
@@ -16,38 +15,25 @@ export const loginByGhCode = async (ghCode: string) => {
         ghCode,
       }),
     });
-    if (response.ok) {
-      const cookies = document.cookie.split("; ");
-      const jwtCookie = cookies.find((cookie) => cookie.startsWith("jwt="));
-
-      if (jwtCookie) {
-        console.log("JWT Cookie recieved:", jwtCookie);
-      } else {
-        console.log("Fail to get JWT Cookie.");
-      }
-      console.log("Login complete.");
-    }
   } catch (error) {
     console.error("fail to login by ghcode:", error);
   }
 };
 
-export const getUserByCookie = async (
-  jwtToken: string
-): Promise<IUserState> => {
+export const getUserByCookie = async (): Promise<IUserState> => {
   try {
     const response = await fetch(`${BE_BASE_URL}/auth/get-user-by-cookie`, {
       method: "GET",
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${jwtToken}`,
       },
       credentials: "include",
     });
     if (response.ok) {
       console.log("get user by cookie complete.");
       const userData: IUserState = await response.json();
+      console.log(`getUserByCookie response.json(): ${userData}`);
       return userData;
     } else {
       console.error(
@@ -74,7 +60,6 @@ export const deleteCookie = async () => {
       credentials: "include",
     });
     if (response.ok) {
-      Cookies.remove("jwt");
       console.log("Cookie has been deleted.");
     } else {
       console.error(
