@@ -4,7 +4,7 @@ const BE_BASE_URL = process.env.REACT_APP_BACK_END_URL;
 
 export const loginByGhCode = async (ghCode: string) => {
   try {
-    const response = await fetch(`${BE_BASE_URL}/auth/login-by-ghcode`, {
+    await fetch(`${BE_BASE_URL}/auth/login-by-ghcode`, {
       method: "POST",
       mode: "cors",
       headers: {
