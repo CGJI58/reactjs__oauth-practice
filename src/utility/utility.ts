@@ -4,7 +4,7 @@ const BE_BASE_URL = process.env.REACT_APP_BACK_END_URL;
 
 export const loginByGhCode = async (ghCode: string) => {
   try {
-    const response = await fetch(`${BE_BASE_URL}/auth/login-by-ghcode`, {
+    await fetch(`${BE_BASE_URL}/auth/login-by-ghcode`, {
       method: "POST",
       mode: "cors",
       headers: {
@@ -30,19 +30,8 @@ export const getUserByCookie = async (): Promise<IUserState> => {
       },
       credentials: "include",
     });
-    if (response.ok) {
-      console.log("get user by cookie complete.");
-      const userData: IUserState = await response.json();
-      console.log(`getUserByCookie response.json(): ${userData}`);
-      return userData;
-    } else {
-      console.error(
-        "Authentication failed:",
-        response.status,
-        await response.text()
-      );
-      return defaultUserState;
-    }
+    const userData: IUserState = await response.json();
+    return userData;
   } catch (error) {
     console.error(error);
     return defaultUserState;
