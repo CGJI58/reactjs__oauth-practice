@@ -40,3 +40,8 @@ export const userState = atom<IUserState>({
   key: "userState",
   default: defaultUserState,
 });
+
+export const loginState = atom({
+  key: "loginState",
+  default: false,
+});

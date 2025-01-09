@@ -4,7 +4,7 @@ const BE_BASE_URL = process.env.REACT_APP_BACK_END_URL;
 
 export const loginByGhCode = async (ghCode: string) => {
   try {
-    await fetch(`${BE_BASE_URL}/auth/login-by-ghcode`, {
+    const response = await fetch(`${BE_BASE_URL}/auth/login-by-ghcode`, {
       method: "POST",
       mode: "cors",
       headers: {
@@ -15,8 +15,12 @@ export const loginByGhCode = async (ghCode: string) => {
         ghCode,
       }),
     });
+    if (response.status < 300) {
+      return true;
+    } else return false;
   } catch (error) {
     console.error("fail to login by ghcode:", error);
+    return false;
   }
 };
 

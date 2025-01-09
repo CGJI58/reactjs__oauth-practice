@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { defaultUserState, IUserState, userState } from "../atoms";
+import { defaultUserState, IUserState, loginState, userState } from "../atoms";
 import {
   motion,
   useAnimation,
@@ -15,7 +15,7 @@ function Header() {
   const { scrollY } = useScroll();
   const navAnimation = useAnimation();
   const [user, setUser] = useRecoilState<IUserState>(userState);
-
+  const setLogin = useSetRecoilState(loginState);
   useMotionValueEvent(scrollY, "change", (scroll) => {
     if (scroll > 80) {
       navAnimation.start("scroll");
@@ -27,6 +27,7 @@ function Header() {
   async function onLogOutClick() {
     await deleteCookie();
     setUser(() => defaultUserState);
+    setLogin(() => false);
     navigate("/");
   }
 
