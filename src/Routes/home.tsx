@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { defaultUserState, IUserState, userState } from "../atoms";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import Blind from "../Components/blind";
 import UserRecord from "../Components/userrecord";
 import { useEffect } from "react";

@@ -25,9 +25,6 @@ export const getUserByCookie = async (): Promise<IUserState> => {
     const response = await fetch(`${BE_BASE_URL}/auth/get-user-by-cookie`, {
       method: "GET",
       mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
       credentials: "include",
     });
     const userData: IUserState = await response.json();
@@ -43,9 +40,6 @@ export const deleteCookie = async () => {
     const response = await fetch(`${BE_BASE_URL}/auth/delete-cookie`, {
       method: "POST",
       mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
       credentials: "include",
     });
     if (response.ok) {
