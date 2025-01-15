@@ -3,6 +3,7 @@ import { defaultUserState, IUserState } from "../atoms";
 const BE_BASE_URL = process.env.REACT_APP_BACK_END_URL;
 
 export const loginByGhCode = async (ghCode: string) => {
+  console.log("Run loginByGhCode()");
   try {
     const response = await fetch(`${BE_BASE_URL}/auth/login-by-ghcode`, {
       method: "POST",
@@ -15,16 +16,16 @@ export const loginByGhCode = async (ghCode: string) => {
         ghCode,
       }),
     });
-    if (response.status < 300) {
-      return true;
-    } else return false;
+    const { ok } = response;
+    return ok;
   } catch (error) {
-    console.error("fail to login by ghcode:", error);
+    console.error("loginByGhCode:", error);
     return false;
   }
 };
 
 export const getUserByCookie = async (): Promise<IUserState> => {
+  console.log("Run getUserByCookie()");
   try {
     const response = await fetch(`${BE_BASE_URL}/auth/get-user-by-cookie`, {
       method: "GET",
@@ -40,20 +41,19 @@ export const getUserByCookie = async (): Promise<IUserState> => {
 };
 
 export const deleteCookie = async () => {
+  console.log("Run deleteCookie()");
   try {
     const response = await fetch(`${BE_BASE_URL}/auth/delete-cookie`, {
       method: "POST",
       mode: "cors",
       credentials: "include",
     });
-    if (response.ok) {
+    const { ok, status } = response;
+    const responseText = await response.text();
+    if (ok) {
       console.log("Cookie has been deleted.");
     } else {
-      console.error(
-        "fail to delete cookie on server:",
-        response.status,
-        await response.text()
-      );
+      console.error("fail to delete cookie on server:", status, responseText);
     }
   } catch (error) {
     console.error(error);
@@ -61,6 +61,7 @@ export const deleteCookie = async () => {
 };
 
 export const updateUser = async (user: IUserState) => {
+  console.log("Run updateUser()");
   await fetch(`${BE_BASE_URL}/users/update`, {
     method: "POST",
     mode: "cors",
@@ -72,6 +73,7 @@ export const updateUser = async (user: IUserState) => {
 };
 
 export const getCodeRequestURL = async () => {
+  console.log("Run getCodeRequestURL()");
   const { codeRequestURL }: { codeRequestURL: string } = await (
     await fetch(`${BE_BASE_URL}`)
   ).json();
