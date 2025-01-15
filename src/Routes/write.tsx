@@ -1,8 +1,16 @@
 import styled from "styled-components";
-import { useSetRecoilState } from "recoil";
-import { IDiary, IUserState, userState } from "../atoms";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  defaultUserState,
+  IDiary,
+  IUserState,
+  loginState,
+  userState,
+} from "../atoms";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { getUserByCookie } from "../utility/utility";
 
 interface IForm {
   title: string;
@@ -22,7 +30,15 @@ const generateDate = () => {
 
 function Write() {
   const navigate = useNavigate();
-  const setUser = useSetRecoilState<IUserState>(userState);
+
+  const [user, setUser] = useRecoilState<IUserState>(userState);
+  const login = useRecoilValue(loginState);
+  useEffect(() => {
+    if (user === defaultUserState) {
+      getUserByCookie().then((user) => setUser(user));
+    }
+  }, [login]);
+
   const { register, setValue, handleSubmit } = useForm<IForm>();
 
   const onValid = ({ title, text }: IForm) => {
