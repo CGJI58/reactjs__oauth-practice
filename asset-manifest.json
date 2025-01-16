@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/reactjs__oauth-practice/static/js/main.79731740.js",
+    "main.js": "/reactjs__oauth-practice/static/js/main.d3261b18.js",
     "index.html": "/reactjs__oauth-practice/index.html",
-    "main.79731740.js.map": "/reactjs__oauth-practice/static/js/main.79731740.js.map"
+    "main.d3261b18.js.map": "/reactjs__oauth-practice/static/js/main.d3261b18.js.map"
   },
   "entrypoints": [
-    "static/js/main.79731740.js"
+    "static/js/main.d3261b18.js"
   ]
 }
