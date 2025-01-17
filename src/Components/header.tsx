@@ -17,7 +17,7 @@ function Header() {
   const [user, setUser] = useRecoilState<IUserState>(userState);
   const setLogin = useSetRecoilState(loginState);
   useMotionValueEvent(scrollY, "change", (scroll) => {
-    if (scroll > 80) {
+    if (scroll > 20) {
       navAnimation.start("scroll");
     } else {
       navAnimation.start("top");
@@ -62,6 +62,7 @@ const navVariants = {
 };
 
 const Wrapper = styled(motion.div)`
+  z-index: 99;
   position: fixed;
   top: 0;
   width: 100%;
