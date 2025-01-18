@@ -1,7 +1,6 @@
 import { atom } from "recoil";
 
 export interface IUserState {
-  hashCode: string;
   userInfo: IUserInfo;
   userRecord: IUserRecord;
 }
@@ -25,7 +24,6 @@ export interface IDiary {
 }
 
 export const defaultUserState: IUserState = {
-  hashCode: "",
   userInfo: {
     email: "",
     primary: false,
@@ -41,4 +39,9 @@ export const defaultUserState: IUserState = {
 export const userState = atom<IUserState>({
   key: "userState",
   default: defaultUserState,
+});
+
+export const loginState = atom({
+  key: "loginState",
+  default: false,
 });

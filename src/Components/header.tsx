@@ -1,31 +1,33 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { IUserState, userState } from "../atoms";
+import { defaultUserState, IUserState, loginState, userState } from "../atoms";
 import {
   motion,
   useAnimation,
   useMotionValueEvent,
   useScroll,
 } from "framer-motion";
+import { deleteCookie } from "../utility/utility";
 
 function Header() {
   const navigate = useNavigate();
   const { scrollY } = useScroll();
   const navAnimation = useAnimation();
   const [user, setUser] = useRecoilState<IUserState>(userState);
-
+  const setLogin = useSetRecoilState(loginState);
   useMotionValueEvent(scrollY, "change", (scroll) => {
-    if (scroll > 80) {
+    if (scroll > 20) {
       navAnimation.start("scroll");
     } else {
       navAnimation.start("top");
     }
   });
 
-  function onLogOutClick() {
-    localStorage.removeItem("hashCode");
-    setUser((prev) => ({ ...prev, hashCode: "" }));
+  async function onLogOutClick() {
+    await deleteCookie();
+    setUser(() => defaultUserState);
+    setLogin(() => false);
     navigate("/");
   }
 
@@ -34,12 +36,12 @@ function Header() {
       <Link to="/">
         <Col>Home</Col>
       </Link>
-      {user.hashCode !== "" ? (
+      {user.userInfo?.email !== "" ? (
         <Link to={`/write`}>
           <Col>Write</Col>
         </Link>
       ) : null}
-      {user.hashCode !== "" ? (
+      {user.userInfo?.email !== "" ? (
         <Col onClick={() => onLogOutClick()}>Log out</Col>
       ) : (
         <Link to="/login">
@@ -60,6 +62,7 @@ const navVariants = {
 };
 
 const Wrapper = styled(motion.div)`
+  z-index: 99;
   position: fixed;
   top: 0;
   width: 100%;

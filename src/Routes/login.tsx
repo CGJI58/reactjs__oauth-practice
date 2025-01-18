@@ -3,24 +3,21 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { getCodeRequestURL, loginByGhCode } from "../utility/utility";
 import { useSetRecoilState } from "recoil";
-import { IUserState, userState } from "../atoms";
-import { getCodeRequestURL, getUserByGhCode } from "../utility/utility";
+import { loginState } from "../atoms";
 
 function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const [codeRequestURL, setCodeRequestURL] = useState("");
   const ghCode = new URLSearchParams(location.search).get("code");
-  const setUser = useSetRecoilState<IUserState>(userState);
+  const setLogin = useSetRecoilState<boolean>(loginState);
 
   useEffect(() => {
     if (ghCode) {
-      getUserByGhCode(ghCode)
-        .then((user) => {
-          setUser(user);
-          localStorage.setItem("hashCode", user.hashCode);
-        })
+      loginByGhCode(ghCode)
+        .then((flag) => setLogin(flag))
         .then(() => navigate("/"));
     } else {
       getCodeRequestURL().then((url) => setCodeRequestURL(url));
