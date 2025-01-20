@@ -3,18 +3,28 @@ import { IDiary, userState } from "../atoms";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useSetRecoilState } from "recoil";
+import { useNavigate } from "react-router-dom";
 
 interface IDiaryComponent {
   diary: IDiary;
 }
 
 function Diary({ diary: { date, title, text } }: IDiaryComponent) {
+  const navigate = useNavigate();
   const setUser = useSetRecoilState(userState);
   const [preview, setPreview] = useState(false);
 
   const OnPreviewClicked = () => {
     setPreview((prev) => !prev);
-    //preview === true 일 때, 수정 버튼과 삭제 버튼이 나타나도록
+  };
+
+  const onModifyClicked = () => {
+    const confirmed = window.confirm("정말로 수정하시겠습니까?");
+    if (confirmed) {
+      // 해당 Diary 의 date, title, text 데이터를 Write 페이지로 보냄 (navigate)
+      const state: { diary: IDiary } = { diary: { date, title, text } };
+      navigate("write?mode=modify", { state });
+    }
   };
 
   const onDeleteClicked = () => {
@@ -35,7 +45,20 @@ function Diary({ diary: { date, title, text } }: IDiaryComponent) {
   return (
     <Wrapper>
       <Preview onClick={() => OnPreviewClicked()}>
-        <Title>{title}</Title>
+        {preview ? (
+          <ModifyBtn
+            title="수정"
+            onClick={() => onModifyClicked()}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            🔄
+          </ModifyBtn>
+        ) : null}
+
+        <Title animate={{ x: preview ? 30 : 0 }} transition={{ duration: 0 }}>
+          {title}
+        </Title>
         <TimeStamp
           animate={{ x: preview ? -30 : 0 }}
           transition={{ duration: 0 }}
@@ -44,6 +67,7 @@ function Diary({ diary: { date, title, text } }: IDiaryComponent) {
         </TimeStamp>
         {preview ? (
           <DeleteBtn
+            title="삭제"
             onClick={() => onDeleteClicked()}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -76,7 +100,12 @@ const Preview = styled.div`
   cursor: pointer;
 `;
 
-const Title = styled.div`
+const ModifyBtn = styled(motion.div)`
+  position: absolute;
+  left: 10px;
+`;
+
+const Title = styled(motion.div)`
   font-size: 20px;
   font-weight: bold;
 `;

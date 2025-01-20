@@ -37,7 +37,10 @@ function Header() {
         <Col>Home</Col>
       </Link>
       {user.userInfo?.email !== "" ? (
-        <Link to={`/write`}>
+        <Link
+          to={{ pathname: "/write", search: "?mode=create" }}
+          state={{ diary: { date: "", title: "", text: "" } }}
+        >
           <Col>Write</Col>
         </Link>
       ) : null}

@@ -1,21 +1,13 @@
 import styled from "styled-components";
-import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  defaultUserState,
-  IDiary,
-  IUserState,
-  loginState,
-  userState,
-} from "../atoms";
+import { useRecoilState } from "recoil";
+import { defaultUserState, IDiary, IUserState, userState } from "../atoms";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { getUserByCookie } from "../utility/utility";
 
-interface IForm {
-  title: string;
-  text: string;
-}
+type IDiaryForm = IDiary;
+type IWrite = { diary: IDiary };
 
 const generateDate = () => {
   const now = new Date(Date.now());
@@ -30,19 +22,48 @@ const generateDate = () => {
 
 function Write() {
   const navigate = useNavigate();
-
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+  const mode = query.get("mode") as "create" | "modify";
+  const { diary }: IWrite = location.state;
   const [user, setUser] = useRecoilState<IUserState>(userState);
-  const login = useRecoilValue(loginState);
+
   useEffect(() => {
     if (user === defaultUserState) {
       getUserByCookie().then((user) => setUser(user));
     }
-  }, [login]);
+  }, []);
 
-  const { register, setValue, handleSubmit } = useForm<IForm>();
+  const { register, setValue, handleSubmit } = useForm<IDiaryForm>();
 
-  const onValid = ({ title, text }: IForm) => {
-    const newDiary: IDiary = { date: generateDate(), title, text };
+  useEffect(() => {
+    if (mode === "modify") {
+      setValue("title", diary.title);
+      setValue("text", diary.text);
+    }
+  }, []);
+
+  const onValid = ({ title, text }: IDiaryForm) => {
+    const date = mode === "create" ? generateDate() : diary.date;
+    const newDiary: IDiary = { date, title, text };
+
+    if (mode === "modify") {
+      setUser((prev) => {
+        const originalDiaries = prev.userRecord.diaries;
+        const modifiedDiaries = originalDiaries.filter(
+          (diary) => diary.date !== newDiary.date
+        );
+        const newUser: IUserState = {
+          ...prev,
+          userRecord: {
+            ...prev.userRecord,
+            diaries: modifiedDiaries,
+          },
+        };
+        return newUser;
+      });
+    }
+
     setUser((prev) => {
       const prevDiaries = prev.userRecord.diaries;
       const newUser: IUserState = {
