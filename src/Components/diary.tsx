@@ -14,24 +14,34 @@ function Diary({ diary: { date, title, text } }: IDiaryComponent) {
 
   const OnPreviewClicked = () => {
     setPreview((prev) => !prev);
-    //여기에 수정버튼과 삭제버튼을 활성화하는 로직 삽입
+    //preview === true 일 때, 수정 버튼과 삭제 버튼이 나타나도록
   };
 
   const onDeleteClicked = () => {
-    setUser((prev) => {
-      const newDiaries = prev.userRecord.diaries.filter(
-        (diary) => diary.date !== date
-      );
-      return {
-        ...prev,
-        userRecord: { ...prev.userRecord, diaries: newDiaries },
-      };
-    });
+    const confirmed = window.confirm("정말로 삭제하시겠습니까?");
+    if (confirmed) {
+      setUser((prev) => {
+        const newDiaries = prev.userRecord.diaries.filter(
+          (diary) => diary.date !== date
+        );
+        return {
+          ...prev,
+          userRecord: { ...prev.userRecord, diaries: newDiaries },
+        };
+      });
+    }
   };
 
   return (
     <Wrapper>
       <Preview onClick={() => OnPreviewClicked()}>
+        <Title>{title}</Title>
+        <TimeStamp
+          animate={{ x: preview ? -30 : 0 }}
+          transition={{ duration: 0 }}
+        >
+          {date}
+        </TimeStamp>
         {preview ? (
           <DeleteBtn
             onClick={() => onDeleteClicked()}
@@ -41,10 +51,6 @@ function Diary({ diary: { date, title, text } }: IDiaryComponent) {
             🗑️
           </DeleteBtn>
         ) : null}
-        <Title animate={{ x: preview ? 30 : 0 }} transition={{ duration: 0 }}>
-          {title}
-        </Title>
-        <TimeStamp>{date}</TimeStamp>
       </Preview>
       {preview ? <Text>{text}</Text> : null}
     </Wrapper>
@@ -70,16 +76,16 @@ const Preview = styled.div`
   cursor: pointer;
 `;
 
-const Title = styled(motion.div)`
+const Title = styled.div`
   font-size: 20px;
   font-weight: bold;
 `;
 
-const TimeStamp = styled.div``;
+const TimeStamp = styled(motion.div)``;
 
 const DeleteBtn = styled(motion.div)`
   position: absolute;
-  left: 10px;
+  right: 10px;
 `;
 
 const Text = styled.div`
