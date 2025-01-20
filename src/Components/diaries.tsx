@@ -8,18 +8,11 @@ interface IDiaries {
 }
 
 function Diaries({ diaries }: IDiaries) {
-  const [editMode, setEditMode] = useState(false);
-  const toggleEditMode = () => {
-    setEditMode((prev) => !prev);
-  };
   return (
     <Wrapper>
-      {diaries.length ? (
-        <EditModeBtn onClick={() => toggleEditMode()}>{"edit"}</EditModeBtn>
-      ) : null}
       <DiariesList>
         {diaries.map((diary) => (
-          <Diary key={diary.date} diary={diary} editMode={editMode} />
+          <Diary key={diary.date} diary={diary} />
         ))}
       </DiariesList>
     </Wrapper>

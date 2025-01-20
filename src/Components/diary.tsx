@@ -6,15 +6,15 @@ import { useSetRecoilState } from "recoil";
 
 interface IDiaryComponent {
   diary: IDiary;
-  editMode: boolean;
 }
 
-function Diary({ diary: { date, title, text }, editMode }: IDiaryComponent) {
-  const [previewClicked, setPreviewClicked] = useState(false);
+function Diary({ diary: { date, title, text } }: IDiaryComponent) {
   const setUser = useSetRecoilState(userState);
+  const [preview, setPreview] = useState(false);
 
   const OnPreviewClicked = () => {
-    setPreviewClicked((prev) => !prev);
+    setPreview((prev) => !prev);
+    //여기에 수정버튼과 삭제버튼을 활성화하는 로직 삽입
   };
 
   const onDeleteClicked = () => {
@@ -32,7 +32,7 @@ function Diary({ diary: { date, title, text }, editMode }: IDiaryComponent) {
   return (
     <Wrapper>
       <Preview onClick={() => OnPreviewClicked()}>
-        {editMode ? (
+        {preview ? (
           <DeleteBtn
             onClick={() => onDeleteClicked()}
             initial={{ opacity: 0 }}
@@ -41,12 +41,12 @@ function Diary({ diary: { date, title, text }, editMode }: IDiaryComponent) {
             🗑️
           </DeleteBtn>
         ) : null}
-        <Title animate={{ x: editMode ? 30 : 0 }} transition={{ duration: 0 }}>
+        <Title animate={{ x: preview ? 30 : 0 }} transition={{ duration: 0 }}>
           {title}
         </Title>
         <TimeStamp>{date}</TimeStamp>
       </Preview>
-      {previewClicked ? <Text>{text}</Text> : null}
+      {preview ? <Text>{text}</Text> : null}
     </Wrapper>
   );
 }
