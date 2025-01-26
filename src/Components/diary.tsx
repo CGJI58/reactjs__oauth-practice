@@ -23,7 +23,7 @@ function Diary({ diary: { date, title, text } }: IDiaryComponent) {
     if (confirmed) {
       // 해당 Diary 의 date, title, text 데이터를 Write 페이지로 보냄 (navigate)
       const state: { diary: IDiary } = { diary: { date, title, text } };
-      navigate("write?mode=modify", { state });
+      navigate(`write?mode=modify&diary_id=${date}`, { state }); // id 속성을 추가할 예정임(임시로 date 사용).
     }
   };
 

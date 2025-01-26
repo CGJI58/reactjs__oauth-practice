@@ -6,11 +6,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { getUserByCookie } from "../utility/utility";
 
-type IDiaryForm = IDiary;
-type IWrite = { diary: IDiary };
+interface IDiaryForm extends Omit<IDiary, "date"> {}
+type IOriginalDiary = { diary: IDiary };
 
-const generateDate = () => {
-  const now = new Date(Date.now());
+const generateDate = (dateValue: number) => {
+  const now = new Date(dateValue);
   const year = String(now.getFullYear()).slice(-2);
   const mon = String(now.getMonth() + 1).padStart(2, "0");
   const day = String(now.getDate()).padStart(2, "0");
@@ -25,29 +25,27 @@ function Write() {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
   const mode = query.get("mode") as "create" | "modify";
-  const { diary }: IWrite = location.state;
   const [user, setUser] = useRecoilState<IUserState>(userState);
+  const {
+    diary: { title: originalTitle, text: originalText, date: originalDate },
+  }: IOriginalDiary = location.state;
+
+  const { register, setValue, handleSubmit, getValues } = useForm<IDiaryForm>();
 
   useEffect(() => {
     if (user === defaultUserState) {
       getUserByCookie().then((user) => setUser(user));
     }
-  }, []);
-
-  const { register, setValue, handleSubmit } = useForm<IDiaryForm>();
-
-  useEffect(() => {
     if (mode === "modify") {
-      setValue("title", diary.title);
-      setValue("text", diary.text);
+      setValue("title", originalTitle);
+      setValue("text", originalText);
     }
   }, []);
 
   const onValid = ({ title, text }: IDiaryForm) => {
-    const date = mode === "create" ? generateDate() : diary.date;
+    const dateValue = Date.now(); // 이후에 dateValue 값을 diary 의 id로 활용할 것.
+    const date = mode === "modify" ? originalDate : generateDate(dateValue);
     const newDiary: IDiary = { date, title, text };
-
-    if (mode === "modify") {
       setUser((prev) => {
         const originalDiaries = prev.userRecord.diaries;
         const modifiedDiaries = originalDiaries.filter(
@@ -57,18 +55,8 @@ function Write() {
           ...prev,
           userRecord: {
             ...prev.userRecord,
-            diaries: modifiedDiaries,
-          },
-        };
-        return newUser;
-      });
-    }
-
-    setUser((prev) => {
-      const prevDiaries = prev.userRecord.diaries;
-      const newUser: IUserState = {
-        ...prev,
-        userRecord: { ...prev.userRecord, diaries: [newDiary, ...prevDiaries] },
+          diaries: [newDiary, ...modifiedDiaries],
+        },
       };
       return newUser;
     });
