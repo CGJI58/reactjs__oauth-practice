@@ -9,7 +9,7 @@ interface IDiaryComponent {
   diary: IDiary;
 }
 
-function Diary({ diary: { date, title, text } }: IDiaryComponent) {
+function Diary({ diary: { id, date, title, text } }: IDiaryComponent) {
   const navigate = useNavigate();
   const setUser = useSetRecoilState(userState);
   const [preview, setPreview] = useState(false);
@@ -21,9 +21,8 @@ function Diary({ diary: { date, title, text } }: IDiaryComponent) {
   const onModifyClicked = () => {
     const confirmed = window.confirm("정말로 수정하시겠습니까?");
     if (confirmed) {
-      // 해당 Diary 의 date, title, text 데이터를 Write 페이지로 보냄 (navigate)
-      const state: { diary: IDiary } = { diary: { date, title, text } };
-      navigate(`write?mode=modify&diary_id=${date}`, { state }); // id 속성을 추가할 예정임(임시로 date 사용).
+      const state: { diary: IDiary } = { diary: { id, date, title, text } };
+      navigate(`write?mode=modify&diary_id=${id}`, { state });
     }
   };
 
@@ -32,7 +31,7 @@ function Diary({ diary: { date, title, text } }: IDiaryComponent) {
     if (confirmed) {
       setUser((prev) => {
         const newDiaries = prev.userRecord.diaries.filter(
-          (diary) => diary.date !== date
+          (diary) => diary.id !== id
         );
         return {
           ...prev,

@@ -27,7 +27,12 @@ function Write() {
   const mode = query.get("mode") as "create" | "modify";
   const [user, setUser] = useRecoilState<IUserState>(userState);
   const {
-    diary: { title: originalTitle, text: originalText, date: originalDate },
+    diary: {
+      id: originalId,
+      title: originalTitle,
+      text: originalText,
+      date: originalDate,
+    },
   }: IOriginalDiary = location.state;
 
   const { register, setValue, handleSubmit, getValues } = useForm<IDiaryForm>();
@@ -43,13 +48,13 @@ function Write() {
   }, []);
 
   const onValid = ({ title, text }: IDiaryForm) => {
-    const dateValue = Date.now(); // 이후에 dateValue 값을 diary 의 id로 활용할 것.
+    const dateValue = mode === "modify" ? Number(originalId) : Date.now();
     const date = mode === "modify" ? originalDate : generateDate(dateValue);
-    const newDiary: IDiary = { date, title, text };
+    const newDiary: IDiary = { id: dateValue.toString(), date, title, text };
       setUser((prev) => {
         const originalDiaries = prev.userRecord.diaries;
         const modifiedDiaries = originalDiaries.filter(
-          (diary) => diary.date !== newDiary.date
+        (diary) => diary.id !== newDiary.id
         );
         const newUser: IUserState = {
           ...prev,

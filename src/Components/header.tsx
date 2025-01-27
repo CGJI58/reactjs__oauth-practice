@@ -39,7 +39,7 @@ function Header() {
       {user.userInfo?.email !== "" ? (
         <Link
           to={{ pathname: "/write", search: "?mode=create" }}
-          state={{ diary: { date: "", title: "", text: "" } }}
+          state={{ diary: { id: "", date: "", title: "", text: "" } }}
         >
           <Col>Write</Col>
         </Link>

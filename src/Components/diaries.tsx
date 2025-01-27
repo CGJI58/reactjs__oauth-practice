@@ -12,7 +12,7 @@ function Diaries({ diaries }: IDiaries) {
     <Wrapper>
       <DiariesList>
         {diaries.map((diary) => (
-          <Diary key={diary.date} diary={diary} />
+          <Diary key={diary.id} diary={diary} />
         ))}
       </DiariesList>
     </Wrapper>

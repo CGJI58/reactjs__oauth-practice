@@ -18,6 +18,7 @@ export interface IUserRecord {
 }
 
 export interface IDiary {
+  id: string;
   date: string;
   title: string;
   text: string;
