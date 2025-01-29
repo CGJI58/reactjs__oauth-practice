@@ -47,19 +47,33 @@ function Write() {
     }
   }, []);
 
+  useEffect(() => {
+    window.addEventListener("beforeunload", onRefresh);
+    return () => {
+      window.removeEventListener("beforeunload", onRefresh);
+    };
+  }, []);
+
+  const onRefresh = (event: BeforeUnloadEvent) => {
+    const { title, text } = getValues();
+    if (title !== originalTitle || text !== originalText) {
+      event.preventDefault();
+    }
+  };
+
   const onValid = ({ title, text }: IDiaryForm) => {
     const dateValue = mode === "modify" ? Number(originalId) : Date.now();
     const date = mode === "modify" ? originalDate : generateDate(dateValue);
     const newDiary: IDiary = { id: dateValue.toString(), date, title, text };
-      setUser((prev) => {
-        const originalDiaries = prev.userRecord.diaries;
-        const modifiedDiaries = originalDiaries.filter(
+    setUser((prev) => {
+      const originalDiaries = prev.userRecord.diaries;
+      const modifiedDiaries = originalDiaries.filter(
         (diary) => diary.id !== newDiary.id
-        );
-        const newUser: IUserState = {
-          ...prev,
-          userRecord: {
-            ...prev.userRecord,
+      );
+      const newUser: IUserState = {
+        ...prev,
+        userRecord: {
+          ...prev.userRecord,
           diaries: [newDiary, ...modifiedDiaries],
         },
       };

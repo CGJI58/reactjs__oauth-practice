@@ -22,7 +22,7 @@ function Diary({ diary: { id, date, title, text } }: IDiaryComponent) {
     const confirmed = window.confirm("정말로 수정하시겠습니까?");
     if (confirmed) {
       const state: { diary: IDiary } = { diary: { id, date, title, text } };
-      navigate(`write?mode=modify&diary_id=${id}`, { state });
+      navigate(`write?mode=modify`, { state });
     }
   };
 
