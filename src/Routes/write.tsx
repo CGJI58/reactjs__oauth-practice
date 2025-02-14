@@ -53,6 +53,7 @@ function Write() {
   }, []);
 
   useEffect(() => {
+    localStorage.clear();
     window.addEventListener("beforeunload", onRefresh);
     return () => {
       window.removeEventListener("beforeunload", onRefresh);
