@@ -5,9 +5,9 @@ import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { getUserByCookie } from "../utility/utility";
+import { debounce } from "lodash";
 
-interface IDiaryForm extends Omit<IDiary, "date"> {}
-type IOriginalDiary = { diary: IDiary };
+interface IForm extends Omit<IDiary, "date" | "id"> {}
 
 const generateDate = (dateValue: number) => {
   const now = new Date(dateValue);
@@ -19,6 +19,11 @@ const generateDate = (dateValue: number) => {
   const sec = String(now.getSeconds()).padStart(2, "0");
   return `${year}${mon}${day} ${hour}:${min}:${sec}`;
 };
+
+const tempSave = debounce((diary: IDiary) => {
+  console.log(diary);
+  localStorage.setItem("tempDiary", JSON.stringify(diary));
+}, 1000);
 
 function Write() {
   const navigate = useNavigate();
@@ -33,9 +38,9 @@ function Write() {
       text: originalText,
       date: originalDate,
     },
-  }: IOriginalDiary = location.state;
-
-  const { register, setValue, handleSubmit, getValues } = useForm<IDiaryForm>();
+  }: { diary: IDiary } = location.state;
+  const { register, setValue, handleSubmit, getValues, watch } =
+    useForm<IForm>();
 
   useEffect(() => {
     if (user === defaultUserState) {
@@ -54,17 +59,39 @@ function Write() {
     };
   }, []);
 
+  useEffect(() => {
+    const subscription = watch(({ title, text }) => {
+      if (title && text) {
+        const tempDiary = generateDiary({ title, text });
+        tempSave(tempDiary);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
+
+  const onValid = ({ title, text }: IForm) => {
+    const newDiary = generateDiary({ title, text });
+    onSave(newDiary);
+    localStorage.clear();
+    navigate("/");
+  };
+
   const onRefresh = (event: BeforeUnloadEvent) => {
     const { title, text } = getValues();
     if (title !== originalTitle || text !== originalText) {
       event.preventDefault();
+      // 브라우저에 기본으로 내장된 confirm alert 가 실행됨.
     }
   };
 
-  const onValid = ({ title, text }: IDiaryForm) => {
+  const generateDiary = ({ title, text }: IForm) => {
     const dateValue = mode === "modify" ? Number(originalId) : Date.now();
     const date = mode === "modify" ? originalDate : generateDate(dateValue);
     const newDiary: IDiary = { id: dateValue.toString(), date, title, text };
+    return newDiary;
+  };
+
+  const onSave = (newDiary: IDiary) => {
     setUser((prev) => {
       const originalDiaries = prev.userRecord.diaries;
       const modifiedDiaries = originalDiaries.filter(
@@ -79,9 +106,6 @@ function Write() {
       };
       return newUser;
     });
-    setValue("title", "");
-    setValue("text", "");
-    navigate("/");
   };
 
   return (

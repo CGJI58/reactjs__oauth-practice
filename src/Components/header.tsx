@@ -1,7 +1,13 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { defaultUserState, IUserState, loginState, userState } from "../atoms";
+import {
+  defaultUserState,
+  IDiary,
+  IUserState,
+  loginState,
+  userState,
+} from "../atoms";
 import {
   motion,
   useAnimation,
@@ -12,10 +18,11 @@ import { deleteCookie } from "../utility/utility";
 
 function Header() {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const { scrollY } = useScroll();
   const navAnimation = useAnimation();
   const [user, setUser] = useRecoilState<IUserState>(userState);
-  const setLogin = useSetRecoilState(loginState);
+  const setLogin = useSetRecoilState<boolean>(loginState);
   useMotionValueEvent(scrollY, "change", (scroll) => {
     if (scroll > 20) {
       navAnimation.start("scroll");
@@ -23,6 +30,32 @@ function Header() {
       navAnimation.start("top");
     }
   });
+
+  function saveIfTempDiary() {
+    const stringTempDiary = localStorage.getItem("tempDiary");
+    if (pathname === "/write" && stringTempDiary) {
+      const confirmed = window.confirm("변경사항을 저장하시겠습니까?");
+      if (confirmed) {
+        const tempDiary: IDiary = JSON.parse(stringTempDiary);
+        //아래 setUser 가 write 에 있는 코드의 반복인데, 합칠 수 있는 방법 찾아볼 것
+        setUser((prev) => {
+          const originalDiaries = prev.userRecord.diaries;
+          const modifiedDiaries = originalDiaries.filter(
+            (diary) => diary.id !== tempDiary.id
+          );
+          const newUser: IUserState = {
+            ...prev,
+            userRecord: {
+              ...prev.userRecord,
+              diaries: [tempDiary, ...modifiedDiaries],
+            },
+          };
+          return newUser;
+        });
+      }
+      localStorage.clear();
+    }
+  }
 
   async function onLogOutClick() {
     await deleteCookie();
@@ -33,7 +66,7 @@ function Header() {
 
   return (
     <Wrapper variants={navVariants} initial="top" animate={navAnimation}>
-      <Link to="/">
+      <Link to="/" onClick={() => saveIfTempDiary()}>
         <Col>Home</Col>
       </Link>
       {user.userInfo?.email !== "" ? (
