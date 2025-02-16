@@ -65,6 +65,8 @@ function Write() {
       if (title && text) {
         const tempDiary = generateDiary({ title, text });
         tempSave(tempDiary);
+      } else {
+        localStorage.clear();
       }
     });
     return () => subscription.unsubscribe();
