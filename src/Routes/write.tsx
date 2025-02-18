@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { getUserByCookie } from "../utility/utility";
 import { debounce } from "lodash";
+import useSaveDiary from "../hooks/onsave";
 
 interface IForm extends Omit<IDiary, "date" | "id"> {}
 
@@ -41,6 +42,7 @@ function Write() {
   }: { diary: IDiary } = location.state;
   const { register, setValue, handleSubmit, getValues, watch } =
     useForm<IForm>();
+  const { onSave } = useSaveDiary();
 
   useEffect(() => {
     if (user === defaultUserState) {
@@ -92,23 +94,6 @@ function Write() {
     const date = mode === "modify" ? originalDate : generateDate(dateValue);
     const newDiary: IDiary = { id: dateValue.toString(), date, title, text };
     return newDiary;
-  };
-
-  const onSave = (newDiary: IDiary) => {
-    setUser((prev) => {
-      const originalDiaries = prev.userRecord.diaries;
-      const modifiedDiaries = originalDiaries.filter(
-        (diary) => diary.id !== newDiary.id
-      );
-      const newUser: IUserState = {
-        ...prev,
-        userRecord: {
-          ...prev.userRecord,
-          diaries: [newDiary, ...modifiedDiaries],
-        },
-      };
-      return newUser;
-    });
   };
 
   return (

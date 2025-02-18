@@ -15,6 +15,7 @@ import {
   useScroll,
 } from "framer-motion";
 import { deleteCookie } from "../utility/utility";
+import useSaveDiary from "../hooks/onsave";
 
 function Header() {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ function Header() {
   const navAnimation = useAnimation();
   const [user, setUser] = useRecoilState<IUserState>(userState);
   const setLogin = useSetRecoilState<boolean>(loginState);
+  const { onSave } = useSaveDiary();
   useMotionValueEvent(scrollY, "change", (scroll) => {
     if (scroll > 20) {
       navAnimation.start("scroll");
@@ -37,21 +39,7 @@ function Header() {
       const confirmed = window.confirm("변경사항을 저장하시겠습니까?");
       if (confirmed) {
         const tempDiary: IDiary = JSON.parse(stringTempDiary);
-        //아래 setUser 가 write 에 있는 코드의 반복인데, 합칠 수 있는 방법 찾아볼 것
-        setUser((prev) => {
-          const originalDiaries = prev.userRecord.diaries;
-          const modifiedDiaries = originalDiaries.filter(
-            (diary) => diary.id !== tempDiary.id
-          );
-          const newUser: IUserState = {
-            ...prev,
-            userRecord: {
-              ...prev.userRecord,
-              diaries: [tempDiary, ...modifiedDiaries],
-            },
-          };
-          return newUser;
-        });
+        onSave(tempDiary);
       }
       localStorage.clear();
     }
