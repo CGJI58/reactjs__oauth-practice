@@ -1,10 +1,15 @@
 import styled from "styled-components";
-import { defaultUserState, IUserState, loginState, userState } from "../atoms";
+import {
+  defaultUserState,
+  IUserState,
+  loginState,
+  userState,
+} from "../States/atoms";
 import { useRecoilState, useRecoilValue } from "recoil";
 import Blind from "../Components/blind";
-import UserRecord from "../Components/userrecord";
+import UserRecord from "../Components/userRecord";
 import { useEffect } from "react";
-import { getUserByCookie } from "../utility/utility";
+import { getUserByCookie } from "../Api/api";
 
 function Home() {
   const [user, setUser] = useRecoilState<IUserState>(userState);

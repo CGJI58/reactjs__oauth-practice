@@ -1,21 +1,15 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import {
-  defaultUserState,
-  IDiary,
-  IUserState,
-  loginState,
-  userState,
-} from "../atoms";
+import { IDiary, IUserState, userState } from "../States/atoms";
 import {
   motion,
   useAnimation,
   useMotionValueEvent,
   useScroll,
 } from "framer-motion";
-import { deleteCookie } from "../utility/utility";
-import useSaveDiary from "../hooks/onsave";
+import useSaveDiary from "../Hooks/useSaveDiary";
+import { useEffect, useState } from "react";
 
 function Header() {
   const navigate = useNavigate();

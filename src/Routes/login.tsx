@@ -3,9 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getCodeRequestURL, loginByGhCode } from "../utility/utility";
+import { getCodeRequestURL, loginByGhCode } from "../Api/api";
 import { useSetRecoilState } from "recoil";
-import { loginState } from "../atoms";
+import { loginState } from "../States/atoms";
 
 function Login() {
   const navigate = useNavigate();

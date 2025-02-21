@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { userState } from "../atoms";
+import { userState } from "../States/atoms";
 
 interface IForm {
   nickname: string;

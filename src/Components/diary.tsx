@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { IDiary, userState } from "../atoms";
+import { IDiary, userState } from "../States/atoms";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useSetRecoilState } from "recoil";

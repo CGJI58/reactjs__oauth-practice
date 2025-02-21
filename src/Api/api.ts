@@ -1,4 +1,4 @@
-import { defaultUserState, IUserState } from "../atoms";
+import { defaultUserState, IUserState } from "../States/atoms";
 
 const BE_BASE_URL = process.env.REACT_APP_BACK_END_URL;
 
@@ -62,7 +62,7 @@ export const deleteCookie = async () => {
 
 export const updateUser = async (user: IUserState) => {
   console.log("Run updateUser()");
-  await fetch(`${BE_BASE_URL}/users/update`, {
+  const response = await fetch(`${BE_BASE_URL}/users/update`, {
     method: "POST",
     mode: "cors",
     headers: {
@@ -70,6 +70,7 @@ export const updateUser = async (user: IUserState) => {
     },
     body: JSON.stringify({ user }),
   });
+  return response.ok;
 };
 
 export const getCodeRequestURL = async () => {

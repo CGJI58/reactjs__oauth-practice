@@ -1,5 +1,5 @@
 import { FC, ReactNode } from "react";
-import Header from "./Components/header";
+import Header from "../Components/header";
 import styled from "styled-components";
 
 interface LayoutProps {

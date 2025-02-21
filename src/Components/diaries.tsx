@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { IDiary } from "../atoms";
+import { IDiary } from "../States/atoms";
 import Diary from "./diary";
 import { useState } from "react";
 

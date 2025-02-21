@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import { IUserState } from "../atoms";
+import { IUserState } from "../States/atoms";
 import Diaries from "./diaries";
 import Nickname from "./nickname";
 import { useEffect } from "react";
-import { updateUser } from "../utility/utility";
+import { updateUser } from "../Api/api";
 
 function UserRecord({ user }: { user: IUserState }) {
   useEffect(() => {
