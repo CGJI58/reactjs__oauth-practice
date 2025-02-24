@@ -21,7 +21,20 @@ function useSaveDiary() {
     });
   };
 
-  return { onSave };
+  const isTempDiaryInStorage = () => {
+    const stringTempDiary = localStorage.getItem("tempDiary");
+    if (stringTempDiary) {
+      const confirmed = window.confirm("변경사항을 저장하시겠습니까?");
+      if (confirmed) {
+        const tempDiary: IDiary = JSON.parse(stringTempDiary);
+        return tempDiary;
+      }
+    }
+  };
+
+  return { onSave, isTempDiaryInStorage };
 }
 
 export default useSaveDiary;
+
+//로컬스토리지에 뭔가 들어있으면 무조건 실행되는 saveIfTempDiary()

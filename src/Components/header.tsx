@@ -1,24 +1,17 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { Link } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { IDiary, IUserState, userState } from "../States/atoms";
+import { IUserState, userState } from "../States/atoms";
 import {
   motion,
   useAnimation,
   useMotionValueEvent,
   useScroll,
 } from "framer-motion";
-import useSaveDiary from "../Hooks/useSaveDiary";
-import { useEffect, useState } from "react";
 
 function Header() {
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
   const { scrollY } = useScroll();
   const navAnimation = useAnimation();
-  const [user, setUser] = useRecoilState<IUserState>(userState);
-  const setLogin = useSetRecoilState<boolean>(loginState);
-  const { onSave } = useSaveDiary();
   useMotionValueEvent(scrollY, "change", (scroll) => {
     if (scroll > 20) {
       navAnimation.start("scroll");
@@ -26,44 +19,28 @@ function Header() {
       navAnimation.start("top");
     }
   });
-
-  function saveIfTempDiary() {
-    const stringTempDiary = localStorage.getItem("tempDiary");
-    if (pathname === "/write" && stringTempDiary) {
-      const confirmed = window.confirm("변경사항을 저장하시겠습니까?");
-      if (confirmed) {
-        const tempDiary: IDiary = JSON.parse(stringTempDiary);
-        onSave(tempDiary);
-      }
-      localStorage.clear();
-    }
-  }
-
-  async function onLogOutClick() {
-    await deleteCookie();
-    setUser(() => defaultUserState);
-    setLogin(() => false);
-    navigate("/");
-  }
+  const user = useRecoilValue<IUserState>(userState);
 
   return (
     <Wrapper variants={navVariants} initial="top" animate={navAnimation}>
-      <Link to="/" onClick={() => saveIfTempDiary()}>
+      <Link to="/">
         <Col>Home</Col>
       </Link>
-      {user.userInfo?.email !== "" ? (
+      {user.userInfo?.email === "" ? null : (
         <Link
           to={{ pathname: "/write", search: "?mode=create" }}
           state={{ diary: { id: "", date: "", title: "", text: "" } }}
         >
           <Col>Write</Col>
         </Link>
-      ) : null}
-      {user.userInfo?.email !== "" ? (
-        <Col onClick={() => onLogOutClick()}>Log out</Col>
-      ) : (
+      )}
+      {user.userInfo?.email === "" ? (
         <Link to="/login">
           <Col>Log in</Col>
+        </Link>
+      ) : (
+        <Link to="/logout">
+          <Col>Log out</Col>
         </Link>
       )}
     </Wrapper>
