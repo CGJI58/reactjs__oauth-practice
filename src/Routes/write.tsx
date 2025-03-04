@@ -50,6 +50,7 @@ function Write() {
   const { onSave } = useSaveDiary();
 
   useEffect(() => {
+    // Load diary information into the form
     if (user === defaultUserState) {
       getUserByCookie().then((user) => setUser(user));
     }
@@ -60,6 +61,9 @@ function Write() {
   }, []);
 
   useEffect(() => {
+    // Initialize write page and set beforeunload eventListener
+    // This will protect the user when user close or refresh page.
+    // 헤더를 클릭하여 페이지를 벗어나는 경우에 대한 보호는 useSaveDiary.ts 에서 담당할 것.
     localStorage.clear();
     window.addEventListener("beforeunload", onRefresh);
     return () => {
@@ -68,6 +72,7 @@ function Write() {
   }, []);
 
   useEffect(() => {
+    // Dynamically store validated Form data into Local Storage in real-time
     const subscription = watch(({ title, text }) => {
       if (title && text) {
         const tempDiary = generateDiary({ title, text });

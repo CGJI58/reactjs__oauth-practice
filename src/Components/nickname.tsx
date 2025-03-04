@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { userState } from "../States/atoms";
 
@@ -7,12 +7,13 @@ interface IForm {
   nickname: string;
 }
 
-interface INickname {
-  nickname: string;
-}
-
-function Nickname({ nickname }: INickname) {
-  const setUser = useSetRecoilState(userState);
+function Nickname() {
+  const [
+    {
+      userRecord: { nickname },
+    },
+    setUser,
+  ] = useRecoilState(userState);
   const {
     register,
     setValue,

@@ -4,21 +4,16 @@ import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getCodeRequestURL, loginByGhCode } from "../Api/api";
-import { useSetRecoilState } from "recoil";
-import { loginState } from "../States/atoms";
 
 function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const [codeRequestURL, setCodeRequestURL] = useState("");
   const ghCode = new URLSearchParams(location.search).get("code");
-  const setLogin = useSetRecoilState<boolean>(loginState);
 
   useEffect(() => {
     if (ghCode) {
-      loginByGhCode(ghCode)
-        .then((flag) => setLogin(flag))
-        .then(() => navigate("/"));
+      loginByGhCode(ghCode).then(() => navigate("/"));
     } else {
       getCodeRequestURL().then((url) => setCodeRequestURL(url));
     }

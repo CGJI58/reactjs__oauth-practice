@@ -1,18 +1,14 @@
 import styled from "styled-components";
-import { IUserState } from "../States/atoms";
 import Diaries from "./diaries";
 import Nickname from "./nickname";
-import { useEffect } from "react";
-import { updateUser } from "../Api/api";
+import useUpdate from "../Hooks/useUpdate";
 
-function UserRecord({ user }: { user: IUserState }) {
-  useEffect(() => {
-    updateUser(user);
-  }, [user]);
+function UserRecord() {
+  useUpdate();
   return (
     <Wrapper>
-      <Nickname nickname={user.userRecord.nickname} />
-      <Diaries diaries={user.userRecord.diaries} />
+      <Nickname />
+      <Diaries />
     </Wrapper>
   );
 }

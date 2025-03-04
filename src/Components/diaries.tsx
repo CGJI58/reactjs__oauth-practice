@@ -1,13 +1,12 @@
 import styled from "styled-components";
-import { IDiary } from "../States/atoms";
 import Diary from "./diary";
-import { useState } from "react";
+import { useRecoilValue } from "recoil";
+import { IUserState, userState } from "../States/atoms";
 
-interface IDiaries {
-  diaries: IDiary[];
-}
-
-function Diaries({ diaries }: IDiaries) {
+function Diaries() {
+  const {
+    userRecord: { diaries },
+  } = useRecoilValue<IUserState>(userState);
   return (
     <Wrapper>
       <DiariesList>
