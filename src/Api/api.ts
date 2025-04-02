@@ -25,7 +25,6 @@ export const loginByGhCode = async (ghCode: string) => {
 };
 
 export const getUserByCookie = async (): Promise<IUserState> => {
-  console.log("Run getUserByCookie()");
   try {
     const response = await fetch(`${BE_BASE_URL}/auth/get-user-by-cookie`, {
       method: "GET",
@@ -41,7 +40,6 @@ export const getUserByCookie = async (): Promise<IUserState> => {
 };
 
 export const deleteCookie = async () => {
-  console.log("Run deleteCookie()");
   try {
     const response = await fetch(`${BE_BASE_URL}/auth/delete-cookie`, {
       method: "POST",
@@ -61,7 +59,6 @@ export const deleteCookie = async () => {
 };
 
 export const updateUser = async (user: IUserState) => {
-  console.log("Run updateUser()");
   const response = await fetch(`${BE_BASE_URL}/users/update`, {
     method: "POST",
     mode: "cors",
@@ -74,7 +71,6 @@ export const updateUser = async (user: IUserState) => {
 };
 
 export const getCodeRequestURL = async () => {
-  console.log("Run getCodeRequestURL()");
   const { codeRequestURL }: { codeRequestURL: string } = await (
     await fetch(`${BE_BASE_URL}`)
   ).json();

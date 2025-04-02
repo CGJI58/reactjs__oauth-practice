@@ -8,102 +8,88 @@ import {
 } from "../States/atoms";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getUserByCookie } from "../Api/api";
 import { debounce } from "lodash";
+import { createDiary } from "../util/diaryUtility";
 import useSaveDiary from "../Hooks/useSaveDiary";
+import { Subscription } from "react-hook-form/dist/utils/createSubject";
 
-interface IForm extends Omit<IDiary, "date" | "id"> {}
-
-const generateDate = (dateValue: number) => {
-  const now = new Date(dateValue);
-  const year = String(now.getFullYear()).slice(-2);
-  const mon = String(now.getMonth() + 1).padStart(2, "0");
-  const day = String(now.getDate()).padStart(2, "0");
-  const hour = String(now.getHours()).padStart(2, "0");
-  const min = String(now.getMinutes()).padStart(2, "0");
-  const sec = String(now.getSeconds()).padStart(2, "0");
-  return `${year}${mon}${day} ${hour}:${min}:${sec}`;
-};
-
-const tempSave = debounce((diary: IDiary) => {
-  console.log(diary);
-  localStorage.setItem("tempDiary", JSON.stringify(diary));
-}, 1000);
+export interface IForm extends Omit<IDiary, "date" | "id"> {}
 
 function Write() {
   const navigate = useNavigate();
   const location = useLocation();
+  const originalDiary: IDiary = location.state.diary;
   const query = new URLSearchParams(location.search);
   const mode = query.get("mode") as "create" | "modify";
   const [user, setUser] = useRecoilState<IUserState>(userState);
-  const {
-    diary: {
-      id: originalId,
-      title: originalTitle,
-      text: originalText,
-      date: originalDate,
-    },
-  }: { diary: IDiary } = location.state;
-  const { register, setValue, handleSubmit, getValues, watch } =
-    useForm<IForm>();
-  const { onSave } = useSaveDiary();
+  const [diary, setDiary] = useState<IDiary>(originalDiary);
+  const { register, setValue, handleSubmit, watch } = useForm<IForm>();
+  const { saveDiary } = useSaveDiary();
+  const subscriptionRef = useRef<Subscription | null>(null);
 
+  const tempSave = debounce((tempDiary: IForm) => {
+    localStorage.setItem("tempDiary", JSON.stringify(tempDiary));
+  }, 500);
+
+  // Load diary information into the form
   useEffect(() => {
-    // Load diary information into the form
     if (user === defaultUserState) {
       getUserByCookie().then((user) => setUser(user));
     }
-    if (mode === "modify") {
-      setValue("title", originalTitle);
-      setValue("text", originalText);
-    }
+    const { title, text } = diary;
+    setValue("title", title);
+    setValue("text", text);
   }, []);
 
   useEffect(() => {
-    // Initialize write page and set beforeunload eventListener
-    // This will protect the user when user close or refresh page.
-    // 헤더를 클릭하여 페이지를 벗어나는 경우에 대한 보호는 useSaveDiary.ts 에서 담당할 것.
-    localStorage.clear();
-    window.addEventListener("beforeunload", onRefresh);
+    if (diary !== originalDiary) {
+      saveDiary(diary);
+      localStorage.removeItem("tempDiary");
+      navigate("/");
+    }
+  }, [diary]);
+
+  /**
+   * Initialize write page and set beforeunload eventListener
+   * 헤더를 클릭하여 페이지를 벗어나는 경우에 대한 보호는 useSaveDiary.ts 에서 담당할 것.
+   */
+  useEffect(() => {
+    // This will protect the form data when user close or refresh page.
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
     return () => {
-      window.removeEventListener("beforeunload", onRefresh);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
 
   useEffect(() => {
     // Dynamically store validated Form data into Local Storage in real-time
-    const subscription = watch(({ title, text }) => {
-      if (title && text) {
-        const tempDiary = generateDiary({ title, text });
-        tempSave(tempDiary);
-      } else {
-        localStorage.clear();
-      }
+    subscriptionRef.current = watch(({ title = "", text = "" }) => {
+      tempSave({ title, text });
     });
-    return () => subscription.unsubscribe();
+    return () => {
+      tempSave.cancel();
+      subscriptionRef.current?.unsubscribe();
+    };
   }, [watch]);
 
   const onValid = ({ title, text }: IForm) => {
-    const newDiary = generateDiary({ title, text });
-    onSave(newDiary);
-    localStorage.clear();
-    navigate("/");
-  };
-
-  const onRefresh = (event: BeforeUnloadEvent) => {
-    const { title, text } = getValues();
-    if (title !== originalTitle || text !== originalText) {
-      event.preventDefault();
-      // 브라우저에 기본으로 내장된 confirm alert 가 실행됨.
+    tempSave.cancel();
+    subscriptionRef.current?.unsubscribe();
+    if (mode === "create") {
+      const createdDiary = createDiary({ title, text });
+      createdDiary
+        ? setDiary(() => createdDiary)
+        : console.error("fail to submit: no created diary.");
     }
-  };
-
-  const generateDiary = ({ title, text }: IForm) => {
-    const dateValue = mode === "modify" ? Number(originalId) : Date.now();
-    const date = mode === "modify" ? originalDate : generateDate(dateValue);
-    const newDiary: IDiary = { id: dateValue.toString(), date, title, text };
-    return newDiary;
+    if (mode === "modify") {
+      const modifiedDiary = { ...diary, title, text };
+      setDiary(() => modifiedDiary);
+    }
   };
 
   return (

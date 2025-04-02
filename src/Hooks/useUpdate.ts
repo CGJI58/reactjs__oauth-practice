@@ -3,6 +3,10 @@ import { IUserState, userState } from "../States/atoms";
 import { useEffect, useState } from "react";
 import { updateUser } from "../Api/api";
 
+/**
+ * ok는 오직 onUpdate()에 의해서만 true 가 될 수 있다.
+ * ok는 update가 BE와 DB에서 작업을 모두 완료했음을 의미하는 boolean 값이기 때문.
+ */
 function useUpdate() {
   const user = useRecoilValue<IUserState>(userState);
   const [ok, setOk] = useState<boolean>(false);
@@ -17,8 +21,12 @@ function useUpdate() {
   }, [user]);
 
   useEffect(() => {
-    // 로그아웃 하기 전에 임시저장이 완료되었는지를 검사하는 용도로 사용할 예정
+    if (ok) {
+      console.log("update complete.");
+    }
   }, [ok]);
+
+  return { ok, setOk };
 }
 
 export default useUpdate;
