@@ -2,14 +2,31 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getCodeRequestURL, loginByGhCode } from "../Api/api";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const [codeRequestURL, setCodeRequestURL] = useState("");
   const ghCode = new URLSearchParams(location.search).get("code");
+  const popupRef = useRef<HTMLDivElement | null>(null);
+  const handleOutsideClick = (event: MouseEvent) => {
+    if (
+      popupRef.current &&
+      event.target instanceof Node &&
+      !popupRef.current.contains(event.target)
+    ) {
+      console.log("oustside popup clicked");
+      navigate("/");
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, []);
 
   useEffect(() => {
     if (ghCode) {
@@ -21,23 +38,26 @@ function Login() {
 
   return (
     <Wrapper>
-      <Popup>
+      <Popup ref={popupRef}>
         <Link to="/">
-          <ExitBtn>❌</ExitBtn>
+          <ExitBtn>
+            <FontAwesomeIcon icon={faXmark} color="whitesmoke" />
+          </ExitBtn>
         </Link>
         <Title>Log In</Title>
-        <Link to={codeRequestURL}>
-          <GithubButton>
+        <GithubButton>
+          <Link to={codeRequestURL}>
             <FontAwesomeIcon icon={faGithub} size="2x" />
             <span>Log in with a github</span>
-          </GithubButton>
-        </Link>
+          </Link>
+        </GithubButton>
       </Popup>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
+  z-index: 100;
   position: fixed;
   top: 0;
   bottom: 0;
@@ -46,16 +66,17 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.5);
   box-sizing: border-box;
 `;
 const Popup = styled.div`
+  z-index: 101;
   position: relative;
   width: 400px;
   height: 300px;
   box-sizing: border-box;
   border-radius: 10px;
-  background-color: darkcyan;
+  background-color: ${(props) => props.theme.background.lighter};
   display: flex;
   flex-direction: column;
   padding: 50px;
@@ -72,9 +93,8 @@ const ExitBtn = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 1rem;
   border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.8);
   cursor: pointer;
 `;
 
@@ -85,19 +105,23 @@ const Title = styled.div`
 `;
 
 const GithubButton = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  box-sizing: border-box;
-  gap: 20px;
-  background-color: #1f2937;
-  cursor: pointer;
-  color: white;
-  border-radius: 10px;
-  width: 100%;
-  a {
-    color: white;
+  & > a {
+    background-color: ${(props) => props.theme.background.regular};
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2), 4px 4px 8px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    border-radius: 10px;
+    padding: 10px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: ${(props) => props.theme.text};
     text-decoration: none;
+    :visited {
+      color: ${(props) => props.theme.text};
+      text-decoration: none;
+    }
   }
 `;
 
