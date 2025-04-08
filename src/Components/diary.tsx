@@ -4,6 +4,8 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useSetRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 interface IDiaryComponent {
   diary: IDiary;
@@ -19,11 +21,8 @@ function Diary({ diary: { id, date, title, text } }: IDiaryComponent) {
   };
 
   const onModifyClicked = () => {
-    const confirmed = window.confirm("정말로 수정하시겠습니까?");
-    if (confirmed) {
-      const state: { diary: IDiary } = { diary: { id, date, title, text } };
-      navigate(`write?mode=modify`, { state });
-    }
+    const state: { diary: IDiary } = { diary: { id, date, title, text } };
+    navigate(`write?mode=modify`, { state });
   };
 
   const onDeleteClicked = () => {
@@ -51,7 +50,7 @@ function Diary({ diary: { id, date, title, text } }: IDiaryComponent) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            🔄
+            <FontAwesomeIcon icon={faPen} />
           </ModifyBtn>
         ) : null}
 
@@ -71,7 +70,7 @@ function Diary({ diary: { id, date, title, text } }: IDiaryComponent) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            🗑️
+            <FontAwesomeIcon icon={faTrash} />
           </DeleteBtn>
         ) : null}
       </Preview>
@@ -105,7 +104,7 @@ const ModifyBtn = styled(motion.div)`
 `;
 
 const Title = styled(motion.div)`
-  font-size: 20px;
+  font-size: 1rem;
   font-weight: bold;
 `;
 

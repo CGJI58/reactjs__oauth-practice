@@ -17,14 +17,16 @@ const Layout: FC<LayoutProps> = ({ children }) => {
 
 const Wrapper = styled.div`
   position: relative;
-  padding-top: 50px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  background-color: #374151;
+  background-color: ${(props) => props.theme.background.regular};
   min-height: 100vh;
-  color: whitesmoke;
+  color: ${(props) => props.theme.text};
+  main {
+    margin-top: 50px;
+    height: 100%;
+  }
 `;
 
 export default Layout;

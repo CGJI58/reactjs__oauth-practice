@@ -27,11 +27,6 @@ const Wrapper = styled.div`
   align-self: center;
 `;
 
-const EditModeBtn = styled.button`
-  margin-bottom: 10px;
-  align-self: flex-end;
-`;
-
 const DiariesList = styled.div`
   display: flex;
   flex-direction: column;

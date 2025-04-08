@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { IDiary, IUserState, userState } from "../States/atoms";
 import { useRecoilValue } from "recoil";
-import Blind from "../Components/blind";
 import UserRecord from "../Components/userRecord";
 import ScrollTopBtn from "../Components/scrollTopBtn";
 import useGetUserByCookie from "../Hooks/useGetUserByCookie";
@@ -10,7 +9,9 @@ import { useEffect, useState } from "react";
 import useSaveDiary from "../Hooks/useSaveDiary";
 
 function Home() {
-  const user = useRecoilValue<IUserState>(userState);
+  const {
+    userInfo: { email },
+  } = useRecoilValue<IUserState>(userState);
   const [diary, setDiary] = useState<IDiary | null>(null);
   const { saveDiary } = useSaveDiary();
 
@@ -36,7 +37,7 @@ function Home() {
 
   return (
     <Wrapper>
-      {user.userInfo.email === "" ? <Blind /> : <UserRecord />}
+      {email === "" ? <span>log in please</span> : <UserRecord />}
       <ScrollTopBtn />
     </Wrapper>
   );
