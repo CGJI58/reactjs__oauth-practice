@@ -41,3 +41,8 @@ export const userState = atom<IUserState>({
   key: "userState",
   default: defaultUserState,
 });
+
+export const isDarkThemeState = atom<boolean>({
+  key: "themeState",
+  default: false,
+});
