@@ -1,13 +1,11 @@
 import styled from "styled-components";
 import Diaries from "./diaries";
-import Nickname from "./nickname";
 import useUpdate from "../Hooks/useUpdate";
 
 function UserRecord() {
   useUpdate();
   return (
     <Wrapper>
-      <Nickname />
       <Diaries />
     </Wrapper>
   );

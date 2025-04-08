@@ -1,83 +1,20 @@
-import { useForm } from "react-hook-form";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { userState } from "../States/atoms";
-
-interface IForm {
-  nickname: string;
-}
+import { Link } from "react-router-dom";
 
 function Nickname() {
-  const [
-    {
-      userRecord: { nickname },
-    },
-    setUser,
-  ] = useRecoilState(userState);
   const {
-    register,
-    setValue,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<IForm>();
+    userRecord: { nickname },
+  } = useRecoilValue(userState);
 
-  const resetNickname = () => {
-    setUser((prev) => ({
-      ...prev,
-      userRecord: { ...prev.userRecord, nickname: "" },
-    }));
-  };
-
-  const onValid = ({ nickname }: IForm) => {
-    setUser((prev) => ({
-      ...prev,
-      userRecord: { ...prev.userRecord, nickname },
-    }));
-    setValue("nickname", "");
-  };
   return (
     <Wrapper>
-      {nickname ? (
-        <Greeting>
-          <div>{`hello, ${nickname}!`}</div>
-          <ResetNicknameBtn onClick={() => resetNickname()}>
-            edit
-          </ResetNicknameBtn>
-        </Greeting>
-      ) : (
-        <Form onSubmit={handleSubmit(onValid)}>
-          <label htmlFor="nickname">nickname: </label>
-          <input
-            id="nickname"
-            {...register("nickname", {
-              required: true,
-              minLength: { value: 2, message: "2글자 이상 작성해주세요." },
-            })}
-            type="text"
-            placeholder="write your nickname"
-          />
-          <button>submit</button>
-          {errors.nickname && <span>{errors.nickname.message}</span>}
-        </Form>
-      )}
+      <Link to="profile">{nickname}</Link>
     </Wrapper>
   );
 }
 
-const Wrapper = styled.div`
-  font-size: 18px;
-`;
-
-const Greeting = styled.div`
-  display: flex;
-  gap: 10px;
-`;
-
-const ResetNicknameBtn = styled.button``;
-
-const Form = styled.form`
-  display: flex;
-  gap: 5px;
-`;
+const Wrapper = styled.div``;
 
 export default Nickname;

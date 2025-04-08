@@ -4,6 +4,7 @@ import Home from "./Routes/home";
 import Login from "./Routes/login";
 import Write from "./Routes/write";
 import Logout from "./Routes/logout";
+import Profile from "./Routes/profile";
 import { ThemeProvider } from "styled-components";
 import { useRecoilValue } from "recoil";
 import { isDarkThemeState } from "./States/atoms";
@@ -16,14 +17,15 @@ function App() {
   return (
     <Router basename={`${FE_BASE_URL}`}>
       <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/write" element={<Write />} />
-          <Route path="/logout" element={<Logout />} />
-        </Routes>
-      </Layout>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/write" element={<Write />} />
+            <Route path="/logout" element={<Logout />} />
+            <Route path="/profile" element={<Profile />} />
+          </Routes>
+        </Layout>
       </ThemeProvider>
     </Router>
   );
