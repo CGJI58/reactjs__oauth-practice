@@ -1,88 +1,68 @@
 import styled from "styled-components";
-import { IDiary, userState } from "../States/atoms";
-import { useState } from "react";
+import { IDiary } from "../States/atoms";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { useSetRecoilState } from "recoil";
-import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
 interface IDiaryComponent {
   diary: IDiary;
+  focus: [
+    focused: number,
+    setFocused: React.Dispatch<React.SetStateAction<number>>
+  ];
 }
 
-function Diary({ diary: { id, date, title, text } }: IDiaryComponent) {
-  const navigate = useNavigate();
-  const setUser = useSetRecoilState(userState);
-  const [preview, setPreview] = useState(false);
-
-  const OnPreviewClicked = () => {
-    setPreview((prev) => !prev);
-  };
-
-  const onModifyClicked = () => {
-    const state: { diary: IDiary } = { diary: { id, date, title, text } };
-    navigate(`write?mode=modify`, { state });
-  };
-
-  const onDeleteClicked = () => {
-    const confirmed = window.confirm("정말로 삭제하시겠습니까?");
-    if (confirmed) {
-      setUser((prev) => {
-        const newDiaries = prev.userRecord.diaries.filter(
-          (diary) => diary.id !== id
-        );
-        return {
-          ...prev,
-          userRecord: { ...prev.userRecord, diaries: newDiaries },
-        };
-      });
+function Diary({ diary, focus: [focused, setFocused] }: IDiaryComponent) {
+  const { id, date, title, text } = diary;
+  const [preview, setPreview] = useState<boolean>(false);
+  useEffect(() => {
+    if (focused === Number(id)) {
+      setPreview(true);
+    } else {
+      setPreview(false);
     }
-  };
+  }, [focused]);
 
   return (
     <Wrapper>
-      <Preview onClick={() => OnPreviewClicked()}>
-        {preview ? (
-          <ModifyBtn
-            title="수정"
-            onClick={() => onModifyClicked()}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            <FontAwesomeIcon icon={faPen} />
-          </ModifyBtn>
-        ) : null}
-
-        <Title animate={{ x: preview ? 30 : 0 }} transition={{ duration: 0 }}>
-          {title}
-        </Title>
-        <TimeStamp
-          animate={{ x: preview ? -30 : 0 }}
-          transition={{ duration: 0 }}
+      <DiaryHead>
+        <Preview
+          onClick={() =>
+            setFocused((prev) => (prev === Number(id) ? 0 : Number(id)))
+          }
         >
-          {date}
-        </TimeStamp>
-        {preview ? (
-          <DeleteBtn
-            title="삭제"
-            onClick={() => onDeleteClicked()}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            <FontAwesomeIcon icon={faTrash} />
-          </DeleteBtn>
-        ) : null}
-      </Preview>
-      {preview ? <Text>{text}</Text> : null}
+          {preview ? (
+            <FontAwesomeIcon icon={faAngleDown} />
+          ) : (
+            <FontAwesomeIcon icon={faAngleRight} />
+          )}
+        </Preview>
+        <Title>{title}</Title>
+        <TimeStamp>{date}</TimeStamp>
+      </DiaryHead>
+      {preview ? <DiaryBody>{text}</DiaryBody> : null}
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
   width: 100%;
+  max-width: 800px;
+  min-width: 300px;
   border: 1px solid black;
   border-radius: 5px;
+`;
+
+const DiaryHead = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  transition: all 0.3s;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+  cursor: default;
 `;
 
 const Preview = styled.div`
@@ -91,33 +71,36 @@ const Preview = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  transition: all 0.3s;
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.2);
-  }
   cursor: pointer;
 `;
 
-const ModifyBtn = styled(motion.div)`
-  position: absolute;
-  left: 10px;
-`;
-
 const Title = styled(motion.div)`
-  font-size: 1rem;
+  width: 50%;
   font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
-const TimeStamp = styled(motion.div)``;
-
-const DeleteBtn = styled(motion.div)`
-  position: absolute;
-  right: 10px;
+// innerwidth가 일정 수준 이하로 내려가면 안 보이게 할 것
+// Wrapper의 width가 400px 이하로 떨어지면 비활성화
+const TimeStamp = styled(motion.div)`
+  width: 50%;
+  text-align: right;
+  white-space: nowrap;
+  font-size: 0.8rem;
+  overflow: hidden;
 `;
 
-const Text = styled.div`
-  padding: 10px;
-  white-space: pre;
+const DiaryBody = styled.div`
+  font-size: 0.9rem;
+  line-height: 1.3rem;
+  margin: 10px 30px;
+  white-space: pre-wrap;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 `;
 
 export default Diary;
