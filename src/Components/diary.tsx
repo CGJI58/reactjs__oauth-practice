@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { IDiary } from "../States/atoms";
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
@@ -16,11 +15,22 @@ interface IDiaryComponent {
 function Diary({ diary, focus: [focused, setFocused] }: IDiaryComponent) {
   const { id, date, title, text } = diary;
   const [preview, setPreview] = useState<boolean>(false);
+  const textRef = useRef<null | HTMLDivElement>(null);
+  const [more, setMore] = useState<boolean>(false);
+  const [isTruncated, setIsTruncated] = useState<boolean>(false);
+  useEffect(() => {
+    if (textRef.current) {
+      const { scrollHeight, clientHeight } = textRef.current;
+      setIsTruncated(scrollHeight > clientHeight || more);
+    }
+  }, [more, preview]);
+
   useEffect(() => {
     if (focused === Number(id)) {
       setPreview(true);
     } else {
       setPreview(false);
+      setMore(false);
     }
   }, [focused]);
 
@@ -41,51 +51,71 @@ function Diary({ diary, focus: [focused, setFocused] }: IDiaryComponent) {
         <Title>{title}</Title>
         <TimeStamp>{date}</TimeStamp>
       </DiaryHead>
-      {preview ? <DiaryBody>{text}</DiaryBody> : null}
+      {preview ? (
+        <DiaryBody>
+          {/* $more 이렇게 앞에 $를 붙이면 more이 DOM으로 전달되지 않도록 할 수 있음. React에서 허용하지 않은 변수 전달 방지 */}
+          <Text ref={textRef} $more={more}>
+            {text}
+          </Text>
+          {isTruncated && (
+            <More onClick={() => setMore((prev) => !prev)}>
+              {more ? "간략히" : "더보기"}
+            </More>
+          )}
+        </DiaryBody>
+      ) : null}
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   width: 100%;
   max-width: 800px;
   min-width: 300px;
   border: 1px solid black;
   border-radius: 5px;
+  transition: 100ms ease-out 100ms;
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
 `;
 
 const DiaryHead = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  transition: all 0.3s;
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.2);
+  display: grid;
+  grid-template-columns: 20px 1fr 100px;
+  grid-template-rows: repeat(3, 100%);
+  gap: 10px;
+  padding: 0px 10px;
+  box-sizing: border-box;
+  & > * {
+    padding: 10px 0px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
   }
-  cursor: default;
 `;
 
 const Preview = styled.div`
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  cursor: pointer;
+  justify-content: center;
+  transition: 100ms linear;
+  &:hover {
+    scale: 1.2;
+    color: ${(props) => props.theme.highlight};
+  }
 `;
 
-const Title = styled(motion.div)`
-  width: 50%;
+const Title = styled.div`
   font-weight: bold;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
 
-// innerwidth가 일정 수준 이하로 내려가면 안 보이게 할 것
-// Wrapper의 width가 400px 이하로 떨어지면 비활성화
-const TimeStamp = styled(motion.div)`
-  width: 50%;
+const TimeStamp = styled.div`
   text-align: right;
   white-space: nowrap;
   font-size: 0.8rem;
@@ -93,14 +123,32 @@ const TimeStamp = styled(motion.div)`
 `;
 
 const DiaryBody = styled.div`
-  font-size: 0.9rem;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  & > * {
+    font-size: 0.9rem;
+    margin-left: 30px;
+    box-sizing: border-box;
+  }
+`;
+
+const Text = styled.div<{ $more: boolean }>`
   line-height: 1.3rem;
-  margin: 10px 30px;
   white-space: pre-wrap;
-  overflow: hidden;
-  display: -webkit-box;
+  overflow: ${(props) => (props.$more ? "visible" : "hidden")};
+  display: ${(props) => (props.$more ? "flex" : "-webkit-box")};
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+`;
+
+const More = styled.span`
+  width: max-content;
+  transition: 100ms linear;
+  &:hover {
+    color: ${(props) => props.theme.highlight};
+  }
 `;
 
 export default Diary;
