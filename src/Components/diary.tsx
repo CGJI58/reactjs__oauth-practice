@@ -3,6 +3,7 @@ import { IDiary } from "../States/atoms";
 import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 interface IDiaryComponent {
   diary: IDiary;
@@ -18,6 +19,7 @@ function Diary({ diary, focus: [focused, setFocused] }: IDiaryComponent) {
   const textRef = useRef<null | HTMLDivElement>(null);
   const [more, setMore] = useState<boolean>(false);
   const [isTruncated, setIsTruncated] = useState<boolean>(false);
+
   useEffect(() => {
     if (textRef.current) {
       const { scrollHeight, clientHeight } = textRef.current;
@@ -36,34 +38,43 @@ function Diary({ diary, focus: [focused, setFocused] }: IDiaryComponent) {
 
   return (
     <Wrapper>
-      <DiaryHead>
-        <Preview
-          onClick={() =>
-            setFocused((prev) => (prev === Number(id) ? 0 : Number(id)))
-          }
-        >
-          {preview ? (
-            <FontAwesomeIcon icon={faAngleDown} />
-          ) : (
-            <FontAwesomeIcon icon={faAngleRight} />
-          )}
-        </Preview>
-        <Title>{title}</Title>
-        <TimeStamp>{date}</TimeStamp>
-      </DiaryHead>
-      {preview ? (
-        <DiaryBody>
-          {/* $more 이렇게 앞에 $를 붙이면 more이 DOM으로 전달되지 않도록 할 수 있음. React에서 허용하지 않은 변수 전달 방지 */}
-          <Text ref={textRef} $more={more}>
-            {text}
-          </Text>
-          {isTruncated && (
-            <More onClick={() => setMore((prev) => !prev)}>
-              {more ? "간략히" : "더보기"}
-            </More>
-          )}
-        </DiaryBody>
-      ) : null}
+      <StyledLink to="/read" state={{ diary }}>
+        <DiaryHead>
+          <Preview
+            onClick={(event: React.MouseEvent<HTMLDivElement>) => {
+              event.stopPropagation();
+              event.preventDefault();
+              setFocused((prev) => (prev === Number(id) ? 0 : Number(id)));
+            }}
+          >
+            {preview ? (
+              <FontAwesomeIcon icon={faAngleDown} />
+            ) : (
+              <FontAwesomeIcon icon={faAngleRight} />
+            )}
+          </Preview>
+          <Title>{title}</Title>
+          <TimeStamp>{date}</TimeStamp>
+        </DiaryHead>
+        {preview ? (
+          <DiaryBody>
+            <Text ref={textRef} $more={more}>
+              {text}
+            </Text>
+            {isTruncated && (
+              <More
+                onClick={(event: React.MouseEvent<HTMLDivElement>) => {
+                  event.stopPropagation();
+                  event.preventDefault();
+                  setMore((prev) => !prev);
+                }}
+              >
+                {more ? "간략히" : "더보기"}
+              </More>
+            )}
+          </DiaryBody>
+        ) : null}
+      </StyledLink>
     </Wrapper>
   );
 }
@@ -77,10 +88,22 @@ const Wrapper = styled.div`
   min-width: 300px;
   border: 1px solid black;
   border-radius: 5px;
+  z-index: 0;
+  * {
+    z-index: 1;
+  }
   transition: 100ms ease-out 100ms;
-  cursor: pointer;
   &:hover {
     background-color: rgba(0, 0, 0, 0.1);
+  }
+`;
+
+const StyledLink = styled(Link)`
+  color: ${(props) => props.theme.text};
+  text-decoration: none;
+  cursor: default;
+  &:visited {
+    color: ${(props) => props.theme.text};
   }
 `;
 

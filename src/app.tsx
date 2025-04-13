@@ -9,6 +9,7 @@ import { ThemeProvider } from "styled-components";
 import { useRecoilValue } from "recoil";
 import { isDarkThemeState } from "./States/atoms";
 import { darkTheme, lightTheme } from "./theme/theme";
+import Read from "./Routes/read";
 
 const FE_BASE_URL = "/reactjs__oauth-practice";
 
@@ -20,8 +21,9 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/read" element={<Read />} />
             <Route path="/write" element={<Write />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/profile" element={<Profile />} />
           </Routes>
