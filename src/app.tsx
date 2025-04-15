@@ -10,6 +10,7 @@ import { useRecoilValue } from "recoil";
 import { isDarkThemeState } from "./States/atoms";
 import { darkTheme, lightTheme } from "./theme/theme";
 import Read from "./Routes/read";
+import { Helmet } from "react-helmet";
 
 const FE_BASE_URL = "/reactjs__oauth-practice";
 
@@ -18,6 +19,12 @@ function App() {
   return (
     <Router basename={`${FE_BASE_URL}`}>
       <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
+        <Helmet>
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, minimum-scale=1"
+          />
+        </Helmet>
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />

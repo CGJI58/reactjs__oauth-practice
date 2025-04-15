@@ -23,7 +23,6 @@ function Diaries() {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
   align-self: center;
 `;
 

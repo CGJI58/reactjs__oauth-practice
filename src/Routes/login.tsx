@@ -67,14 +67,13 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.5);
-  box-sizing: border-box;
 `;
 const Popup = styled.div`
   z-index: 101;
   position: relative;
   width: 400px;
   height: 300px;
-  box-sizing: border-box;
+
   border-radius: 10px;
   background-color: ${(props) => props.theme.background.lighter};
   display: flex;
@@ -108,7 +107,7 @@ const GithubButton = styled.div`
   & > a {
     background-color: ${(props) => props.theme.background.regular};
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2), 4px 4px 8px rgba(0, 0, 0, 0.2);
-    box-sizing: border-box;
+
     border-radius: 10px;
     padding: 10px;
     width: 100%;

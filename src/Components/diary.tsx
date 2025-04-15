@@ -113,10 +113,8 @@ const DiaryHead = styled.div`
   grid-template-rows: repeat(3, 100%);
   gap: 10px;
   padding: 0px 10px;
-  box-sizing: border-box;
   & > * {
     padding: 10px 0px;
-    box-sizing: border-box;
     display: flex;
     align-items: center;
   }
@@ -153,7 +151,6 @@ const DiaryBody = styled.div`
   & > * {
     font-size: 0.9rem;
     margin-left: 30px;
-    box-sizing: border-box;
   }
 `;
 

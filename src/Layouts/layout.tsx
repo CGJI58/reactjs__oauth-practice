@@ -17,7 +17,6 @@ const Layout: FC<LayoutProps> = ({ children }) => {
 
 const Wrapper = styled.div`
   position: relative;
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   background-color: ${(props) => props.theme.background.regular};
