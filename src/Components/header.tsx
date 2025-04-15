@@ -8,36 +8,57 @@ import UserInfo from "./userInfo";
 import ScrollMeter from "./ScrollMeter";
 
 function Header() {
-  const user = useRecoilValue<IUserState>(userState);
+  const {
+    userInfo: { email },
+  } = useRecoilValue<IUserState>(userState);
 
   return (
     <Wrapper>
-      <Col>
-        <StyledLink to="/">
-          <FontAwesomeIcon icon={faHouse} />
-        </StyledLink>
-      </Col>
-      {user.userInfo?.email === "" ? null : (
-        <Col>
-          <StyledLink
-            to={{ pathname: "/write", search: "?mode=create" }}
-            state={{ diary: { id: "", date: "", title: "", text: "" } }}
-          >
-            Write
-          </StyledLink>
-        </Col>
-      )}
-      {user.userInfo?.email === "" ? (
-        <Col>
-          <StyledLink to="/login">Log in</StyledLink>
-        </Col>
-      ) : (
-        <Col>
-          <UserInfo />
-        </Col>
-      )}
+      <HomeBtn />
+      {email === "" ? <LoginBtn /> : null}
+      {email !== "" ? <WriteBtn /> : null}
+      {email !== "" ? <UserInfoBtn /> : null}
       <ScrollMeter />
     </Wrapper>
+  );
+}
+
+function HomeBtn() {
+  return (
+    <Col>
+      <StyledLink to="/">
+        <FontAwesomeIcon icon={faHouse} />
+      </StyledLink>
+    </Col>
+  );
+}
+
+function WriteBtn() {
+  return (
+    <Col>
+      <StyledLink
+        to={{ pathname: "/write", search: "?mode=create" }}
+        state={{ diary: { id: "", date: "", title: "", text: "" } }}
+      >
+        Write
+      </StyledLink>
+    </Col>
+  );
+}
+
+function LoginBtn() {
+  return (
+    <Col>
+      <StyledLink to="/login">Log in</StyledLink>
+    </Col>
+  );
+}
+
+function UserInfoBtn() {
+  return (
+    <Col>
+      <UserInfo />
+    </Col>
   );
 }
 
@@ -62,7 +83,7 @@ const Wrapper = styled.div`
 `;
 
 const Col = styled.div`
-  width: 30%;
+  width: 100%;
   height: 100%;
   box-sizing: border-box;
   display: flex;
