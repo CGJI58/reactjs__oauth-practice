@@ -68,12 +68,12 @@ const Wrapper = styled.div`
   top: 0;
   width: 100%;
   height: 50px;
-  background-color: ${(props) => props.theme.background.lighter};
+  background-color: ${(props) => props.theme.backgroundLighter};
   display: flex;
   justify-content: space-around;
   align-items: center;
   font-size: 1.5rem;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05), 4px 4px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: ${(props) => props.theme.boxShadow};
   a {
     cursor: default;
     width: 100%;

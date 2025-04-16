@@ -74,9 +74,9 @@ const DropList = styled.div`
   }
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => props.theme.background.lighter};
+  background-color: ${(props) => props.theme.backgroundLighter};
   border-radius: 0 0 10px 10px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05), 4px 4px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: ${(props) => props.theme.boxShadow};
   cursor: default;
   & > * {
     font-size: 1rem;

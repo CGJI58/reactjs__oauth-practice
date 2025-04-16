@@ -19,7 +19,7 @@ const Wrapper = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => props.theme.background.regular};
+  background-color: ${(props) => props.theme.backgroundRegular};
   min-height: 100vh;
   color: ${(props) => props.theme.text};
   main {

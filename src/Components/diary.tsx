@@ -86,12 +86,8 @@ const Wrapper = styled.div`
   width: 100%;
   max-width: 800px;
   min-width: 300px;
-  border: 1px solid black;
+  box-shadow: ${(props) => props.theme.boxShadow};
   border-radius: 5px;
-  z-index: 0;
-  * {
-    z-index: 1;
-  }
   transition: 100ms ease-out 100ms;
   &:hover {
     background-color: rgba(0, 0, 0, 0.1);

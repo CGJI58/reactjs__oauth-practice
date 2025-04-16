@@ -1,19 +1,13 @@
 import styled from "styled-components";
-import { useRecoilState } from "recoil";
-import {
-  defaultUserState,
-  IDiary,
-  IUserState,
-  userState,
-} from "../States/atoms";
+import { IDiary } from "../States/atoms";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { getUserByCookie } from "../Api/api";
 import { debounce } from "lodash";
 import { createDiary } from "../util/diaryUtility";
 import useSaveDiary from "../Hooks/useSaveDiary";
 import { Subscription } from "react-hook-form/dist/utils/createSubject";
+import useGetUserByCookie from "../Hooks/useGetUserByCookie";
 
 export interface IForm extends Omit<IDiary, "date" | "id"> {}
 
@@ -23,7 +17,6 @@ function Write() {
   const originalDiary: IDiary = location.state.diary;
   const query = new URLSearchParams(location.search);
   const mode = query.get("mode") as "create" | "modify";
-  const [user, setUser] = useRecoilState<IUserState>(userState);
   const [diary, setDiary] = useState<IDiary>(originalDiary);
   const { register, setValue, handleSubmit, watch } = useForm<IForm>();
   const { saveDiary } = useSaveDiary();
@@ -33,11 +26,10 @@ function Write() {
     localStorage.setItem("tempDiary", JSON.stringify(tempDiary));
   }, 500);
 
+  useGetUserByCookie();
+
   // Load diary information into the form
   useEffect(() => {
-    if (user === defaultUserState) {
-      getUserByCookie().then((user) => setUser(user));
-    }
     const { title, text } = diary;
     setValue("title", title);
     setValue("text", text);
@@ -95,22 +87,28 @@ function Write() {
   return (
     <Wrapper>
       <Form onSubmit={handleSubmit(onValid)}>
-        <input {...register("title", { required: true })} placeholder="Title" />
+        <input
+          id="title"
+          {...register("title", { required: true })}
+          placeholder="Title"
+        />
         <textarea
+          id="text"
           {...register("text", { required: true })}
           placeholder="write your diary"
         />
-        <input type="submit" value="저장" />
+        <input id="submit" type="submit" value="저장" />
       </Form>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
-  width: 80%;
+  width: 100%;
+  max-width: 800px;
   align-self: center;
   justify-self: center;
-  padding: 10px 0;
+  padding: 10px;
 `;
 
 const Form = styled.form`
@@ -118,11 +116,25 @@ const Form = styled.form`
   flex-direction: column;
   gap: 10px;
   * {
-    padding: 5px;
+    margin: 0;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: ${(props) => props.theme.backgroundLighter};
+    box-shadow: ${(props) => props.theme.boxShadow};
+    outline: none;
+    font: inherit;
+    color: inherit;
   }
-  textarea {
+  #text {
     height: 200px;
     resize: none;
+  }
+  #submit {
+    transition: 100ms ease-in-out;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
   }
 `;
 

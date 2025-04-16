@@ -75,7 +75,7 @@ const Popup = styled.div`
   height: 300px;
 
   border-radius: 10px;
-  background-color: ${(props) => props.theme.background.lighter};
+  background-color: ${(props) => props.theme.backgroundLighter};
   display: flex;
   flex-direction: column;
   padding: 50px;
@@ -86,6 +86,8 @@ const ExitBtn = styled.div`
   position: absolute;
   top: 15px;
   right: 15px;
+  background-color: ${(props) => props.theme.backgroundDarker};
+  box-shadow: ${(props) => props.theme.boxShadow};
   width: 30px;
   height: 30px;
   padding: 2px;
@@ -95,6 +97,9 @@ const ExitBtn = styled.div`
   font-size: 1rem;
   border-radius: 50%;
   cursor: pointer;
+  * {
+    color: ${(props) => props.theme.text};
+  }
 `;
 
 const Title = styled.div`
@@ -105,7 +110,7 @@ const Title = styled.div`
 
 const GithubButton = styled.div`
   & > a {
-    background-color: ${(props) => props.theme.background.regular};
+    background-color: ${(props) => props.theme.backgroundDarker};
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2), 4px 4px 8px rgba(0, 0, 0, 0.2);
 
     border-radius: 10px;
