@@ -84,7 +84,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 100%;
-  max-width: 800px;
+  max-width: 600px;
   min-width: 300px;
   box-shadow: ${(props) => props.theme.boxShadow};
   border-radius: 5px;
@@ -108,7 +108,7 @@ const DiaryHead = styled.div`
   grid-template-columns: 20px 1fr 100px;
   grid-template-rows: repeat(3, 100%);
   gap: 10px;
-  padding: 0px 10px;
+  padding-right: 10px;
   & > * {
     padding: 10px 0px;
     display: flex;
@@ -120,7 +120,7 @@ const Preview = styled.div`
   justify-content: center;
   transition: 100ms linear;
   &:hover {
-    scale: 1.2;
+    background-color: rgba(0, 0, 0, 0.1);
     color: ${(props) => props.theme.highlight};
   }
 `;
@@ -140,18 +140,21 @@ const TimeStamp = styled.div`
 `;
 
 const DiaryBody = styled.div`
+  width: 100%;
   margin-bottom: 10px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  overflow: hidden;
   & > * {
     font-size: 0.9rem;
-    margin-left: 30px;
   }
 `;
 
 const Text = styled.div<{ $more: boolean }>`
-  line-height: 1.3rem;
+  width: 100%;
+  padding: 0px 30px;
+  line-height: 180%;
   white-space: pre-wrap;
   overflow: ${(props) => (props.$more ? "visible" : "hidden")};
   display: ${(props) => (props.$more ? "flex" : "-webkit-box")};
@@ -161,8 +164,11 @@ const Text = styled.div<{ $more: boolean }>`
 
 const More = styled.span`
   width: max-content;
+  padding: 5px;
+  margin-left: 30px;
   transition: 100ms linear;
   &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
     color: ${(props) => props.theme.highlight};
   }
 `;
