@@ -53,7 +53,7 @@ function Diary({ diary, focus: [focused, setFocused] }: IDiaryComponent) {
               <FontAwesomeIcon icon={faAngleRight} />
             )}
           </Preview>
-          <Title>{title}</Title>
+          <Title preview={preview}>{title}</Title>
           <TimeStamp>{date}</TimeStamp>
         </DiaryHead>
         {preview ? (
@@ -90,7 +90,7 @@ const Wrapper = styled.div`
   border-radius: 5px;
   transition: 100ms ease-out 100ms;
   &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: ${(props) => props.theme.backgroundDarker};
   }
 `;
 
@@ -125,10 +125,10 @@ const Preview = styled.div`
   }
 `;
 
-const Title = styled.div`
+const Title = styled.div<{ preview: boolean }>`
   font-weight: bold;
-  white-space: nowrap;
-  overflow: hidden;
+  white-space: ${(props) => (props.preview ? "pre-wrap" : "nowrap")};
+  overflow: ${(props) => (props.preview ? "visible" : "hidden")};
   text-overflow: ellipsis;
 `;
 

@@ -15,7 +15,8 @@ function ScrollMeter() {
   const throttledScroll = useRef(
     throttle(
       (progressValue: number) => {
-        const progress = Math.floor(progressValue * 100);
+        const progress = progressValue * 100;
+
         setScrollProgress(progress);
       },
       200,
@@ -64,7 +65,6 @@ function ScrollMeter() {
 }
 
 const Wrapper = styled(motion.div)<{ scrollprogress: number }>`
-  width: ${(props) => props.scrollprogress}%;
   height: 2px;
   left: 0px;
   bottom: 0px;

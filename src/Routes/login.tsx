@@ -58,39 +58,38 @@ function Login() {
 
 const Wrapper = styled.div`
   z-index: 100;
-  position: fixed;
+  position: absolute;
   top: 0;
   bottom: 0;
-  width: 100%;
+  left: 0;
+  right: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
 `;
 const Popup = styled.div`
   z-index: 101;
   position: relative;
-  width: 400px;
-  height: 300px;
-
+  width: 300px;
+  height: 240px;
+  box-shadow: ${(props) => props.theme.boxShadow};
   border-radius: 10px;
   background-color: ${(props) => props.theme.backgroundLighter};
   display: flex;
   flex-direction: column;
-  padding: 50px;
-  gap: 20px;
+  padding: 1rem;
+  gap: 1rem;
 `;
 
 const ExitBtn = styled.div`
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 1rem;
+  right: 1rem;
+  width: 1.5rem;
+  height: 1.5rem;
   background-color: ${(props) => props.theme.backgroundDarker};
   box-shadow: ${(props) => props.theme.boxShadow};
-  width: 30px;
-  height: 30px;
-  padding: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -103,7 +102,7 @@ const ExitBtn = styled.div`
 `;
 
 const Title = styled.div`
-  font-size: 34px;
+  font-size: 1.5rem;
   font-weight: 800;
   margin-bottom: 10px;
 `;
@@ -111,15 +110,16 @@ const Title = styled.div`
 const GithubButton = styled.div`
   & > a {
     background-color: ${(props) => props.theme.backgroundDarker};
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2), 4px 4px 8px rgba(0, 0, 0, 0.2);
-
+    box-shadow: ${(props) => props.theme.boxShadow};
     border-radius: 10px;
     padding: 10px;
     width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 20px;
+    font-size: 0.9rem;
     color: ${(props) => props.theme.text};
     text-decoration: none;
     :visited {

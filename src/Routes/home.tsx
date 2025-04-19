@@ -37,8 +37,8 @@ function Home() {
 
   return (
     <Wrapper>
-      {email === "" ? <span>log in please</span> : <UserRecord />}
-      <ScrollTopBtn />
+      {email !== "" ? <UserRecord /> : <span>log in please</span>}
+      {email !== "" ? <ScrollTopBtn /> : null}
     </Wrapper>
   );
 }

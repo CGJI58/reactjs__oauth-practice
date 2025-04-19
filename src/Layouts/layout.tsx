@@ -16,15 +16,20 @@ const Layout: FC<LayoutProps> = ({ children }) => {
 };
 
 const Wrapper = styled.div`
-  position: relative;
   display: flex;
   flex-direction: column;
+  align-items: center;
   background-color: ${(props) => props.theme.backgroundRegular};
   min-height: 100vh;
   color: ${(props) => props.theme.text};
+  & > * {
+    max-width: 600px;
+  }
   main {
-    margin-top: 50px;
-    height: 100%;
+    padding-top: 50px;
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
   }
 `;
 

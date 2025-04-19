@@ -104,8 +104,9 @@ function Write() {
 }
 
 const Wrapper = styled.div`
+  margin-top: 30px;
   width: 100%;
-  max-width: 800px;
+  max-width: 600px;
   align-self: center;
   justify-self: center;
   padding: 10px;
@@ -132,8 +133,9 @@ const Form = styled.form`
   }
   #submit {
     transition: 100ms ease-in-out;
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.1);
+    &:hover,
+    &:focus {
+      background-color: ${(props) => props.theme.backgroundDarker};
     }
   }
 `;

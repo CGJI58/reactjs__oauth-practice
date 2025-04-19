@@ -5,16 +5,19 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Nickname from "./nickname";
-import { useRecoilState } from "recoil";
-import { isDarkThemeState } from "../States/atoms";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { isDarkThemeState, IUserState, userState } from "../States/atoms";
 
 function UserInfo() {
+  const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [isDarkTheme, setIsDarkTheme] =
     useRecoilState<boolean>(isDarkThemeState);
+  const {
+    userRecord: { nickname },
+  } = useRecoilValue<IUserState>(userState);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleMouseLeave = () => {
@@ -34,9 +37,7 @@ function UserInfo() {
       <FontAwesomeIcon icon={faCircleUser} />
       {isHovered && (
         <DropList>
-          <DropItem>
-            <Nickname />
-          </DropItem>
+          <DropItem onClick={() => navigate("/profile")}>{nickname}</DropItem>
           <DropItem onClick={() => setIsDarkTheme((prev) => !prev)}>
             <Label>Dark mode:</Label>
             {isDarkTheme ? (
@@ -45,9 +46,7 @@ function UserInfo() {
               <FontAwesomeIcon icon={faToggleOff} />
             )}
           </DropItem>
-          <DropItem>
-            <Link to="/logout">Log out</Link>
-          </DropItem>
+          <DropItem onClick={() => navigate("/logout")}>Log out</DropItem>
         </DropList>
       )}
     </Wrapper>
@@ -66,12 +65,7 @@ const Wrapper = styled.div`
 const DropList = styled.div`
   position: absolute;
   top: 50px;
-  width: 50%;
-  min-width: 200px;
-  @media (max-width: 600px) {
-    width: 90vw;
-    right: 0;
-  }
+  width: 100%;
   display: flex;
   flex-direction: column;
   background-color: ${(props) => props.theme.backgroundLighter};
@@ -98,7 +92,10 @@ const DropItem = styled.div`
   padding: 10px 0;
   transition: all 0.3s;
   &:hover {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: ${(props) => props.theme.backgroundDarker};
+  }
+  &:last-child {
+    border-radius: 0 0 10px 10px;
   }
 `;
 

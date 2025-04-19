@@ -15,9 +15,9 @@ function Header() {
   return (
     <Wrapper>
       <HomeBtn />
-      {email === "" ? <LoginBtn /> : null}
-      {email !== "" ? <WriteBtn /> : null}
-      {email !== "" ? <UserInfoBtn /> : null}
+      {email === "" && <LoginBtn />}
+      {email !== "" && <WriteBtn />}
+      {email !== "" && <UserInfoBtn />}
       <ScrollMeter />
     </Wrapper>
   );
@@ -72,6 +72,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
+  font-weight: bold;
   font-size: 1.5rem;
   box-shadow: ${(props) => props.theme.boxShadow};
   a {
@@ -88,6 +89,10 @@ const Col = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  &:hover {
+    background-color: ${(props) => props.theme.backgroundDarker};
+  }
+
   & > * {
     display: flex;
     justify-content: center;
