@@ -2,8 +2,9 @@ import styled from "styled-components";
 import { IDiary } from "../States/atoms";
 import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 interface IDiaryComponent {
   diary: IDiary;
@@ -37,21 +38,19 @@ function Diary({ diary, focus: [focused, setFocused] }: IDiaryComponent) {
   }, [focused]);
 
   return (
-    <Wrapper>
+    <Wrapper layout transition={{ duration: 0.1 }}>
       <StyledLink to="/read" state={{ diary }}>
         <DiaryHead>
           <Preview
+            animate={{ rotate: preview ? 90 : 0 }}
+            transition={{ duration: 0 }}
             onClick={(event: React.MouseEvent<HTMLDivElement>) => {
               event.stopPropagation();
               event.preventDefault();
               setFocused((prev) => (prev === Number(id) ? 0 : Number(id)));
             }}
           >
-            {preview ? (
-              <FontAwesomeIcon icon={faAngleDown} />
-            ) : (
-              <FontAwesomeIcon icon={faAngleRight} />
-            )}
+            <FontAwesomeIcon icon={faAngleRight} />
           </Preview>
           <Title preview={preview}>{title}</Title>
           <TimeStamp>{date}</TimeStamp>
@@ -79,7 +78,7 @@ function Diary({ diary, focus: [focused, setFocused] }: IDiaryComponent) {
   );
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled(motion.div)`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -106,7 +105,8 @@ const StyledLink = styled(Link)`
 const DiaryHead = styled.div`
   display: grid;
   grid-template-columns: 20px 1fr 100px;
-  grid-template-rows: repeat(3, 100%);
+  height: 50px;
+  min-height: max-content;
   gap: 10px;
   padding-right: 10px;
   & > * {
@@ -116,11 +116,10 @@ const DiaryHead = styled.div`
   }
 `;
 
-const Preview = styled.div`
+const Preview = styled(motion.div)`
   justify-content: center;
   transition: 100ms linear;
   &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
     color: ${(props) => props.theme.highlight};
   }
 `;
