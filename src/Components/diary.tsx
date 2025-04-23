@@ -52,7 +52,7 @@ function Diary({ diary, focus: [focused, setFocused] }: IDiaryComponent) {
           >
             <FontAwesomeIcon icon={faAngleRight} />
           </Preview>
-          <Title preview={preview}>{title}</Title>
+          <Title $preview={preview}>{title}</Title>
           <TimeStamp>{date}</TimeStamp>
         </DiaryHead>
         {preview ? (
@@ -124,10 +124,10 @@ const Preview = styled(motion.div)`
   }
 `;
 
-const Title = styled.div<{ preview: boolean }>`
+const Title = styled.div<{ $preview: boolean }>`
   font-weight: bold;
-  white-space: ${(props) => (props.preview ? "pre-wrap" : "nowrap")};
-  overflow: ${(props) => (props.preview ? "visible" : "hidden")};
+  white-space: ${(props) => (props.$preview ? "pre-wrap" : "nowrap")};
+  overflow: ${(props) => (props.$preview ? "visible" : "hidden")};
   text-overflow: ellipsis;
 `;
 
