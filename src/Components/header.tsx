@@ -18,7 +18,7 @@ function Header() {
       {email === "" && <LoginBtn />}
       {email !== "" && <WriteBtn />}
       {email !== "" && <UserInfoBtn />}
-      <ScrollMeter />
+      {email !== "" && <ScrollMeter />}
     </Wrapper>
   );
 }

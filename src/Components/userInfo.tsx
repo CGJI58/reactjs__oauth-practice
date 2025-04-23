@@ -23,7 +23,7 @@ function UserInfo() {
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => {
       setIsHovered(false);
-    }, 500);
+    }, 200);
   };
   const handleMouseEnter = () => {
     if (timeoutRef.current) {

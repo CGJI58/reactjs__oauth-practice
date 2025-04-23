@@ -12,6 +12,7 @@ function Login() {
   const [codeRequestURL, setCodeRequestURL] = useState("");
   const ghCode = new URLSearchParams(location.search).get("code");
   const popupRef = useRef<HTMLDivElement | null>(null);
+
   const handleOutsideClick = (event: MouseEvent) => {
     if (
       popupRef.current &&
@@ -41,7 +42,7 @@ function Login() {
       <Popup ref={popupRef}>
         <Link to="/">
           <ExitBtn>
-            <FontAwesomeIcon icon={faXmark} color="whitesmoke" />
+            <FontAwesomeIcon icon={faXmark} />
           </ExitBtn>
         </Link>
         <Title>Log In</Title>
@@ -70,9 +71,12 @@ const Wrapper = styled.div`
 `;
 const Popup = styled.div`
   z-index: 101;
-  position: relative;
-  width: 300px;
-  height: 240px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 300px;
   box-shadow: ${(props) => props.theme.boxShadow};
   border-radius: 10px;
   background-color: ${(props) => props.theme.backgroundLighter};

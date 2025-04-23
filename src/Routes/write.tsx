@@ -128,7 +128,7 @@ const Form = styled.form`
     color: inherit;
   }
   #text {
-    height: 200px;
+    height: 300px;
     resize: none;
   }
   #submit {
