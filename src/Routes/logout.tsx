@@ -3,7 +3,8 @@ import useUpdate from "../Hooks/useUpdate";
 import { deleteCookie } from "../Api/api";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
-import { defaultUserState, IUserState, userState } from "../States/atoms";
+import { defaultUserState, userState } from "../States/atoms";
+import { IUserState } from "../types/types";
 
 function Logout() {
   const navigate = useNavigate();

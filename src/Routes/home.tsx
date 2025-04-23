@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { IDiary, IUserState, userState } from "../States/atoms";
+import { userState } from "../States/atoms";
 import { useRecoilValue } from "recoil";
 import UserRecord from "../Components/userRecord";
 import ScrollTopBtn from "../Components/scrollTopBtn";
@@ -7,6 +7,7 @@ import useGetUserByCookie from "../Hooks/useGetUserByCookie";
 import { createDiary, getTempDiary } from "../util/diaryUtility";
 import { useEffect, useState } from "react";
 import useSaveDiary from "../Hooks/useSaveDiary";
+import { IDiary, IUserState } from "../types/types";
 
 function Home() {
   const {

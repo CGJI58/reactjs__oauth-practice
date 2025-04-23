@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { IDiary } from "../States/atoms";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
@@ -8,6 +7,7 @@ import { createDiary } from "../util/diaryUtility";
 import useSaveDiary from "../Hooks/useSaveDiary";
 import { Subscription } from "react-hook-form/dist/utils/createSubject";
 import useGetUserByCookie from "../Hooks/useGetUserByCookie";
+import { IDiary } from "../types/types";
 
 export interface IForm extends Omit<IDiary, "date" | "id"> {}
 

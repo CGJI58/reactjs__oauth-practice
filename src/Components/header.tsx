@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { IUserState, userState } from "../States/atoms";
+import { userState } from "../States/atoms";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse } from "@fortawesome/free-solid-svg-icons";
 import UserInfo from "./userInfo";
 import ScrollMeter from "./ScrollMeter";
+import { IUserState } from "../types/types";
 
 function Header() {
   const {

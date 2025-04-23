@@ -1,4 +1,5 @@
-import { defaultUserState, IUserState } from "../States/atoms";
+import { defaultUserState } from "../States/atoms";
+import { IUserState } from "../types/types";
 
 const BE_BASE_URL = process.env.REACT_APP_BACK_END_URL;
 

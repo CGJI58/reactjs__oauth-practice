@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import { IDiary } from "../States/atoms";
 import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { IDiary } from "../types/types";
 
 interface IDiaryComponent {
   diary: IDiary;

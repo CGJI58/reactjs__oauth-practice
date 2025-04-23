@@ -1,7 +1,8 @@
 import { useRecoilValue } from "recoil";
-import { IUserState, userState } from "../States/atoms";
+import { userState } from "../States/atoms";
 import { useEffect, useState } from "react";
 import { updateUser } from "../Api/api";
+import { IUserState } from "../types/types";
 
 /**
  * ok는 오직 onUpdate()에 의해서만 true 가 될 수 있다.

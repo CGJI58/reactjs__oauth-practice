@@ -8,7 +8,8 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { isDarkThemeState, IUserState, userState } from "../States/atoms";
+import { isDarkThemeState, userState } from "../States/atoms";
+import { IUserState } from "../types/types";
 
 function UserInfo() {
   const navigate = useNavigate();

@@ -1,5 +1,5 @@
 import { IForm } from "../Routes/write";
-import { IDiary } from "../States/atoms";
+import { IDiary } from "../types/types";
 
 export const createDiary = ({ title, text }: IForm): IDiary => {
   const generateDate = (dateValue: number) => {

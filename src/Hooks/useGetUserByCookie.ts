@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { getUserByCookie } from "../Api/api";
 import { useRecoilState } from "recoil";
-import { defaultUserState, IUserState, userState } from "../States/atoms";
+import { defaultUserState, userState } from "../States/atoms";
+import { IUserState } from "../types/types";
 
 function useGetUserByCookie() {
   const [user, setUser] = useRecoilState<IUserState>(userState);

@@ -1,5 +1,6 @@
 import { useSetRecoilState } from "recoil";
-import { IDiary, IUserState, userState } from "../States/atoms";
+import { userState } from "../States/atoms";
+import { IDiary, IUserState } from "../types/types";
 
 function useSaveDiary() {
   const setUser = useSetRecoilState<IUserState>(userState);

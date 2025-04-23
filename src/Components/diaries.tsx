@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import Diary from "./diary";
 import { useRecoilValue } from "recoil";
-import { IUserState, userState } from "../States/atoms";
+import { userState } from "../States/atoms";
 import { useState } from "react";
+import { IUserState } from "../types/types";
 
 function Diaries() {
   const {
