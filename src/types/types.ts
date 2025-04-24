@@ -30,3 +30,8 @@ export interface IDiary {
   title: string;
   text: string;
 }
+
+export interface IGetUserByCookie {
+  userData?: IUserState;
+  status: number | null;
+}

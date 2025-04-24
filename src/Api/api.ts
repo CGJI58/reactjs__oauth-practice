@@ -1,5 +1,5 @@
 import { defaultUserState } from "../States/atoms";
-import { IUserState } from "../types/types";
+import { IGetUserByCookie, IUserState } from "../types/types";
 
 const BE_BASE_URL = process.env.REACT_APP_BACK_END_URL;
 
@@ -25,18 +25,21 @@ export const loginByGhCode = async (ghCode: string) => {
   }
 };
 
-export const getUserByCookie = async (): Promise<IUserState> => {
+export const getUserByCookie = async (): Promise<IGetUserByCookie> => {
   try {
     const response = await fetch(`${BE_BASE_URL}/auth/get-user-by-cookie`, {
       method: "GET",
       mode: "cors",
       credentials: "include",
     });
-    const userData: IUserState = await response.json();
-    return userData;
+    if (response.ok) {
+      const userData: IUserState = await response.json();
+      return { status: response.status, userData };
+    } else {
+      return { status: response.status, userData: defaultUserState };
+    }
   } catch (error) {
-    console.error(error);
-    return defaultUserState;
+    return { status: null };
   }
 };
 
