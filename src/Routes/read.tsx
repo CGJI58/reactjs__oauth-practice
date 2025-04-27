@@ -51,11 +51,6 @@ function Read() {
         <DiaryDate>{date}</DiaryDate>
         <DiaryText>{text}</DiaryText>
       </Context>
-      <Replies>
-        <span>댓글</span>
-        <Reply>hi</Reply>
-        <Reply>bye</Reply>
-      </Replies>
       {modalFlag && (
         <ModalBackground>
           <Modal {...modalConfig} />
@@ -125,20 +120,6 @@ const DiaryText = styled.div`
   width: 100%;
   line-height: 200%;
   white-space: pre-wrap;
-`;
-
-const Replies = styled.div``;
-
-const Reply = styled.div`
-  margin: 0;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  background: ${(props) => props.theme.backgroundLighter};
-  box-shadow: ${(props) => props.theme.boxShadow};
-  outline: none;
-  font: inherit;
-  color: inherit;
 `;
 
 const ModalBackground = styled.div`
