@@ -1,10 +1,11 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import useGetUserByCookie from "../Hooks/useGetUserByCookie";
 import { useEffect, useState } from "react";
 import Modal from "../Components/modal";
 import { IDiary, IOnModal } from "../types/types";
 import useModal from "../Hooks/useModal";
+import useDeleteDiary from "../Hooks/useDeleteDiary";
 
 const modifyVariants: IOnModal = {
   modalId: "modify",
@@ -19,19 +20,36 @@ function Read() {
   useGetUserByCookie();
   const location = useLocation();
   const diary: IDiary = location.state.diary;
-  const { title, date, text } = diary;
+  const { title, date, text, id: diaryId } = diary;
   const { onModal, modalProps, modalResult } = useModal();
   const [modalOn, setModalOn] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const { deleteDiary } = useDeleteDiary();
 
   const runModal = (variants: IOnModal) => {
     onModal(variants);
     setModalOn(true);
   };
 
+  const runModify = () => {
+    navigate(`../write?mode=modify`, { state: { diary } });
+  };
+
+  const runDelete = () => {
+    deleteDiary(diaryId);
+    navigate("/");
+  };
+
   useEffect(() => {
     if (modalProps && modalResult !== null) {
       console.log(modalProps.modalId, modalResult);
       setModalOn(false);
+      if (modalProps.modalId === modifyVariants.modalId && modalResult) {
+        runModify();
+      }
+      if (modalProps.modalId === deleteVariants.modalId && modalResult) {
+        runDelete();
+      }
     }
   }, [modalResult]);
 
