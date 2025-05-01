@@ -3,59 +3,57 @@ import styled from "styled-components";
 import useGetUserByCookie from "../Hooks/useGetUserByCookie";
 import { useEffect, useState } from "react";
 import Modal from "../Components/modal";
-import { IDiary, IModal, ModalFlag } from "../types/types";
+import { IDiary, IOnModal } from "../types/types";
+import useModal from "../Hooks/useModal";
 
-const MODIFY_SENTENCE = "이 게시글을 수정하시겠습니까?";
-const DELETE_SENTENCE = "이 게시글을 삭제하시겠습니까?";
+const modifyVariants: IOnModal = {
+  modalId: "modify",
+  sentence: "이 게시글을 수정하시겠습니까?",
+};
+const deleteVariants: IOnModal = {
+  modalId: "delete",
+  sentence: "이 게시글을 삭제하시겠습니까?",
+};
 
 function Read() {
+  useGetUserByCookie();
   const location = useLocation();
   const diary: IDiary = location.state.diary;
   const { title, date, text } = diary;
+  const { onModal, modalProps, modalResult } = useModal();
+  const [modalOn, setModalOn] = useState<boolean>(false);
 
-  useGetUserByCookie();
-
-  const [modalFlag, setModalFlag] = useState<ModalFlag>(null);
-  const [modalConfig, setModalConfig] = useState<IModal>({
-    diary,
-    sentence: "",
-    modalFlag: null,
-    setModalFlag,
-  });
+  const runModal = (variants: IOnModal) => {
+    onModal(variants);
+    setModalOn(true);
+  };
 
   useEffect(() => {
-    if (modalFlag === "modify") {
-      setModalConfig((prev) => ({
-        ...prev,
-        modalFlag,
-        sentence: MODIFY_SENTENCE,
-      }));
+    if (modalProps && modalResult !== null) {
+      console.log(modalProps.modalId, modalResult);
+      setModalOn(false);
     }
-    if (modalFlag === "delete") {
-      setModalConfig((prev) => ({
-        ...prev,
-        modalFlag,
-        sentence: DELETE_SENTENCE,
-      }));
+  }, [modalResult]);
+
+  useEffect(() => {
+    //modal 종료 후 modalResult 초기화
+    if (!modalOn && modalProps) {
+      modalProps.setModalResult(null);
     }
-  }, [modalFlag]);
+  }, [modalOn]);
 
   return (
     <Wrapper>
       <Buttons>
-        <ModifyBtn onClick={() => setModalFlag("modify")}>수정</ModifyBtn>
-        <DeleteBtn onClick={() => setModalFlag("delete")}>삭제</DeleteBtn>
+        <ModifyBtn onClick={() => runModal(modifyVariants)}>수정</ModifyBtn>
+        <DeleteBtn onClick={() => runModal(deleteVariants)}>삭제</DeleteBtn>
       </Buttons>
       <Context>
         <DiaryTitle>{title}</DiaryTitle>
         <DiaryDate>{date}</DiaryDate>
         <DiaryText>{text}</DiaryText>
       </Context>
-      {modalFlag && (
-        <ModalBackground>
-          <Modal {...modalConfig} />
-        </ModalBackground>
-      )}
+      {modalOn && <Modal {...modalProps} />}
     </Wrapper>
   );
 }
@@ -120,18 +118,6 @@ const DiaryText = styled.div`
   width: 100%;
   line-height: 200%;
   white-space: pre-wrap;
-`;
-
-const ModalBackground = styled.div`
-  z-index: 100;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
 `;
 
 export default Read;

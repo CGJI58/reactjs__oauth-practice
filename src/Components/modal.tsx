@@ -1,29 +1,27 @@
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import useDeleteDiary from "../Hooks/useDeleteDiary";
-import { IModal } from "../types/types";
+import { IModalProp } from "../types/types";
 
-function Modal({ diary, sentence, modalFlag, setModalFlag }: IModal) {
-  const navigate = useNavigate();
-  const { deleteDiary } = useDeleteDiary();
-
+function Modal({ sentence, setModalResult }: Partial<IModalProp>) {
   const onYes = () => {
-    if (modalFlag === "modify") {
-      navigate(`../write?mode=modify`, { state: { diary } });
+    if (setModalResult) {
+      setModalResult(true);
     }
-    if (modalFlag === "delete") {
-      deleteDiary(diary.id);
-      navigate("/");
+  };
+  const onNo = () => {
+    if (setModalResult) {
+      setModalResult(false);
     }
   };
   return (
-    <Wrapper>
-      <Question>{sentence}</Question>
-      <Choice>
-        <Yes onClick={() => onYes()}>예</Yes>
-        <No onClick={() => setModalFlag(null)}>아니오</No>
-      </Choice>
-    </Wrapper>
+    <ModalBackground>
+      <Wrapper>
+        <Question>{sentence}</Question>
+        <Choice>
+          <Yes onClick={() => onYes()}>예</Yes>
+          <No onClick={() => onNo()}>아니오</No>
+        </Choice>
+      </Wrapper>
+    </ModalBackground>
   );
 }
 
@@ -80,5 +78,17 @@ const Choice = styled.div`
 const Yes = styled.div``;
 
 const No = styled.div``;
+
+const ModalBackground = styled.div`
+  z-index: 100;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+`;
 
 export default Modal;

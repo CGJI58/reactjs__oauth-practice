@@ -1,12 +1,3 @@
-export type ModalFlag = "modify" | "delete" | null;
-
-export interface IModal {
-  diary: IDiary;
-  sentence: string;
-  modalFlag: ModalFlag;
-  setModalFlag: React.Dispatch<React.SetStateAction<ModalFlag>>;
-}
-
 export interface IUserState {
   userInfo: IUserInfo;
   userRecord: IUserRecord;
@@ -35,3 +26,13 @@ export interface IGetUserByCookie {
   userData?: IUserState;
   status: number | null;
 }
+
+export interface IOnModal {
+  modalId: string | null;
+  sentence: string;
+}
+
+export type IModalProp = {
+  modalResult: boolean | null;
+  setModalResult: React.Dispatch<React.SetStateAction<boolean | null>>;
+} & IOnModal;
