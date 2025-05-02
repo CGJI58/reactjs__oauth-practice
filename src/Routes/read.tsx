@@ -19,13 +19,19 @@ const deleteVariants: IOnModal = {
 
 function Read() {
   useGetUserByCookie();
-  useTempDiary();
+  const { saveTempDiaryVariants, tempDiary, runSaveTempDiary } = useTempDiary();
   const navigate = useNavigate();
   const location = useLocation();
   const diary: IDiary = location.state.diary;
   const { title, date, text, id: diaryId } = diary;
   const { deleteDiary } = useDeleteDiary();
   const { modalProps, modalResult, modalOn, createModal } = useModal();
+
+  useEffect(() => {
+    if (tempDiary) {
+      createModal(saveTempDiaryVariants);
+    }
+  }, [tempDiary]);
 
   const runModify = () => {
     navigate(`../write?mode=modify`, { state: { diary } });
@@ -44,6 +50,9 @@ function Read() {
       }
       if (modalId === deleteVariants.modalId) {
         runDelete();
+      }
+      if (modalId === saveTempDiaryVariants.modalId) {
+        runSaveTempDiary();
       }
     }
   }, [modalResult]);
