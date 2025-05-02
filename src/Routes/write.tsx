@@ -130,6 +130,7 @@ const Form = styled.form`
   #text {
     height: 300px;
     resize: none;
+    line-height: 180%;
   }
   #submit {
     transition: 100ms ease-in-out;

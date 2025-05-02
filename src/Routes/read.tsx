@@ -6,6 +6,7 @@ import Modal from "../Components/modal";
 import { IDiary, IOnModal } from "../types/types";
 import useModal from "../Hooks/useModal";
 import useDeleteDiary from "../Hooks/useDeleteDiary";
+import useTempDiary from "../Hooks/useTempDiary";
 
 const modifyVariants: IOnModal = {
   modalId: "modify",
@@ -18,6 +19,7 @@ const deleteVariants: IOnModal = {
 
 function Read() {
   useGetUserByCookie();
+  useTempDiary();
   const location = useLocation();
   const diary: IDiary = location.state.diary;
   const { title, date, text, id: diaryId } = diary;
@@ -134,7 +136,7 @@ const DiaryTitle = styled.div`
 
 const DiaryText = styled.div`
   width: 100%;
-  line-height: 200%;
+  line-height: 180%;
   white-space: pre-wrap;
 `;
 
