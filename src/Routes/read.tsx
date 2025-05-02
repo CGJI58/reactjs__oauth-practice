@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import useGetUserByCookie from "../Hooks/useGetUserByCookie";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Modal from "../Components/modal";
 import { IDiary, IOnModal } from "../types/types";
 import useModal from "../Hooks/useModal";
@@ -20,18 +20,12 @@ const deleteVariants: IOnModal = {
 function Read() {
   useGetUserByCookie();
   useTempDiary();
+  const navigate = useNavigate();
   const location = useLocation();
   const diary: IDiary = location.state.diary;
   const { title, date, text, id: diaryId } = diary;
-  const { onModal, modalProps, modalResult } = useModal();
-  const [modalOn, setModalOn] = useState<boolean>(false);
-  const navigate = useNavigate();
   const { deleteDiary } = useDeleteDiary();
-
-  const runModal = (variants: IOnModal) => {
-    onModal(variants);
-    setModalOn(true);
-  };
+  const { modalProps, modalResult, modalOn, createModal } = useModal();
 
   const runModify = () => {
     navigate(`../write?mode=modify`, { state: { diary } });
@@ -43,30 +37,22 @@ function Read() {
   };
 
   useEffect(() => {
-    if (modalProps && modalResult !== null) {
-      console.log(modalProps.modalId, modalResult);
-      setModalOn(false);
-      if (modalProps.modalId === modifyVariants.modalId && modalResult) {
+    if (modalProps && modalResult) {
+      const { modalId } = modalProps;
+      if (modalId === modifyVariants.modalId) {
         runModify();
       }
-      if (modalProps.modalId === deleteVariants.modalId && modalResult) {
+      if (modalId === deleteVariants.modalId) {
         runDelete();
       }
     }
   }, [modalResult]);
 
-  useEffect(() => {
-    //modal 종료 후 modalResult 초기화
-    if (!modalOn && modalProps) {
-      modalProps.setModalResult(null);
-    }
-  }, [modalOn]);
-
   return (
     <Wrapper>
       <Buttons>
-        <ModifyBtn onClick={() => runModal(modifyVariants)}>수정</ModifyBtn>
-        <DeleteBtn onClick={() => runModal(deleteVariants)}>삭제</DeleteBtn>
+        <ModifyBtn onClick={() => createModal(modifyVariants)}>수정</ModifyBtn>
+        <DeleteBtn onClick={() => createModal(deleteVariants)}>삭제</DeleteBtn>
       </Buttons>
       <Context>
         <DiaryTitle>{title}</DiaryTitle>

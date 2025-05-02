@@ -33,6 +33,5 @@ export interface IOnModal {
 }
 
 export type IModalProp = {
-  modalResult: boolean | null;
   setModalResult: React.Dispatch<React.SetStateAction<boolean | null>>;
 } & IOnModal;
