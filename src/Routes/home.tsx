@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import { userState } from "../States/atoms";
+import { userInfoState } from "../States/atoms";
 import { useRecoilValue } from "recoil";
 import UserRecord from "../Components/userRecord";
 import ScrollTopBtn from "../Components/scrollTopBtn";
 import useGetUserByCookie from "../Hooks/useGetUserByCookie";
-import { IUserState } from "../types/types";
+import { IUserInfo } from "../types/types";
 import useTempDiary from "../Hooks/useTempDiary";
 import { useEffect } from "react";
 import useModal from "../Hooks/useModal";
@@ -12,9 +12,7 @@ import Modal from "../Components/modal";
 
 function Home() {
   useGetUserByCookie();
-  const {
-    userInfo: { email },
-  } = useRecoilValue<IUserState>(userState);
+  const { email } = useRecoilValue<IUserInfo>(userInfoState);
 
   const { saveTempDiaryVariants, tempDiary, runSaveTempDiary } = useTempDiary();
   const { modalProps, modalResult, modalOn, createModal } = useModal();

@@ -1,14 +1,12 @@
 import styled from "styled-components";
 import Diary from "./diary";
 import { useRecoilValue } from "recoil";
-import { userState } from "../States/atoms";
+import { userRecordState } from "../States/atoms";
 import { useState } from "react";
-import { IUserState } from "../types/types";
+import { IUserRecord } from "../types/types";
 
 function Diaries() {
-  const {
-    userRecord: { diaries },
-  } = useRecoilValue<IUserState>(userState);
+  const { diaries } = useRecoilValue<IUserRecord>(userRecordState);
   const [focused, setFocused] = useState<number>(0);
   return (
     <Wrapper>

@@ -1,17 +1,14 @@
 import { useSetRecoilState } from "recoil";
-import { userState } from "../States/atoms";
-import { IUserState } from "../types/types";
+import { userRecordState } from "../States/atoms";
+import { IUserRecord } from "../types/types";
 
 function useDeleteDiary() {
-  const setUser = useSetRecoilState<IUserState>(userState);
+  const setUserRecordState = useSetRecoilState<IUserRecord>(userRecordState);
   const deleteDiary = (diaryId: string) => {
-    setUser((prev) => {
-      const newDiaries = prev.userRecord.diaries.filter(
-        (diary) => diary.id !== diaryId
-      );
+    setUserRecordState((prev) => {
+      const newDiaries = prev.diaries.filter((diary) => diary.id !== diaryId);
       return {
-        ...prev,
-        userRecord: { ...prev.userRecord, diaries: newDiaries },
+        diaries: newDiaries,
       };
     });
   };

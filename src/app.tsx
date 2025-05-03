@@ -7,18 +7,16 @@ import Logout from "./Routes/logout";
 import Profile from "./Routes/profile";
 import { ThemeProvider } from "styled-components";
 import { useRecoilValue } from "recoil";
-import { userState } from "./States/atoms";
+import { userConfigState } from "./States/atoms";
 import { darkTheme, lightTheme } from "./theme/theme";
 import Read from "./Routes/read";
 import { Helmet } from "react-helmet";
-import { IUserState } from "./types/types";
+import { IUserConfig } from "./types/types";
 
 const FE_BASE_URL = "/reactjs__oauth-practice";
 
 function App() {
-  const {
-    userConfig: { isDarkTheme },
-  } = useRecoilValue<IUserState>(userState);
+  const { isDarkTheme } = useRecoilValue<IUserConfig>(userConfigState);
   return (
     <Router basename={`${FE_BASE_URL}`}>
       <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>

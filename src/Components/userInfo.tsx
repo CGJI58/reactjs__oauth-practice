@@ -8,18 +8,14 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
-import { userState } from "../States/atoms";
-import { IUserState } from "../types/types";
+import { userConfigState } from "../States/atoms";
+import { IUserConfig } from "../types/types";
 
 function UserInfo() {
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState<boolean>(false);
-  const [
-    {
-      userConfig: { nickname, isDarkTheme },
-    },
-    setUser,
-  ] = useRecoilState<IUserState>(userState);
+  const [{ nickname, isDarkTheme }, setUserConfig] =
+    useRecoilState<IUserConfig>(userConfigState);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleMouseLeave = () => {
@@ -42,12 +38,9 @@ function UserInfo() {
           <DropItem onClick={() => navigate("/profile")}>{nickname}</DropItem>
           <DropItem
             onClick={() =>
-              setUser((prev) => ({
+              setUserConfig((prev) => ({
                 ...prev,
-                userConfig: {
-                  ...prev.userConfig,
-                  isDarkTheme: !prev.userConfig.isDarkTheme,
-                },
+                isDarkTheme: !prev.isDarkTheme,
               }))
             }
           >

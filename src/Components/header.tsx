@@ -1,17 +1,15 @@
 import { Link } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { userState } from "../States/atoms";
+import { userInfoState } from "../States/atoms";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse } from "@fortawesome/free-solid-svg-icons";
 import UserInfo from "./userInfo";
 import ScrollMeter from "./ScrollMeter";
-import { IUserState } from "../types/types";
+import { IUserInfo } from "../types/types";
 
 function Header() {
-  const {
-    userInfo: { email },
-  } = useRecoilValue<IUserState>(userState);
+  const { email } = useRecoilValue<IUserInfo>(userInfoState);
 
   return (
     <Wrapper>
