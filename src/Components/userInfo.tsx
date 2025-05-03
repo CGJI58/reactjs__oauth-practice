@@ -7,18 +7,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { isDarkThemeState, userState } from "../States/atoms";
+import { useRecoilState } from "recoil";
+import { userState } from "../States/atoms";
 import { IUserState } from "../types/types";
 
 function UserInfo() {
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState<boolean>(false);
-  const [isDarkTheme, setIsDarkTheme] =
-    useRecoilState<boolean>(isDarkThemeState);
-  const {
-    userRecord: { nickname },
-  } = useRecoilValue<IUserState>(userState);
+  const [
+    {
+      userConfig: { nickname, isDarkTheme },
+    },
+    setUser,
+  ] = useRecoilState<IUserState>(userState);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleMouseLeave = () => {
@@ -39,7 +40,17 @@ function UserInfo() {
       {isHovered && (
         <DropList>
           <DropItem onClick={() => navigate("/profile")}>{nickname}</DropItem>
-          <DropItem onClick={() => setIsDarkTheme((prev) => !prev)}>
+          <DropItem
+            onClick={() =>
+              setUser((prev) => ({
+                ...prev,
+                userConfig: {
+                  ...prev.userConfig,
+                  isDarkTheme: !prev.userConfig.isDarkTheme,
+                },
+              }))
+            }
+          >
             <Label>Dark mode:</Label>
             {isDarkTheme ? (
               <FontAwesomeIcon icon={faToggleOn} />

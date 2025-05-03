@@ -1,6 +1,7 @@
 export interface IUserState {
   userInfo: IUserInfo;
   userRecord: IUserRecord;
+  userConfig: IUserConfig;
 }
 
 export interface IUserInfo {
@@ -11,8 +12,13 @@ export interface IUserInfo {
 }
 
 export interface IUserRecord {
-  nickname: string;
   diaries: Array<IDiary>;
+}
+
+export interface IUserConfig {
+  nickname: string;
+  isDarkTheme: boolean;
+  password: string;
 }
 
 export interface IDiary {

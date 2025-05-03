@@ -1,9 +1,7 @@
 import styled from "styled-components";
 import Diaries from "./diaries";
-import useUpdate from "../Hooks/useUpdate";
 
 function UserRecord() {
-  useUpdate();
   return (
     <Wrapper>
       <Diaries />

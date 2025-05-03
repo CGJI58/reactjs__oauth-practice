@@ -1,12 +1,14 @@
 import { FC, ReactNode } from "react";
 import Header from "../Components/header";
 import styled from "styled-components";
+import useUpdate from "../Hooks/useUpdate";
 
 interface LayoutProps {
   children: ReactNode;
 }
 
 const Layout: FC<LayoutProps> = ({ children }) => {
+  useUpdate();
   return (
     <Wrapper>
       <Header />

@@ -10,7 +10,8 @@ import Modal from "../Components/modal";
 
 function Profile() {
   useGetUserByCookie();
-  const { userInfo, userRecord } = useRecoilValue<IUserState>(userState);
+  const { userInfo, userRecord, userConfig } =
+    useRecoilValue<IUserState>(userState);
 
   const { saveTempDiaryVariants, tempDiary, runSaveTempDiary } = useTempDiary();
   const { modalProps, modalResult, modalOn, createModal } = useModal();
@@ -36,7 +37,7 @@ function Profile() {
         <Label>E-mail</Label>
         <Value>{userInfo.email}</Value>
         <Label>NickName</Label>
-        <Value>{userRecord.nickname}</Value>
+        <Value>{userConfig.nickname}</Value>
         <Label>Diaries</Label>
         <Value>{userRecord.diaries.length}</Value>
       </Popup>

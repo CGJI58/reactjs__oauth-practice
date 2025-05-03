@@ -9,17 +9,16 @@ export const defaultUserState: IUserState = {
     visibility: "",
   },
   userRecord: {
-    nickname: "",
     diaries: [],
+  },
+  userConfig: {
+    nickname: "",
+    isDarkTheme: false,
+    password: "임시비번임",
   },
 };
 
 export const userState = atom<IUserState>({
   key: "userState",
   default: defaultUserState,
-});
-
-export const isDarkThemeState = atom<boolean>({
-  key: "themeState",
-  default: false,
 });
