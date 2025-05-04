@@ -82,9 +82,6 @@ const Wrapper = styled(motion.div)`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 100%;
-  max-width: 600px;
-  min-width: 300px;
   box-shadow: ${(props) => props.theme.boxShadow};
   border-radius: 5px;
   transition: 100ms ease-out 100ms;
@@ -104,7 +101,7 @@ const StyledLink = styled(Link)`
 
 const DiaryHead = styled.div`
   display: grid;
-  grid-template-columns: 20px 1fr 100px;
+  grid-template-columns: 30px 1fr 100px;
   height: 50px;
   min-height: max-content;
   gap: 10px;
