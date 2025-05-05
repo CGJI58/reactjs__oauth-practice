@@ -1,5 +1,5 @@
 import { useRecoilValue } from "recoil";
-import { userState } from "../States/atoms";
+import { defaultUserState, userState } from "../States/atoms";
 import { useEffect, useState } from "react";
 import { updateUser } from "../Api/api";
 import { IUserState } from "../types/types";
@@ -18,7 +18,9 @@ function useUpdate() {
   };
 
   useEffect(() => {
-    onUpdate(user).then((ok) => setOk(ok));
+    if (user !== defaultUserState) {
+      onUpdate(user).then((ok) => setOk(ok));
+    }
   }, [user]);
 
   useEffect(() => {
