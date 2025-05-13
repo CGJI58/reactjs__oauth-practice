@@ -16,6 +16,7 @@ export const defaultUserState: IUserState = {
     isDarkTheme: false,
     password: "임시비번임",
   },
+  synchronized: false,
 };
 
 export const userState = atom<IUserState>({
@@ -63,6 +64,21 @@ export const userConfigState = selector({
       set(userState, (prev) => ({
         ...prev,
         userConfig: newUserConfig,
+      }));
+    }
+  },
+});
+
+export const userSynchronizedState = selector({
+  key: "userSynchronizedState",
+  get: ({ get }) => get(userState).synchronized,
+  set: ({ set }, newSync) => {
+    if (newSync instanceof DefaultValue) {
+      throw new Error("userConfigState: Invalid argument.");
+    } else {
+      set(userState, (prev) => ({
+        ...prev,
+        synchronized: newSync,
       }));
     }
   },

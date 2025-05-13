@@ -2,6 +2,7 @@ export interface IUserState {
   userInfo: IUserInfo;
   userRecord: IUserRecord;
   userConfig: IUserConfig;
+  synchronized: boolean;
 }
 
 export interface IUserInfo {

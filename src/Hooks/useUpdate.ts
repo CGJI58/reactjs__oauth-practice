@@ -1,35 +1,23 @@
-import { useRecoilValue } from "recoil";
-import { defaultUserState, userState } from "../States/atoms";
-import { useEffect, useState } from "react";
+import { useSetRecoilState } from "recoil";
+import { userSynchronizedState } from "../States/atoms";
 import { updateUser } from "../Api/api";
 import { IUserState } from "../types/types";
 
-/**
- * ok는 오직 onUpdate()에 의해서만 true 가 될 수 있다.
- * ok는 update가 BE와 DB에서 작업을 모두 완료했음을 의미하는 boolean 값이기 때문.
- */
 function useUpdate() {
-  const user = useRecoilValue<IUserState>(userState);
-  const [ok, setOk] = useState<boolean>(false);
-
+  const setUserSynchronized = useSetRecoilState<boolean>(userSynchronizedState);
   const onUpdate = async (user: IUserState) => {
     const ok = await updateUser(user);
-    return ok;
+    if (ok) {
+      setUserSynchronized(() => {
+        console.log("동기화 성공.");
+        return true;
+      });
+    } else {
+      console.log("동기화 실패.");
+    }
   };
 
-  useEffect(() => {
-    if (user !== defaultUserState) {
-      onUpdate(user).then((ok) => setOk(ok));
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (ok) {
-      console.log("update complete.");
-    }
-  }, [ok]);
-
-  return { ok, setOk };
+  return { onUpdate };
 }
 
 export default useUpdate;
