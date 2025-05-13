@@ -3,7 +3,6 @@ import { userInfoState } from "../States/atoms";
 import { useRecoilValue } from "recoil";
 import UserRecord from "../Components/userRecord";
 import ScrollTopBtn from "../Components/scrollTopBtn";
-import useGetUserByCookie from "../Hooks/useGetUserByCookie";
 import { IUserInfo } from "../types/types";
 import useTempDiary from "../Hooks/useTempDiary";
 import { useEffect } from "react";
@@ -11,10 +10,13 @@ import useModal from "../Hooks/useModal";
 import Modal from "../Components/modal";
 
 function Home() {
-  useGetUserByCookie();
   const { email } = useRecoilValue<IUserInfo>(userInfoState);
-
-  const { saveTempDiaryVariants, tempDiary, runSaveTempDiary } = useTempDiary();
+  const {
+    saveTempDiaryVariants,
+    tempDiary,
+    runSaveTempDiary,
+    runRemoveTempDiary,
+  } = useTempDiary();
   const { modalProps, modalResult, modalOn, createModal } = useModal();
 
   useEffect(() => {
@@ -24,10 +26,13 @@ function Home() {
   }, [tempDiary]);
 
   useEffect(() => {
-    if (modalProps && modalResult) {
+    if (modalProps && modalResult !== null) {
       const { modalId } = modalProps;
       if (modalId === saveTempDiaryVariants.modalId) {
-        runSaveTempDiary();
+        if (modalResult) {
+          runSaveTempDiary();
+        }
+        runRemoveTempDiary();
       }
     }
   }, [modalResult]);

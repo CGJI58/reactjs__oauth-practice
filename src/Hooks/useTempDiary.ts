@@ -4,8 +4,10 @@ import useSaveDiary from "./useSaveDiary";
 import { createDiary, getTempDiary } from "../util/diaryUtility";
 import { IForm } from "../Routes/write";
 
+type ITempDiary = IForm | null | undefined;
+
 function useTempDiary() {
-  const [tempDiary, setTempDiary] = useState<IForm | null>(null);
+  const [tempDiary, setTempDiary] = useState<ITempDiary>(undefined);
   const [diary, setDiary] = useState<IDiary | null>(null);
   const { saveDiary } = useSaveDiary();
   const saveTempDiaryVariants: IOnModal = {
@@ -15,10 +17,13 @@ function useTempDiary() {
 
   const runSaveTempDiary = () => {
     if (tempDiary) {
-      const diary = createDiary(tempDiary);
-      setDiary(diary);
-      localStorage.removeItem("tempDiary");
+      const newDiary = createDiary(tempDiary);
+      setDiary(newDiary);
     }
+  };
+
+  const runRemoveTempDiary = () => {
+    localStorage.removeItem("tempDiary");
   };
 
   useEffect(() => {
@@ -32,7 +37,12 @@ function useTempDiary() {
     }
   }, [diary]);
 
-  return { saveTempDiaryVariants, tempDiary, runSaveTempDiary };
+  return {
+    saveTempDiaryVariants,
+    tempDiary,
+    runSaveTempDiary,
+    runRemoveTempDiary,
+  };
 }
 
 export default useTempDiary;

@@ -13,7 +13,12 @@ function Profile() {
   const { userInfo, userRecord, userConfig } =
     useRecoilValue<IUserState>(userState);
 
-  const { saveTempDiaryVariants, tempDiary, runSaveTempDiary } = useTempDiary();
+  const {
+    saveTempDiaryVariants,
+    tempDiary,
+    runSaveTempDiary,
+    runRemoveTempDiary,
+  } = useTempDiary();
   const { modalProps, modalResult, modalOn, createModal } = useModal();
 
   useEffect(() => {
@@ -23,10 +28,13 @@ function Profile() {
   }, [tempDiary]);
 
   useEffect(() => {
-    if (modalProps && modalResult) {
+    if (modalProps && modalResult !== null) {
       const { modalId } = modalProps;
       if (modalId === saveTempDiaryVariants.modalId) {
-        runSaveTempDiary();
+        if (modalResult) {
+          runSaveTempDiary();
+        }
+        runRemoveTempDiary();
       }
     }
   }, [modalResult]);
