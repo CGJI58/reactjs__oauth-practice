@@ -1,22 +1,29 @@
 import { useEffect, useState } from "react";
-import useUpdate from "../Hooks/useUpdate";
-import { deleteCookie } from "../Api/api";
-import { useNavigate } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
-import { defaultUserState, userState } from "../States/atoms";
-import { IUserState } from "../types/types";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import {
+  defaultUserState,
+  userState,
+  userSynchronizedState,
+} from "../States/atoms";
 import useTempDiary from "../Hooks/useTempDiary";
 import useModal from "../Hooks/useModal";
 import Modal from "../Components/modal";
+import { deleteCookie } from "../Api/api";
+import { IUserState } from "../types/types";
 
 function Logout() {
-  const navigate = useNavigate();
-  const { ok } = useUpdate();
   const setUser = useSetRecoilState<IUserState>(userState);
-  const [saveDone, setSaveDone] = useState<boolean>(false);
+  const synchronized = useRecoilValue<boolean>(userSynchronizedState);
+  const {
+    saveTempDiaryVariants,
+    tempDiary,
+    runSaveTempDiary,
+    runRemoveTempDiary,
+  } = useTempDiary();
 
-  const { saveTempDiaryVariants, tempDiary, runSaveTempDiary } = useTempDiary();
   const { modalProps, modalResult, modalOn, createModal } = useModal();
+
+  const [allDone, setAllDone] = useState<boolean>(false);
 
   const onLogout = async () => {
     await deleteCookie();
@@ -24,30 +31,37 @@ function Logout() {
   };
 
   useEffect(() => {
-    if (tempDiary) {
-      createModal(saveTempDiaryVariants);
+    if (tempDiary !== undefined) {
+      if (tempDiary) {
+        createModal(saveTempDiaryVariants);
+      } else {
+        setAllDone(true);
+      }
     }
   }, [tempDiary]);
 
   useEffect(() => {
-    if (modalProps && modalResult) {
+    if (modalProps && modalResult !== null) {
       const { modalId } = modalProps;
       if (modalId === saveTempDiaryVariants.modalId) {
-        runSaveTempDiary();
-        setSaveDone(true);
+        if (modalResult) {
+          runSaveTempDiary();
+        }
+        runRemoveTempDiary();
+        if (synchronized) {
+          setAllDone(true);
+        }
       }
     }
   }, [modalResult]);
 
   useEffect(() => {
-    if (ok && saveDone) {
+    if (synchronized && allDone) {
       (async () => {
         await onLogout();
       })();
-      console.log("logout done.");
-      navigate("/");
     }
-  }, [ok, saveDone]);
+  }, [synchronized, allDone]);
 
   return (
     <>
