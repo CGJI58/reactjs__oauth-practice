@@ -4,10 +4,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { debounce } from "lodash";
 import { createDiary } from "../util/diaryUtility";
-import useSaveDiary from "../Hooks/useSaveDiary";
 import { Subscription } from "react-hook-form/dist/utils/createSubject";
 import useGetUserByCookie from "../Hooks/useGetUserByCookie";
 import { IDiary } from "../types/types";
+import useDiary from "../Hooks/useDiary";
 
 export interface IForm extends Omit<IDiary, "date" | "id"> {}
 
@@ -19,7 +19,7 @@ function Write() {
   const mode = query.get("mode") as "create" | "modify";
   const [diary, setDiary] = useState<IDiary>(originalDiary);
   const { register, setValue, handleSubmit, watch } = useForm<IForm>();
-  const { saveDiary } = useSaveDiary();
+  const { saveDiary } = useDiary();
   const subscriptionRef = useRef<Subscription | null>(null);
 
   const tempSave = debounce((tempDiary: IForm) => {
@@ -45,7 +45,7 @@ function Write() {
 
   /**
    * Initialize write page and set beforeunload eventListener
-   * 헤더를 클릭하여 페이지를 벗어나는 경우에 대한 보호는 useSaveDiary.ts 에서 담당할 것.
+   * 헤더를 클릭하여 페이지를 벗어나는 경우에 대한 보호는 saveDiary 에서 담당할 것.
    */
   useEffect(() => {
     // This will protect the form data when user close or refresh page.

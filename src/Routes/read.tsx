@@ -5,8 +5,8 @@ import { useEffect } from "react";
 import Modal from "../Components/modal";
 import { IDiary, IOnModal } from "../types/types";
 import useModal from "../Hooks/useModal";
-import useDeleteDiary from "../Hooks/useDeleteDiary";
 import useTempDiary from "../Hooks/useTempDiary";
+import useDiary from "../Hooks/useDiary";
 
 const modifyVariants: IOnModal = {
   modalId: "modify",
@@ -29,7 +29,7 @@ function Read() {
   const location = useLocation();
   const diary: IDiary = location.state.diary;
   const { title, date, text, id: diaryId } = diary;
-  const { deleteDiary } = useDeleteDiary();
+  const { deleteDiary } = useDiary();
   const { modalProps, modalAnswer, modalOn, createModal } = useModal();
 
   useEffect(() => {

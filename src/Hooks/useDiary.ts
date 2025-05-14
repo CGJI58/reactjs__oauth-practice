@@ -2,7 +2,7 @@ import { useSetRecoilState } from "recoil";
 import { userRecordState } from "../States/atoms";
 import { IDiary, IUserRecord } from "../types/types";
 
-function useSaveDiary() {
+function useDiary() {
   const setUserRecord = useSetRecoilState<IUserRecord>(userRecordState);
 
   const saveDiary = (newDiary: IDiary) => {
@@ -19,7 +19,17 @@ function useSaveDiary() {
       });
     }
   };
-  return { saveDiary };
+
+  const deleteDiary = (diaryId: string) => {
+    setUserRecord((prev) => {
+      const newDiaries = prev.diaries.filter((diary) => diary.id !== diaryId);
+      return {
+        diaries: newDiaries,
+      };
+    });
+  };
+
+  return { saveDiary, deleteDiary };
 }
 
-export default useSaveDiary;
+export default useDiary;
