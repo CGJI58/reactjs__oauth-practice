@@ -1,15 +1,15 @@
 import styled from "styled-components";
 import { IModalProp } from "../types/types";
 
-function Modal({ sentence, setModalResult }: Partial<IModalProp>) {
+function Modal({ sentence, setModalAnswer }: Partial<IModalProp>) {
   const onYes = () => {
-    if (setModalResult) {
-      setModalResult(true);
+    if (setModalAnswer) {
+      setModalAnswer(true);
     }
   };
   const onNo = () => {
-    if (setModalResult) {
-      setModalResult(false);
+    if (setModalAnswer) {
+      setModalAnswer(false);
     }
   };
   return (

@@ -2,30 +2,30 @@ import { useEffect, useState } from "react";
 import { IModalProp, IOnModal } from "../types/types";
 
 function useModal() {
-  const [modalResult, setModalResult] = useState<boolean | null>(null);
+  const [modalAnswer, setModalAnswer] = useState<boolean | null>(null);
   const [modalProps, setModalProps] = useState<IModalProp>();
   const [modalOn, setModalOn] = useState<boolean>(false);
 
   const createModal = (variants: IOnModal) => {
-    setModalProps({ ...variants, setModalResult });
+    setModalProps({ ...variants, setModalAnswer });
     setModalOn(true);
   };
 
   useEffect(() => {
-    // modalResult 값 반환 후 초기화
+    // modalAnswer 값 반환 후 초기화
     if (!modalOn && modalProps) {
-      modalProps.setModalResult(null);
+      modalProps.setModalAnswer(null);
     }
   }, [modalOn]);
 
   useEffect(() => {
-    // modalResult 초기화 후 modal 창 종료
-    if (modalResult !== null) {
+    // modalAnswer 초기화 후 modal 창 종료
+    if (modalAnswer !== null) {
       setModalOn(false);
     }
-  }, [modalResult]);
+  }, [modalAnswer]);
 
-  return { modalProps, modalResult, modalOn, createModal };
+  return { modalProps, modalAnswer, modalOn, createModal };
 }
 
 export default useModal;

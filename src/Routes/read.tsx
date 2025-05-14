@@ -30,7 +30,7 @@ function Read() {
   const diary: IDiary = location.state.diary;
   const { title, date, text, id: diaryId } = diary;
   const { deleteDiary } = useDeleteDiary();
-  const { modalProps, modalResult, modalOn, createModal } = useModal();
+  const { modalProps, modalAnswer, modalOn, createModal } = useModal();
 
   useEffect(() => {
     if (tempDiary) {
@@ -48,26 +48,26 @@ function Read() {
   };
 
   useEffect(() => {
-    if (modalProps && modalResult !== null) {
+    if (modalProps && modalAnswer !== null) {
       const { modalId } = modalProps;
       if (modalId === modifyVariants.modalId) {
-        if (modalResult) {
+        if (modalAnswer) {
           runModify();
         }
       }
       if (modalId === deleteVariants.modalId) {
-        if (modalResult) {
+        if (modalAnswer) {
           runDelete();
         }
       }
       if (modalId === saveTempDiaryVariants.modalId) {
-        if (modalResult) {
+        if (modalAnswer) {
           runSaveTempDiary();
         }
         runRemoveTempDiary();
       }
     }
-  }, [modalResult]);
+  }, [modalAnswer]);
 
   return (
     <Wrapper>

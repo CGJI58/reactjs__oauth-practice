@@ -40,5 +40,5 @@ export interface IOnModal {
 }
 
 export type IModalProp = {
-  setModalResult: React.Dispatch<React.SetStateAction<boolean | null>>;
+  setModalAnswer: React.Dispatch<React.SetStateAction<boolean | null>>;
 } & IOnModal;

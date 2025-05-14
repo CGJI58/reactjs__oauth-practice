@@ -21,7 +21,7 @@ function Logout() {
     runRemoveTempDiary,
   } = useTempDiary();
 
-  const { modalProps, modalResult, modalOn, createModal } = useModal();
+  const { modalProps, modalAnswer, modalOn, createModal } = useModal();
 
   const [allDone, setAllDone] = useState<boolean>(false);
 
@@ -41,10 +41,10 @@ function Logout() {
   }, [tempDiary]);
 
   useEffect(() => {
-    if (modalProps && modalResult !== null) {
+    if (modalProps && modalAnswer !== null) {
       const { modalId } = modalProps;
       if (modalId === saveTempDiaryVariants.modalId) {
-        if (modalResult) {
+        if (modalAnswer) {
           runSaveTempDiary();
         }
         runRemoveTempDiary();
@@ -53,7 +53,7 @@ function Logout() {
         }
       }
     }
-  }, [modalResult]);
+  }, [modalAnswer]);
 
   useEffect(() => {
     if (synchronized && allDone) {

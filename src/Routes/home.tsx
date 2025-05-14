@@ -17,7 +17,7 @@ function Home() {
     runSaveTempDiary,
     runRemoveTempDiary,
   } = useTempDiary();
-  const { modalProps, modalResult, modalOn, createModal } = useModal();
+  const { modalProps, modalAnswer, modalOn, createModal } = useModal();
 
   useEffect(() => {
     if (tempDiary) {
@@ -26,16 +26,16 @@ function Home() {
   }, [tempDiary]);
 
   useEffect(() => {
-    if (modalProps && modalResult !== null) {
+    if (modalProps && modalAnswer !== null) {
       const { modalId } = modalProps;
       if (modalId === saveTempDiaryVariants.modalId) {
-        if (modalResult) {
+        if (modalAnswer) {
           runSaveTempDiary();
         }
         runRemoveTempDiary();
       }
     }
-  }, [modalResult]);
+  }, [modalAnswer]);
 
   return (
     <Wrapper>
