@@ -1,7 +1,7 @@
 import { FC, ReactNode, useEffect } from "react";
 import Header from "../Components/header";
 import styled from "styled-components";
-import useUpdate from "../Hooks/useUpdate";
+import useUser from "../Hooks/useUser";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { IUserState } from "../types/types";
 import {
@@ -9,7 +9,6 @@ import {
   userState,
   userSynchronizedState,
 } from "../States/atoms";
-import useGetUserByCookie from "../Hooks/useGetUserByCookie";
 import { useNavigate } from "react-router-dom";
 
 interface LayoutProps {
@@ -24,13 +23,11 @@ const Layout: FC<LayoutProps> = ({ children }) => {
 
   const setSynchronized = useSetRecoilState<boolean>(userSynchronizedState);
 
-  const { onUpdate } = useUpdate();
-
-  const { onGetUserByCookie } = useGetUserByCookie();
+  const { loadUser, saveUser } = useUser();
 
   useEffect(() => {
     if (user === defaultUserState) {
-      onGetUserByCookie();
+      loadUser();
       navigate("/");
     }
   }, [user]);
@@ -46,7 +43,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
 
   useEffect(() => {
     if (!synchronized && user !== defaultUserState) {
-      onUpdate(user);
+      saveUser(user);
     }
   }, [synchronized]);
 

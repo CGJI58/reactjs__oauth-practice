@@ -2,17 +2,16 @@ import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { IUserState } from "../types/types";
 import { userState } from "../States/atoms";
-import useGetUserByCookie from "../Hooks/useGetUserByCookie";
+import useUser from "../Hooks/useUser";
 import useTempDiary from "../Hooks/useTempDiary";
 import useModal from "../Hooks/useModal";
 import { useEffect } from "react";
 import Modal from "../Components/modal";
 
 function Profile() {
-  useGetUserByCookie();
+  const { loadUser } = useUser();
   const { userInfo, userRecord, userConfig } =
     useRecoilValue<IUserState>(userState);
-
   const {
     saveTempDiaryVariants,
     tempDiary,
@@ -20,6 +19,8 @@ function Profile() {
     runRemoveTempDiary,
   } = useTempDiary();
   const { modalProps, modalAnswer, modalOn, createModal } = useModal();
+
+  useEffect(() => loadUser(), []);
 
   useEffect(() => {
     if (tempDiary) {

@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import useGetUserByCookie from "../Hooks/useGetUserByCookie";
+import useUser from "../Hooks/useUser";
 import { useEffect } from "react";
 import Modal from "../Components/modal";
 import { IDiary, IOnModal } from "../types/types";
@@ -18,7 +18,7 @@ const deleteVariants: IOnModal = {
 };
 
 function Read() {
-  useGetUserByCookie();
+  const { loadUser } = useUser();
   const {
     saveTempDiaryVariants,
     tempDiary,
@@ -31,6 +31,8 @@ function Read() {
   const { title, date, text, id: diaryId } = diary;
   const { deleteDiary } = useDiary();
   const { modalProps, modalAnswer, modalOn, createModal } = useModal();
+
+  useEffect(() => loadUser(), []);
 
   useEffect(() => {
     if (tempDiary) {

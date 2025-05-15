@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { getCodeRequestURL, loginByGhCode } from "../Api/api";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import useGetUserByCookie from "../Hooks/useGetUserByCookie";
+import useUser from "../Hooks/useUser";
 
 function Login() {
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ function Login() {
   const [codeRequestURL, setCodeRequestURL] = useState("");
   const ghCode = new URLSearchParams(location.search).get("code");
   const popupRef = useRef<HTMLDivElement | null>(null);
-  const { onGetUserByCookie } = useGetUserByCookie();
+  const { loadUser } = useUser();
 
   const handleOutsideClick = (event: MouseEvent) => {
     if (
@@ -34,7 +34,7 @@ function Login() {
   useEffect(() => {
     if (ghCode) {
       loginByGhCode(ghCode)
-        .then(() => onGetUserByCookie())
+        .then(() => loadUser())
         .then(() => navigate("/"));
     } else {
       getCodeRequestURL().then((url) => setCodeRequestURL(url));
