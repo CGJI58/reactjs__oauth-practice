@@ -1,18 +1,12 @@
 import { useEffect, useState } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import {
-  defaultUserState,
-  userState,
-  userSynchronizedState,
-} from "../States/atoms";
+import { useRecoilValue } from "recoil";
+import { userSynchronizedState } from "../States/atoms";
 import useTempDiary from "../Hooks/useTempDiary";
 import useModal from "../Hooks/useModal";
 import Modal from "../Components/modal";
-import { deleteCookie } from "../Api/api";
-import { IUserState } from "../types/types";
+import useAuth from "../Hooks/useAuth";
 
 function Logout() {
-  const setUser = useSetRecoilState<IUserState>(userState);
   const synchronized = useRecoilValue<boolean>(userSynchronizedState);
   const {
     saveTempDiaryVariants,
@@ -20,15 +14,9 @@ function Logout() {
     runSaveTempDiary,
     runRemoveTempDiary,
   } = useTempDiary();
-
   const { modalProps, modalAnswer, modalOn, createModal } = useModal();
-
+  const { logOut } = useAuth();
   const [allDone, setAllDone] = useState<boolean>(false);
-
-  const onLogout = async () => {
-    await deleteCookie();
-    setUser(() => defaultUserState);
-  };
 
   useEffect(() => {
     if (tempDiary !== undefined) {
@@ -58,7 +46,7 @@ function Logout() {
   useEffect(() => {
     if (synchronized && allDone) {
       (async () => {
-        await onLogout();
+        await logOut();
       })();
     }
   }, [synchronized, allDone]);

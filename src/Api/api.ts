@@ -3,7 +3,7 @@ import { IGetUserByCookie, IUserState } from "../types/types";
 
 const BE_BASE_URL = process.env.REACT_APP_BACK_END_URL;
 
-export const loginByGhCode = async (ghCode: string): Promise<boolean> => {
+export const loginByGhCode = async (ghCode: string): Promise<void> => {
   console.log("Run loginByGhCode()");
   try {
     const response = await fetch(`${BE_BASE_URL}/auth/login-by-ghcode`, {
@@ -18,14 +18,11 @@ export const loginByGhCode = async (ghCode: string): Promise<boolean> => {
       }),
     });
     const { ok } = response;
-    if (ok) {
-      return ok;
-    } else {
+    if (!ok) {
       throw new Error(`Server responded with status: ${response.status}`);
     }
   } catch (error) {
     console.error("loginByGhCode:", error);
-    return false;
   }
 };
 

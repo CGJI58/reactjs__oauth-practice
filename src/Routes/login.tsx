@@ -3,9 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { getCodeRequestURL, loginByGhCode } from "../Api/api";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import useUser from "../Hooks/useUser";
+import useAuth from "../Hooks/useAuth";
 
 function Login() {
   const navigate = useNavigate();
@@ -13,7 +12,7 @@ function Login() {
   const [codeRequestURL, setCodeRequestURL] = useState("");
   const ghCode = new URLSearchParams(location.search).get("code");
   const popupRef = useRef<HTMLDivElement | null>(null);
-  const { loadUser } = useUser();
+  const { loadCodeRequestURL, login } = useAuth();
 
   const handleOutsideClick = (event: MouseEvent) => {
     if (
@@ -32,13 +31,14 @@ function Login() {
   }, []);
 
   useEffect(() => {
-    if (ghCode) {
-      loginByGhCode(ghCode)
-        .then(() => loadUser())
-        .then(() => navigate("/"));
-    } else {
-      getCodeRequestURL().then((url) => setCodeRequestURL(url));
-    }
+    (async () => {
+      if (ghCode) {
+        await login(ghCode);
+      } else {
+        const url = await loadCodeRequestURL();
+        setCodeRequestURL(url);
+      }
+    })();
   }, [ghCode]);
 
   return (
