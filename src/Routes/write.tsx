@@ -5,14 +5,12 @@ import { useEffect, useRef, useState } from "react";
 import { debounce } from "lodash";
 import { createDiary } from "../util/diaryUtility";
 import { Subscription } from "react-hook-form/dist/utils/createSubject";
-import useUser from "../Hooks/useUser";
 import { IDiary } from "../types/types";
 import useDiary from "../Hooks/useDiary";
 
 export interface IForm extends Omit<IDiary, "date" | "id"> {}
 
 function Write() {
-  const { loadUser } = useUser();
   const navigate = useNavigate();
   const location = useLocation();
   const originalDiary: IDiary = location.state.diary;
@@ -26,8 +24,6 @@ function Write() {
   const tempSave = debounce((tempDiary: IForm) => {
     localStorage.setItem("tempDiary", JSON.stringify(tempDiary));
   }, 500);
-
-  useEffect(() => loadUser(), []);
 
   // Load diary information into the form
   useEffect(() => {

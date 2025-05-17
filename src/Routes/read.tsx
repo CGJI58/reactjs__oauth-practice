@@ -1,6 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import useUser from "../Hooks/useUser";
 import { useEffect } from "react";
 import Modal from "../Components/modal";
 import { IDiary, IOnModal } from "../types/types";
@@ -18,7 +17,6 @@ const deleteVariants: IOnModal = {
 };
 
 function Read() {
-  const { loadUser } = useUser();
   const {
     saveTempDiaryVariants,
     tempDiary,
@@ -32,7 +30,6 @@ function Read() {
   const { deleteDiary } = useDiary();
   const { modalProps, modalAnswer, modalOn, createModal } = useModal();
 
-  useEffect(() => loadUser(), []);
 
   useEffect(() => {
     if (tempDiary) {

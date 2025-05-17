@@ -9,14 +9,12 @@ import {
   userState,
   userSynchronizedState,
 } from "../States/atoms";
-import { useNavigate } from "react-router-dom";
 
 interface LayoutProps {
   children: ReactNode;
 }
 
 const Layout: FC<LayoutProps> = ({ children }) => {
-  const navigate = useNavigate();
   const user = useRecoilValue<IUserState>(userState);
 
   const { userConfig, userInfo, userRecord, synchronized } = user;
@@ -28,7 +26,6 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   useEffect(() => {
     if (user === defaultUserState) {
       loadUser();
-      navigate("/");
     }
   }, [user]);
 
