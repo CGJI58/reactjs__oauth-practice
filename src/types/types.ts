@@ -34,11 +34,11 @@ export interface IGetUserByCookie {
   status: number | null;
 }
 
-export interface IOnModal {
+export interface IModalVariants {
   modalId: string | null;
   sentence: string;
 }
 
 export type IModalProp = {
   setModalAnswer: React.Dispatch<React.SetStateAction<boolean | null>>;
-} & IOnModal;
+} & IModalVariants;

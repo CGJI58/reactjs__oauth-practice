@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { IDiary, IOnModal } from "../types/types";
+import { IDiary, IModalVariants } from "../types/types";
 import { createDiary, getTempDiary } from "../util/diaryUtility";
 import { IForm } from "../Routes/write";
 import useDiary from "./useDiary";
@@ -10,7 +10,7 @@ function useTempDiary() {
   const [tempDiary, setTempDiary] = useState<ITempDiary>(undefined);
   const [diary, setDiary] = useState<IDiary | null>(null);
   const { saveDiary } = useDiary();
-  const saveTempDiaryVariants: IOnModal = {
+  const saveTempDiaryVariants: IModalVariants = {
     modalId: "saveTempDiary",
     sentence: "작성하던 내용을 저장하시겠습니까?",
   };

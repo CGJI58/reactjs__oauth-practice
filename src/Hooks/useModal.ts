@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { IModalProp, IOnModal } from "../types/types";
+import { IModalProp, IModalVariants } from "../types/types";
 
 function useModal() {
   const [modalAnswer, setModalAnswer] = useState<boolean | null>(null);
   const [modalProps, setModalProps] = useState<IModalProp>();
   const [modalOn, setModalOn] = useState<boolean>(false);
 
-  const createModal = (variants: IOnModal) => {
+  const createModal = (variants: IModalVariants) => {
     setModalProps({ ...variants, setModalAnswer });
     setModalOn(true);
   };

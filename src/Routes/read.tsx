@@ -2,16 +2,16 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useEffect } from "react";
 import Modal from "../Components/modal";
-import { IDiary, IOnModal } from "../types/types";
+import { IDiary, IModalVariants } from "../types/types";
 import useModal from "../Hooks/useModal";
 import useTempDiary from "../Hooks/useTempDiary";
 import useDiary from "../Hooks/useDiary";
 
-const modifyVariants: IOnModal = {
+const modifyVariants: IModalVariants = {
   modalId: "modify",
   sentence: "이 게시글을 수정하시겠습니까?",
 };
-const deleteVariants: IOnModal = {
+const deleteVariants: IModalVariants = {
   modalId: "delete",
   sentence: "이 게시글을 삭제하시겠습니까?",
 };
