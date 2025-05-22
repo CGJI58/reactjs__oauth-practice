@@ -2,7 +2,8 @@ import { DefaultTheme } from "styled-components";
 
 export const darkTheme: DefaultTheme = {
   text: "whitesmoke",
-  highlight: "red",
+  highlightPositive: "springgreen",
+  highlightNegative: "red",
   backgroundRegular: "#374151",
   backgroundLighter: "#374251",
   backgroundDarker: "#2A303E",
@@ -11,7 +12,8 @@ export const darkTheme: DefaultTheme = {
 
 export const lightTheme: DefaultTheme = {
   text: "black",
-  highlight: "firebrick",
+  highlightPositive: "green",
+  highlightNegative: "firebrick",
   backgroundRegular: "#F9FAFB",
   backgroundLighter: "#FFFFFF",
   backgroundDarker: "#E5E7EB",

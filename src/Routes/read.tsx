@@ -30,7 +30,6 @@ function Read() {
   const { deleteDiary } = useDiary();
   const { modalProps, modalAnswer, modalOn, createModal } = useModal();
 
-
   useEffect(() => {
     if (tempDiary) {
       createModal(saveTempDiaryVariants);
@@ -109,7 +108,7 @@ const Buttons = styled.div`
     padding: 10px;
     background-color: ${(props) => props.theme.backgroundDarker};
     &:hover {
-      color: ${(props) => props.theme.highlight};
+      color: ${(props) => props.theme.highlightNegative};
     }
   }
 `;

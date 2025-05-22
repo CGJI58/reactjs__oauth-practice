@@ -117,7 +117,7 @@ const Preview = styled(motion.div)`
   justify-content: center;
   transition: 100ms linear;
   &:hover {
-    color: ${(props) => props.theme.highlight};
+    color: ${(props) => props.theme.highlightNegative};
   }
 `;
 
@@ -165,7 +165,7 @@ const More = styled.span`
   transition: 100ms linear;
   &:hover {
     background-color: rgba(0, 0, 0, 0.1);
-    color: ${(props) => props.theme.highlight};
+    color: ${(props) => props.theme.highlightNegative};
   }
 `;
 

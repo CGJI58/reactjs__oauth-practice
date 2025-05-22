@@ -68,7 +68,7 @@ const Wrapper = styled(motion.div)<{ scrollprogress: number }>`
   height: 2px;
   left: 0px;
   bottom: 0px;
-  background-color: ${(props) => props.theme.highlight};
+  background-color: ${(props) => props.theme.highlightNegative};
   position: absolute;
 `;
 

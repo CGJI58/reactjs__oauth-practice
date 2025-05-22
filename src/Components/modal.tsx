@@ -69,15 +69,20 @@ const Choice = styled.div`
     align-items: center;
     cursor: pointer;
     background-color: ${(props) => props.theme.backgroundDarker};
-    &:hover {
-      color: ${(props) => props.theme.highlight};
-    }
   }
 `;
 
-const Yes = styled.div``;
+const Yes = styled.div`
+  &:hover {
+    color: ${(props) => props.theme.highlightPositive};
+  }
+`;
 
-const No = styled.div``;
+const No = styled.div`
+  &:hover {
+    color: ${(props) => props.theme.highlightNegative};
+  }
+`;
 
 const ModalBackground = styled.div`
   z-index: 100;
