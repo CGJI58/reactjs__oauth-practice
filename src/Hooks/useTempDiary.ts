@@ -11,7 +11,7 @@ function useTempDiary() {
   const [diary, setDiary] = useState<IDiary | null>(null);
   const { saveDiary } = useDiary();
   const saveTempDiaryVariants: IModalVariants = {
-    modalId: "saveTempDiary",
+    modalId: "tempDiary",
     sentence: "작성하던 내용을 저장하시겠습니까?",
   };
 

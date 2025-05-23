@@ -2,13 +2,17 @@ import { useNavigate } from "react-router-dom";
 import { deleteCookie, getCodeRequestURL, loginByGhCode } from "../Api/api";
 import useUser from "./useUser";
 import { useSetRecoilState } from "recoil";
-import { IUserState } from "../types/types";
+import { IModalVariants, IUserState } from "../types/types";
 import { defaultUserState, userState } from "../States/atoms";
 
 function useAuth() {
   const navigate = useNavigate();
   const setUser = useSetRecoilState<IUserState>(userState);
   const { loadUser } = useUser();
+  const signOutVariants: IModalVariants = {
+    modalId: "signOut",
+    sentence: "회원 탈퇴하시겠습니까?",
+  };
 
   const loadCodeRequestURL = async () => {
     const url = await getCodeRequestURL();
@@ -26,9 +30,11 @@ function useAuth() {
     setUser(() => defaultUserState);
   };
 
-  const signOut = () => {};
+  const signOut = () => {
+    console.log("회원 탈퇴");
+  };
 
-  return { loadCodeRequestURL, login, logOut, signOut };
+  return { loadCodeRequestURL, login, logOut, signOut, signOutVariants };
 }
 
 export default useAuth;

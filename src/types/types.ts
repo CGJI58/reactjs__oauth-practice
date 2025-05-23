@@ -35,10 +35,20 @@ export interface IGetUserByCookie {
 }
 
 export interface IModalVariants {
-  modalId: string | null;
+  modalId: ModalId;
   sentence: string;
 }
 
 export type IModalProp = {
   setModalAnswer: React.Dispatch<React.SetStateAction<boolean | null>>;
 } & IModalVariants;
+
+export type ModalId =
+  | "modifyDiary"
+  | "deleteDiary"
+  | "tempDiary"
+  | "nickname"
+  | "password"
+  | "clearDiaries"
+  | "signOut"
+  | null;

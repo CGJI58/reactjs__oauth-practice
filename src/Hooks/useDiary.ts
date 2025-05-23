@@ -1,9 +1,14 @@
 import { useSetRecoilState } from "recoil";
 import { userRecordState } from "../States/atoms";
-import { IDiary, IUserRecord } from "../types/types";
+import { IDiary, IModalVariants, IUserRecord } from "../types/types";
 
 function useDiary() {
   const setUserRecord = useSetRecoilState<IUserRecord>(userRecordState);
+
+  const clearDiariesVariants: IModalVariants = {
+    modalId: "clearDiaries",
+    sentence: "모든 다이어리를 삭제하시겠습니까?",
+  };
 
   const saveDiary = (newDiary: IDiary) => {
     if (newDiary) {
@@ -29,7 +34,12 @@ function useDiary() {
     });
   };
 
-  return { saveDiary, deleteDiary };
+  const clearDiaries = () => {
+    console.log("모든 다이어리 삭제");
+    // setUserRecord((prev) => ({ ...prev, diaries: [] }));
+  };
+
+  return { saveDiary, deleteDiary, clearDiaries, clearDiariesVariants };
 }
 
 export default useDiary;
