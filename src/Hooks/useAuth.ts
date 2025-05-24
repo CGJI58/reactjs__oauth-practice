@@ -1,13 +1,19 @@
 import { useNavigate } from "react-router-dom";
-import { deleteCookie, getCodeRequestURL, loginByGhCode } from "../Api/api";
+import {
+  deleteCookie,
+  deleteUser,
+  getCodeRequestURL,
+  loginByGhCode,
+} from "../Api/api";
 import useUser from "./useUser";
-import { useSetRecoilState } from "recoil";
-import { IModalVariants, IUserState } from "../types/types";
-import { defaultUserState, userState } from "../States/atoms";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { IModalVariants, IUserInfo, IUserState } from "../types/types";
+import { defaultUserState, userInfoState, userState } from "../States/atoms";
 
 function useAuth() {
   const navigate = useNavigate();
   const setUser = useSetRecoilState<IUserState>(userState);
+  const { email } = useRecoilValue<IUserInfo>(userInfoState);
   const { loadUser } = useUser();
   const signOutVariants: IModalVariants = {
     modalId: "signOut",
@@ -30,8 +36,9 @@ function useAuth() {
     setUser(() => defaultUserState);
   };
 
-  const signOut = () => {
-    console.log("회원 탈퇴");
+  const signOut = async () => {
+    await deleteUser(email);
+    await logOut();
   };
 
   return { loadCodeRequestURL, login, logOut, signOut, signOutVariants };

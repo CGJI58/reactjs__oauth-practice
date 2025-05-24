@@ -83,9 +83,7 @@ export const updateUser = async (user: IUserState): Promise<boolean> => {
     if (ok) {
       return ok;
     } else {
-      throw new Error(`fail to delete user data on server: ${status}`); // 이거 메세지가 좀 잘못됐음. 수정할 것.
-      // 백엔드에서도 update 할 때 delete user 어쩌구 메세지였던거같은데
-      // 회원탈퇴기능이랑 헷갈리니까 이것도 찾아서 다 고쳐
+      throw new Error(`fail to delete user data on server: ${status}`);
     }
   } catch (error) {
     console.error(error);
@@ -93,12 +91,16 @@ export const updateUser = async (user: IUserState): Promise<boolean> => {
   }
 };
 
-export const deleteUser = async (user: IUserState): Promise<boolean> => {
+export const deleteUser = async (email: string): Promise<boolean> => {
   try {
-    const response = await fetch(`${BE_BASE_URL}/auth/delete-user`, {
+    const response = await fetch(`${BE_BASE_URL}/users/delete`, {
       method: "DELETE",
       mode: "cors",
       credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
     });
     const { ok, status } = response;
     const responseText = await response.text();
