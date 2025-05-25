@@ -35,8 +35,7 @@ function useDiary() {
   };
 
   const clearDiaries = () => {
-    console.log("모든 다이어리 삭제");
-    // setUserRecord((prev) => ({ ...prev, diaries: [] }));
+    setUserRecord((prev) => ({ ...prev, diaries: [] }));
   };
 
   return { saveDiary, deleteDiary, clearDiaries, clearDiariesVariants };
