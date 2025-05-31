@@ -12,6 +12,7 @@ import { darkTheme, lightTheme } from "./theme/theme";
 import Read from "./Routes/read";
 import { Helmet } from "react-helmet";
 import { IUserConfig } from "./types/types";
+import EditNickname from "./Routes/edit/editNickname";
 
 const FE_BASE_URL = "/reactjs__oauth-practice";
 
@@ -34,6 +35,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/edit/nickname" element={<EditNickname />} />
           </Routes>
         </Layout>
       </ThemeProvider>

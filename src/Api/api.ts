@@ -118,6 +118,23 @@ export const deleteUser = async (email: string): Promise<boolean> => {
   }
 };
 
+export const validateNickname = async (nickname: string): Promise<boolean> => {
+  // nickname 부분 암호화는 일단 보류. password 관련 기능 구현한 후에 이어서 진행할 것.
+  const response = await fetch(
+    `${BE_BASE_URL}/users/validate/nickname?nickname=${nickname}`,
+    {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  console.log(response);
+
+  return true;
+};
+
 export const getCodeRequestURL = async (): Promise<string> => {
   try {
     const { codeRequestURL }: { codeRequestURL: string } = await (
