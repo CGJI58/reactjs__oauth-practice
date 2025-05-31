@@ -1,7 +1,7 @@
-import { IForm } from "../Routes/write";
+import { IDiaryForm } from "../Routes/write";
 import { IDiary } from "../types/types";
 
-export const createDiary = ({ title, text }: IForm): IDiary => {
+export const createDiary = ({ title, text }: IDiaryForm): IDiary => {
   const generateDate = (dateValue: number) => {
     const now = new Date(dateValue);
     const year = String(now.getFullYear()).slice(-2);
@@ -23,7 +23,7 @@ export const getTempDiary = () => {
   const tempDiaryString = localStorage.getItem("tempDiary");
 
   if (tempDiaryString) {
-    const tempDiary: IForm = JSON.parse(tempDiaryString);
+    const tempDiary: IDiaryForm = JSON.parse(tempDiaryString);
     return tempDiary;
   }
   return null;

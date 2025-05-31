@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { IDiary, IModalVariants } from "../types/types";
 import { createDiary, getTempDiary } from "../util/diaryUtility";
-import { IForm } from "../Routes/write";
+import { IDiaryForm } from "../Routes/write";
 import useDiary from "./useDiary";
 
-type ITempDiary = IForm | null | undefined;
+type ITempDiary = IDiaryForm | null | undefined;
 
 function useTempDiary() {
   const [tempDiary, setTempDiary] = useState<ITempDiary>(undefined);

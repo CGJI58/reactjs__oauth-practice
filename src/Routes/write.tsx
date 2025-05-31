@@ -8,7 +8,7 @@ import { Subscription } from "react-hook-form/dist/utils/createSubject";
 import { IDiary } from "../types/types";
 import useDiary from "../Hooks/useDiary";
 
-export interface IForm extends Omit<IDiary, "date" | "id"> {}
+export interface IDiaryForm extends Omit<IDiary, "date" | "id"> {}
 
 function Write() {
   const navigate = useNavigate();
@@ -17,11 +17,11 @@ function Write() {
   const query = new URLSearchParams(location.search);
   const mode = query.get("mode") as "create" | "modify";
   const [diary, setDiary] = useState<IDiary>(originalDiary);
-  const { register, setValue, handleSubmit, watch } = useForm<IForm>();
+  const { register, setValue, handleSubmit, watch } = useForm<IDiaryForm>();
   const { saveDiary } = useDiary();
   const subscriptionRef = useRef<Subscription | null>(null);
 
-  const tempSave = debounce((tempDiary: IForm) => {
+  const tempSave = debounce((tempDiary: IDiaryForm) => {
     localStorage.setItem("tempDiary", JSON.stringify(tempDiary));
   }, 500);
 
@@ -66,7 +66,7 @@ function Write() {
     };
   }, [watch]);
 
-  const onValid = ({ title, text }: IForm) => {
+  const onValid = ({ title, text }: IDiaryForm) => {
     tempSave.cancel();
     subscriptionRef.current?.unsubscribe();
     if (mode === "create") {
