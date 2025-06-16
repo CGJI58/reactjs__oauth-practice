@@ -106,6 +106,7 @@ const Buttons = styled.div`
   justify-content: flex-end;
   & > * {
     cursor: pointer;
+    user-select: none;
     padding: 10px;
     background-color: ${(props) => props.theme.backgroundDarker};
     &:hover {

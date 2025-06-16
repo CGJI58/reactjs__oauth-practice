@@ -96,6 +96,7 @@ const Col = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    user-select: none;
     color: ${(props) => props.theme.text};
   }
 `;

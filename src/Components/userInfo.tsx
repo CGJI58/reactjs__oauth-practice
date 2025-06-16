@@ -95,6 +95,7 @@ const DropItem = styled.div`
   align-items: center;
   text-align: center;
   padding: 10px 0;
+  user-select: none;
   transition: all 0.3s;
   &:hover {
     background-color: ${(props) => props.theme.backgroundDarker};

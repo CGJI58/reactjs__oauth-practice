@@ -84,6 +84,7 @@ const Wrapper = styled(motion.div)`
   justify-content: center;
   box-shadow: ${(props) => props.theme.boxShadow};
   border-radius: 5px;
+  user-select: none;
   transition: 100ms ease-out 100ms;
   &:hover {
     background-color: ${(props) => props.theme.backgroundDarker};

@@ -173,6 +173,7 @@ const Button = styled.div`
   background-color: ${(props) => props.theme.backgroundLighter};
   box-shadow: ${(props) => props.theme.boxShadow};
   border-radius: 10px;
+  user-select: none;
   cursor: pointer;
 `;
 
