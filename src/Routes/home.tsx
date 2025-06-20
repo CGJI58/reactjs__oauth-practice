@@ -8,7 +8,6 @@ import useTempDiary from "../Hooks/useTempDiary";
 import { useEffect } from "react";
 import useModal from "../Hooks/useModal";
 import Modal from "../Components/modal";
-import { hashString } from "../util/authUtility";
 
 function Home() {
   const { email } = useRecoilValue<IUserInfo>(userInfoState);
@@ -37,10 +36,6 @@ function Home() {
       }
     }
   }, [modalAnswer]);
-
-  useEffect(() => {
-    console.log(hashString("asdf"));
-  }, []);
 
   return (
     <Wrapper>

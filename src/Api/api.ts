@@ -119,7 +119,6 @@ export const deleteUser = async (email: string): Promise<boolean> => {
 };
 
 export const validateNickname = async (nickname: string): Promise<boolean> => {
-  // nickname 부분 암호화는 일단 보류. password 관련 기능 구현한 후에 이어서 진행할 것.
   const response = await fetch(
     `${BE_BASE_URL}/users/validate/nickname?nickname=${nickname}`,
     {
@@ -130,9 +129,10 @@ export const validateNickname = async (nickname: string): Promise<boolean> => {
       },
     }
   );
-  console.log(response);
+  const { isValid } = await response.json();
+  console.log(isValid);
 
-  return true;
+  return isValid;
 };
 
 export const getCodeRequestURL = async (): Promise<string> => {

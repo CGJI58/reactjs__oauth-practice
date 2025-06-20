@@ -22,8 +22,8 @@ function NicknameForm() {
 
   const checkUniqueNickname = async () => {
     const target = getValues("newNickname");
-    const response = await validateNickname(target);
-    setIsUnique(response);
+    const isValid = await validateNickname(target);
+    setIsUnique(isValid);
   };
 
   const onValid = ({ newNickname }: INicknameForm) => {
