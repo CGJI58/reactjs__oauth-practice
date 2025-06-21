@@ -1,14 +1,13 @@
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { IUserState, ModalId } from "../types/types";
-import { defaultUserState, userState } from "../States/atoms";
+import { userState } from "../States/atoms";
 import useTempDiary from "../Hooks/useTempDiary";
 import useModal from "../Hooks/useModal";
 import { useEffect, useState } from "react";
 import Modal from "../Components/modal";
 import useAuth from "../Hooks/useAuth";
 import useDiary from "../Hooks/useDiary";
-import usePassword from "../Hooks/usePassword";
 import useNickname from "../Hooks/useNickname";
 
 function Profile() {
@@ -22,7 +21,6 @@ function Profile() {
     runSaveTempDiary,
     runRemoveTempDiary,
   } = useTempDiary();
-  const { passwordVariants, passwordForm } = usePassword();
   const { nicknameVariants, nicknameForm } = useNickname();
   const { modalProps, modalAnswer, modalOn, createModal } = useModal();
   const [modalId, setModalId] = useState<ModalId>(null);
@@ -41,15 +39,9 @@ function Profile() {
       case "nickname":
         createModal(nicknameVariants);
         break;
-
-      case "password":
-        createModal(passwordVariants);
-        break;
-
       case "clearDiaries":
         createModal(clearDiariesVariants);
         break;
-
       case "signOut":
         createModal(signOutVariants);
         break;
@@ -70,11 +62,6 @@ function Profile() {
         case nicknameVariants.modalId:
           if (modalAnswer) {
             nicknameForm();
-          }
-          break;
-        case passwordVariants.modalId:
-          if (modalAnswer) {
-            passwordForm();
           }
           break;
         case clearDiariesVariants.modalId:
@@ -100,19 +87,10 @@ function Profile() {
         <Value>{userConfig.nickname}</Value>
         <Label>Diaries</Label>
         <Value>{userRecord.diaries.length}</Value>
-        <Label>비밀번호 설정</Label>
-        <Value>
-          {userConfig.password !== defaultUserState.userConfig.password
-            ? "설정 완료"
-            : "아직 안함"}
-        </Value>
       </UserInfo>
       <UserConfig className="section">
         <Button onClick={() => setModalId("nickname")}>
           닉네임 생성 및 변경
-        </Button>
-        <Button onClick={() => setModalId("password")}>
-          비밀번호 생성 및 변경
         </Button>
       </UserConfig>
       <DangerZone className="section">

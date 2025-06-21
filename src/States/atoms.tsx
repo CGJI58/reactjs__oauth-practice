@@ -14,7 +14,6 @@ export const defaultUserState: IUserState = {
   userConfig: {
     nickname: "",
     isDarkTheme: false,
-    password: "임시비번임",
   },
   synchronized: false,
 };

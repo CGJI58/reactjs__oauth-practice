@@ -19,7 +19,6 @@ export interface IUserRecord {
 export interface IUserConfig {
   nickname: string;
   isDarkTheme: boolean;
-  password: string;
 }
 
 export interface IDiary {
@@ -48,7 +47,6 @@ export type ModalId =
   | "deleteDiary"
   | "tempDiary"
   | "nickname"
-  | "password"
   | "clearDiaries"
   | "signOut"
   | null;
