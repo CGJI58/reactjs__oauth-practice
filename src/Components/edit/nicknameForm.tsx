@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { validateNickname } from "../../Api/api";
@@ -17,8 +17,10 @@ const CHECK_UNIQUE = "사용 가능한 닉네임인지 확인이 필요합니다
 function NicknameForm() {
   const navigate = useNavigate();
   const setUserConfig = useSetRecoilState<IUserConfig>(userConfigState);
-  const { register, getValues, handleSubmit } = useForm<INicknameForm>();
+  const { register, getValues, handleSubmit, watch } = useForm<INicknameForm>();
+  const nicknameTracking = watch("newNickname", "");
   const [isUnique, setIsUnique] = useState<boolean | null>(null);
+  const [verifiedNickname, setVerifiedNickname] = useState<string | null>(null);
 
   const checkUniqueNickname = async () => {
     const target = getValues("newNickname");
@@ -30,6 +32,22 @@ function NicknameForm() {
     setUserConfig((prev) => ({ ...prev, nickname: newNickname }));
     navigate("/profile");
   };
+
+  useEffect(() => {
+    if (isUnique) {
+      setVerifiedNickname(() => getValues("newNickname"));
+    }
+  }, [isUnique]);
+
+  useEffect(() => {
+    if (isUnique && verifiedNickname) {
+      // 중복검사 통과한 닉네임이랑 달라지는 순간 폼을 제출하지 못하도록 한다.
+      if (verifiedNickname !== nicknameTracking) {
+        setIsUnique(null);
+        setVerifiedNickname(null);
+      }
+    }
+  }, [isUnique, verifiedNickname, nicknameTracking]);
 
   return (
     <Form onSubmit={handleSubmit(onValid)}>
@@ -47,16 +65,18 @@ function NicknameForm() {
           onClick={() => checkUniqueNickname()}
         />
       </UniqueCheck>
-      {isUnique === true && <span>사용 가능한 닉네임입니다.</span>}
-      {isUnique === false && <span>이미 사용 중인 닉네임입니다.</span>}
-
-      <Submit
-        $uniqueCheck={isUnique === true}
-        disabled={isUnique !== true}
-        type="submit"
-        value="저장"
-        title={isUnique !== true ? CHECK_UNIQUE : undefined}
-      />
+      {isUnique === true && <Notice>사용 가능한 닉네임입니다.</Notice>}
+      {isUnique === false && <Notice>이미 사용 중인 닉네임입니다.</Notice>}
+      {isUnique === null && <Notice></Notice>}
+      {isUnique === true && (
+        <Submit
+          id="Submit"
+          disabled={isUnique !== true}
+          type="submit"
+          value="저장"
+          title={isUnique !== true ? CHECK_UNIQUE : undefined}
+        />
+      )}
     </Form>
   );
 }
@@ -76,7 +96,8 @@ const Form = styled.form`
     font: inherit;
     color: inherit;
   }
-  #isUnique {
+  #isUnique,
+  #Submit {
     transition: 100ms ease-in-out;
     &:hover,
     &:focus {
@@ -91,14 +112,10 @@ const UniqueCheck = styled.div`
   gap: 10px;
 `;
 
-const Submit = styled.input<{ $uniqueCheck: boolean }>`
-  transition: 100ms ease-in-out;
-  &:hover,
-  &:focus {
-    cursor: ${(props) => (props.$uniqueCheck ? "default" : "not-allowed")};
-    background-color: ${(props) =>
-      props.$uniqueCheck ? props.theme.backgroundDarker : "transparent"};
-  }
+const Notice = styled.span`
+  height: 20px;
 `;
+
+const Submit = styled.input``;
 
 export default NicknameForm;
