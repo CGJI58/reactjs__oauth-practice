@@ -1,7 +1,7 @@
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { IUserState, ModalId } from "../types/types";
-import { userState } from "../States/atoms";
+import { IUserConfig, IUserState, ModalId } from "../types/types";
+import { userConfigState, userState } from "../States/atoms";
 import useTempDiary from "../Hooks/useTempDiary";
 import useModal from "../Hooks/useModal";
 import { useEffect, useState } from "react";
@@ -13,6 +13,7 @@ import useNickname from "../Hooks/useNickname";
 function Profile() {
   const { userInfo, userRecord, userConfig } =
     useRecoilValue<IUserState>(userState);
+  const setUserConfig = useSetRecoilState<IUserConfig>(userConfigState);
   const { signOut, signOutVariants } = useAuth();
   const { clearDiaries, clearDiariesVariants } = useDiary();
   const {
@@ -91,6 +92,20 @@ function Profile() {
       <UserConfig className="section">
         <Button onClick={() => setModalId("nickname")}>
           닉네임 생성 및 변경
+        </Button>
+        <Button
+          onClick={() =>
+            setUserConfig((prev) => ({
+              ...prev,
+              isDarkTheme: !prev.isDarkTheme,
+            }))
+          }
+        >{`테마 변경: ${userConfig.isDarkTheme ? "밝게" : "어둡게"}`}</Button>
+        <Button onClick={() => console.log("폰트 사이즈 변경")}>
+          폰트 사이즈 변경
+        </Button>
+        <Button onClick={() => console.log("화면 너비 변경")}>
+          화면 너비 변경
         </Button>
       </UserConfig>
       <DangerZone className="section">
