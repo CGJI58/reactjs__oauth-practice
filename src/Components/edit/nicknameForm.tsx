@@ -3,87 +3,125 @@ import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { validateNickname } from "../../Api/api";
 import { useNavigate } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { userConfigState } from "../../States/atoms";
 import { IUserConfig } from "../../types/types";
 
 interface INicknameForm {
   newNickname: string;
-  isUnique: boolean | null;
 }
 
-const CHECK_UNIQUE = "사용 가능한 닉네임인지 확인이 필요합니다";
+type IsValidNickname =
+  | "valid"
+  | "same"
+  | "duplicated"
+  | "invalidLength"
+  | "invalidText"
+  | null;
+
+type NicknameTracking = string | null;
 
 function NicknameForm() {
+  const { nickname } = useRecoilValue<IUserConfig>(userConfigState);
   const navigate = useNavigate();
   const setUserConfig = useSetRecoilState<IUserConfig>(userConfigState);
-  const { register, getValues, handleSubmit, watch } = useForm<INicknameForm>();
-  const nicknameTracking = watch("newNickname", "");
-  const [isUnique, setIsUnique] = useState<boolean | null>(null);
-  const [verifiedNickname, setVerifiedNickname] = useState<string | null>(null);
 
-  const checkUniqueNickname = async () => {
-    const target = getValues("newNickname");
-    const isValid = await validateNickname(target);
-    setIsUnique(isValid);
-  };
+  const { register, setValue, handleSubmit, watch } = useForm<INicknameForm>();
+  const nicknameTracking: NicknameTracking = watch("newNickname", "");
+  const [isValidNickname, setIsValidNickname] = useState<IsValidNickname>(null);
+  const [runSave, setRunSave] = useState<boolean>(false);
 
-  const onValid = ({ newNickname }: INicknameForm) => {
-    setUserConfig((prev) => ({ ...prev, nickname: newNickname }));
-    navigate("/profile");
+  useEffect(() => {
+    if (nickname) {
+      setValue("newNickname", nickname);
+    }
+  }, [nickname]);
+
+  const onValid = async ({ newNickname }: INicknameForm) => {
+    console.log(newNickname);
+    const apiResult = await validateNickname(newNickname);
+    if (apiResult === true) {
+      setIsValidNickname("valid");
+    }
   };
 
   useEffect(() => {
-    if (isUnique) {
-      setVerifiedNickname(() => getValues("newNickname"));
+    if (nicknameTracking === "사용자") {
+      setIsValidNickname("invalidText");
+    } else if (nicknameTracking === nickname) {
+      setIsValidNickname("same");
+    } else if (nicknameTracking.length > 18 || nicknameTracking.length < 3) {
+      setIsValidNickname("invalidLength");
+    } else {
+      setIsValidNickname(null);
     }
-  }, [isUnique]);
+  }, [nicknameTracking]);
+
+  const onSaveNickname = async ({ newNickname }: INicknameForm) => {
+    const doubleCheck = await validateNickname(newNickname);
+    if (doubleCheck === true) {
+      setUserConfig((prev) => ({ ...prev, nickname: newNickname }));
+      navigate("/profile");
+    } else {
+      console.error("그 새 누군가가 해당 닉네임을 사용해버렸네요..");
+      setRunSave(false);
+      setIsValidNickname("duplicated");
+    }
+  };
 
   useEffect(() => {
-    if (isUnique && verifiedNickname) {
-      // 중복검사 통과한 닉네임이랑 달라지는 순간 폼을 제출하지 못하도록 한다.
-      if (verifiedNickname !== nicknameTracking) {
-        setIsUnique(null);
-        setVerifiedNickname(null);
-      }
+    if (runSave) {
+      onSaveNickname({ newNickname: nicknameTracking });
     }
-  }, [isUnique, verifiedNickname, nicknameTracking]);
+  }, [runSave]);
 
   return (
-    <Form onSubmit={handleSubmit(onValid)}>
-      <UniqueCheck>
+    <Wrapper>
+      <Form onSubmit={handleSubmit(onValid)}>
         <input
           id="newNickname"
-          {...register("newNickname", { required: true })}
-          placeholder="Nickname"
+          {...register("newNickname", {
+            required: true,
+            minLength: 3,
+            maxLength: 18,
+          })}
+          placeholder="write your new nickname"
         />
-        <input
-          id="isUnique"
-          {...register("isUnique", { required: true })}
-          type="button"
-          value="중복확인"
-          onClick={() => checkUniqueNickname()}
-        />
-      </UniqueCheck>
-      {isUnique === true && <Notice>사용 가능한 닉네임입니다.</Notice>}
-      {isUnique === false && <Notice>이미 사용 중인 닉네임입니다.</Notice>}
-      {isUnique === null && <Notice></Notice>}
-      {isUnique === true && (
-        <Submit
-          id="Submit"
-          disabled={isUnique !== true}
-          type="submit"
-          value="저장"
-          title={isUnique !== true ? CHECK_UNIQUE : undefined}
-        />
+        {isValidNickname === null && (
+          <Submit id="isValidNickname" type="submit" value="중복확인" />
+        )}
+      </Form>
+      {isValidNickname === "same" && (
+        <Notice>새로운 닉네임을 입력하세요.</Notice>
       )}
-    </Form>
+      {isValidNickname === "invalidText" && (
+        <Notice>사용할 수 없는 닉네임입니다.</Notice>
+      )}
+      {isValidNickname === "duplicated" && (
+        <Notice>이미 사용 중인 닉네임입니다.</Notice>
+      )}
+      {isValidNickname === "invalidLength" && (
+        <Notice>3자 이상, 18자 이하여야 합니다.</Notice>
+      )}
+      {isValidNickname === "valid" && (
+        <Notice>사용 가능한 닉네임입니다.</Notice>
+      )}
+      {isValidNickname === "valid" && (
+        <SaveBtn onClick={() => setRunSave(true)}>저장</SaveBtn>
+      )}
+    </Wrapper>
   );
 }
 
-const Form = styled.form`
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 10px;
+`;
+
+const Form = styled.form`
+  display: grid;
+  grid-template-columns: 7fr 3fr;
   gap: 10px;
   input {
     margin: 0;
@@ -96,8 +134,7 @@ const Form = styled.form`
     font: inherit;
     color: inherit;
   }
-  #isUnique,
-  #Submit {
+  #isValidNickname {
     transition: 100ms ease-in-out;
     &:hover,
     &:focus {
@@ -106,16 +143,24 @@ const Form = styled.form`
   }
 `;
 
-const UniqueCheck = styled.div`
-  display: grid;
-  grid-template-columns: 7fr 3fr;
-  gap: 10px;
-`;
-
 const Notice = styled.span`
   height: 20px;
 `;
 
 const Submit = styled.input``;
+
+const SaveBtn = styled.div`
+  display: flex;
+  cursor: pointer;
+  justify-content: center;
+  padding: 10px;
+  background: ${(props) => props.theme.backgroundLighter};
+  box-shadow: ${(props) => props.theme.boxShadow};
+  transition: 100ms ease-in-out;
+  &:hover,
+  &:focus {
+    background-color: ${(props) => props.theme.backgroundDarker};
+  }
+`;
 
 export default NicknameForm;

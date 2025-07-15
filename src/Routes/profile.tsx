@@ -90,9 +90,7 @@ function Profile() {
         <Value>{userRecord.diaries.length}</Value>
       </UserInfo>
       <UserConfig className="section">
-        <Button onClick={() => setModalId("nickname")}>
-          닉네임 생성 및 변경
-        </Button>
+        <Button onClick={() => setModalId("nickname")}>닉네임 변경</Button>
         <Button
           onClick={() =>
             setUserConfig((prev) => ({

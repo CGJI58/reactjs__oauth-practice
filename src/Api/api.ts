@@ -119,20 +119,24 @@ export const deleteUser = async (email: string): Promise<boolean> => {
 };
 
 export const validateNickname = async (nickname: string): Promise<boolean> => {
-  const response = await fetch(
-    `${BE_BASE_URL}/users/validate/nickname?nickname=${nickname}`,
-    {
-      method: "GET",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  const { isValid } = await response.json();
-  console.log(isValid);
-
-  return isValid;
+  try {
+    const response = await fetch(
+      `${BE_BASE_URL}/users/validate/nickname?nickname=${nickname}`,
+      {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const { isValid } = await response.json();
+    console.log(isValid);
+    return isValid;
+  } catch (error) {
+    console.error("validateNickname:", error);
+    return false;
+  }
 };
 
 export const getCodeRequestURL = async (): Promise<string> => {

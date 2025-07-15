@@ -35,7 +35,7 @@ function UserInfo() {
       <FontAwesomeIcon icon={faCircleUser} />
       {isHovered && (
         <DropList>
-          <DropItem onClick={() => navigate("/profile")}>{nickname}</DropItem>
+          <DropItem onClick={() => navigate("/profile")}>{"Profile"}</DropItem>
           <DropItem
             onClick={() =>
               setUserConfig((prev) => ({
