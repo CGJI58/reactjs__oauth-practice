@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Diary from "./diary";
+import Diary from "./Diary";
 import { useRecoilValue } from "recoil";
 import { userRecordState } from "../States/atoms";
 import { useState } from "react";

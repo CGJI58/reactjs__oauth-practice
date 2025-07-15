@@ -1,5 +1,5 @@
 import { FC, ReactNode, useEffect } from "react";
-import Header from "../Components/header";
+import Header from "../Components/Header";
 import styled from "styled-components";
 import useUser from "../Hooks/useUser";
 import { useRecoilValue, useSetRecoilState } from "recoil";

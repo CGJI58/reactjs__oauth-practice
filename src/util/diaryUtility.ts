@@ -1,4 +1,4 @@
-import { IDiaryForm } from "../Routes/write";
+import { IDiaryForm } from "../Routes/Write";
 import { IDiary } from "../types/types";
 
 export const createDiary = ({ title, text }: IDiaryForm): IDiary => {

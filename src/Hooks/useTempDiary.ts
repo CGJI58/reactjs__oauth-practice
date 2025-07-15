@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { IDiary, IModalVariants } from "../types/types";
 import { createDiary, getTempDiary } from "../util/diaryUtility";
-import { IDiaryForm } from "../Routes/write";
+import { IDiaryForm } from "../Routes/Write";
 import useDiary from "./useDiary";
 
 type ITempDiary = IDiaryForm | null | undefined;

@@ -1,18 +1,18 @@
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
-import Layout from "./Layouts/layout";
-import Home from "./Routes/home";
-import Login from "./Routes/login";
-import Write from "./Routes/write";
-import Logout from "./Routes/logout";
-import Profile from "./Routes/profile";
+import Layout from "./Layouts/Layout";
+import Home from "./Routes/Home";
+import Login from "./Routes/Login";
+import Write from "./Routes/Write";
+import Logout from "./Routes/Logout";
+import Profile from "./Routes/Profile";
 import { ThemeProvider } from "styled-components";
 import { useRecoilValue } from "recoil";
 import { userConfigState } from "./States/atoms";
 import { darkTheme, lightTheme } from "./theme/theme";
-import Read from "./Routes/read";
+import Read from "./Routes/Read";
 import { Helmet } from "react-helmet";
 import { IUserConfig } from "./types/types";
-import EditNickname from "./Routes/edit/editNickname";
+import EditNickname from "./Routes/edit/EditNickname";
 
 const FE_BASE_URL = "/reactjs__oauth-practice";
 

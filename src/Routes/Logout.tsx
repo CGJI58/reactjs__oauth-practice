@@ -3,7 +3,7 @@ import { useRecoilValue } from "recoil";
 import { userSynchronizedState } from "../States/atoms";
 import useTempDiary from "../Hooks/useTempDiary";
 import useModal from "../Hooks/useModal";
-import Modal from "../Components/modal";
+import Modal from "../Components/Modal";
 import useAuth from "../Hooks/useAuth";
 
 function Logout() {

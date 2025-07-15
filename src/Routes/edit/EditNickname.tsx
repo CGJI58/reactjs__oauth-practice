@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import NicknameForm from "../../Components/edit/nicknameForm";
+import NicknameForm from "../../Components/edit/NicknameForm";
 
 function EditNickname() {
   return (

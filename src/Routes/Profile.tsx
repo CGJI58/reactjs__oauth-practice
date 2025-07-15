@@ -5,7 +5,7 @@ import { userConfigState, userState } from "../States/atoms";
 import useTempDiary from "../Hooks/useTempDiary";
 import useModal from "../Hooks/useModal";
 import { useEffect, useState } from "react";
-import Modal from "../Components/modal";
+import Modal from "../Components/Modal";
 import useAuth from "../Hooks/useAuth";
 import useDiary from "../Hooks/useDiary";
 import useNickname from "../Hooks/useNickname";
