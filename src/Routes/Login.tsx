@@ -20,14 +20,12 @@ function Login() {
       event.target instanceof Node &&
       !popupRef.current.contains(event.target)
     ) {
-      console.log("oustside popup clicked");
       navigate("/");
     }
   };
 
   useEffect(() => {
-    document.addEventListener("mousedown", handleOutsideClick);
-    return () => document.removeEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("mousedown", handleOutsideClick, { once: true });
   }, []);
 
   useEffect(() => {

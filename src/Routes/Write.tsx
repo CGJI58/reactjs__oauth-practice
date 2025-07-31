@@ -25,6 +25,12 @@ function Write() {
     localStorage.setItem("tempDiary", JSON.stringify(tempDiary));
   }, 500);
 
+  const saveTempDiary = () => {
+    saveDiary(diary);
+    localStorage.removeItem("tempDiary");
+    navigate("/");
+  };
+
   // Load diary information into the form
   useEffect(() => {
     const { title, text } = diary;
@@ -34,9 +40,7 @@ function Write() {
 
   useEffect(() => {
     if (diary !== originalDiary) {
-      saveDiary(diary);
-      localStorage.removeItem("tempDiary");
-      navigate("/");
+      saveTempDiary();
     }
   }, [diary]);
 
@@ -49,9 +53,15 @@ function Write() {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       event.preventDefault();
     };
+    const handleUnload = () => {
+      localStorage.removeItem("tempDiary");
+    };
+
     window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("unload", handleUnload);
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("unload", handleUnload);
     };
   }, []);
 
