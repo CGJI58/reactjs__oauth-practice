@@ -17,6 +17,7 @@ function useAuth() {
   const { loadUser } = useUser();
   const signOutVariants: IModalVariants = {
     modalId: "signOut",
+    modalOption: "YesNo",
     sentence: "회원 탈퇴하시겠습니까?",
   };
 

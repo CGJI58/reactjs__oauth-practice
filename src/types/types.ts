@@ -1,3 +1,5 @@
+export * from "./modal";
+
 export interface IUserState {
   userInfo: IUserInfo;
   userRecord: IUserRecord;
@@ -32,21 +34,3 @@ export interface IGetUserByCookie {
   userData?: IUserState;
   status: number | null;
 }
-
-export interface IModalVariants {
-  modalId: ModalId;
-  sentence: string;
-}
-
-export type IModalProp = {
-  setModalAnswer: React.Dispatch<React.SetStateAction<boolean | null>>;
-} & IModalVariants;
-
-export type ModalId =
-  | "modifyDiary"
-  | "deleteDiary"
-  | "tempDiary"
-  | "nickname"
-  | "clearDiaries"
-  | "signOut"
-  | null;

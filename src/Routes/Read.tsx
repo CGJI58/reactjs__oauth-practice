@@ -9,10 +9,12 @@ import useDiary from "../Hooks/useDiary";
 
 const modifyVariants: IModalVariants = {
   modalId: "modifyDiary",
+  modalOption: "YesNo",
   sentence: "이 게시글을 수정하시겠습니까?",
 };
 const deleteVariants: IModalVariants = {
   modalId: "deleteDiary",
+  modalOption: "YesNo",
   sentence: "이 게시글을 삭제하시겠습니까?",
 };
 

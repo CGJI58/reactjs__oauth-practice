@@ -7,6 +7,7 @@ function useDiary() {
 
   const clearDiariesVariants: IModalVariants = {
     modalId: "clearDiaries",
+    modalOption: "YesNo",
     sentence: "모든 다이어리를 삭제하시겠습니까?",
   };
 

@@ -5,6 +5,7 @@ function useNickname() {
   const navigate = useNavigate();
   const nicknameVariants: IModalVariants = {
     modalId: "nickname",
+    modalOption: "YesNo",
     sentence: "닉네임을 변경하시겠습니까?",
   };
   const nicknameForm = () => {

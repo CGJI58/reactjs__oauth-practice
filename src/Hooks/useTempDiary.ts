@@ -12,6 +12,7 @@ function useTempDiary() {
   const { saveDiary } = useDiary();
   const saveTempDiaryVariants: IModalVariants = {
     modalId: "tempDiary",
+    modalOption: "YesNo",
     sentence: "작성하던 내용을 저장하시겠습니까?",
   };
 
