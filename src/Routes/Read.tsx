@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useEffect } from "react";
-import Modal from "../Components/Modal";
+import Modal from "../Components/modal/ModalIndex";
 import { IDiary, IModalVariants } from "../types/types";
 import useModal from "../Hooks/useModal";
 import useTempDiary from "../Hooks/useTempDiary";

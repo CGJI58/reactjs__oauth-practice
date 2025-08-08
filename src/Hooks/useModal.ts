@@ -3,7 +3,12 @@ import { IModalProp, IModalVariants } from "../types/types";
 
 function useModal() {
   const [modalAnswer, setModalAnswer] = useState<boolean | null>(null);
-  const [modalProps, setModalProps] = useState<IModalProp>();
+  const [modalProps, setModalProps] = useState<IModalProp>({
+    modalId: null,
+    modalOption: "YesNo",
+    sentence: "",
+    setModalAnswer,
+  });
   const [modalOn, setModalOn] = useState<boolean>(false);
 
   const createModal = (variants: IModalVariants) => {

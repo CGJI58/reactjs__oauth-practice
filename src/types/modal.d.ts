@@ -11,7 +11,7 @@ export type ModalId =
   | "screenWidth"
   | null;
 
-export type ModalOption = "YesNo" | "Range" | "Multiple";
+export type ModalOption = "YesNo" | "Range";
 
 export interface IModalVariants {
   modalId: ModalId;

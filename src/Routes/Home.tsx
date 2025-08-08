@@ -7,7 +7,7 @@ import { IUserInfo } from "../types/types";
 import useTempDiary from "../Hooks/useTempDiary";
 import { useEffect } from "react";
 import useModal from "../Hooks/useModal";
-import Modal from "../Components/Modal";
+import Modal from "../Components/modal/ModalIndex";
 
 function Home() {
   const { email } = useRecoilValue<IUserInfo>(userInfoState);

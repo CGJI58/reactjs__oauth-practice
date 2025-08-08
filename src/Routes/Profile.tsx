@@ -5,17 +5,17 @@ import { userConfigState, userState } from "../States/atoms";
 import useTempDiary from "../Hooks/useTempDiary";
 import useModal from "../Hooks/useModal";
 import { useEffect, useState } from "react";
-import Modal from "../Components/Modal";
+import Modal from "../Components/modal/ModalIndex";
 import useAuth from "../Hooks/useAuth";
 import useDiary from "../Hooks/useDiary";
 import useNickname from "../Hooks/useNickname";
+import useFontSize from "../Hooks/useFontSize";
+import useScreenWidth from "../Hooks/useScreenWidth";
 
 function Profile() {
   const { userInfo, userRecord, userConfig } =
     useRecoilValue<IUserState>(userState);
   const setUserConfig = useSetRecoilState<IUserConfig>(userConfigState);
-  const { signOut, signOutVariants } = useAuth();
-  const { clearDiaries, clearDiariesVariants } = useDiary();
   const {
     saveTempDiaryVariants,
     tempDiary,
@@ -23,6 +23,10 @@ function Profile() {
     runRemoveTempDiary,
   } = useTempDiary();
   const { nicknameVariants, nicknameForm } = useNickname();
+  const { clearDiaries, clearDiariesVariants } = useDiary();
+  const { handleFontSize, fontSizeVariants } = useFontSize();
+  const { handleScreenWidth, screenWidthVariants } = useScreenWidth();
+  const { signOut, signOutVariants } = useAuth();
   const { modalProps, modalAnswer, modalOn, createModal } = useModal();
   const [modalId, setModalId] = useState<ModalId>(null);
 
@@ -39,6 +43,12 @@ function Profile() {
         break;
       case "nickname":
         createModal(nicknameVariants);
+        break;
+      case "fontSize":
+        createModal(fontSizeVariants);
+        break;
+      case "screenWidth":
+        createModal(screenWidthVariants);
         break;
       case "clearDiaries":
         createModal(clearDiariesVariants);
@@ -65,11 +75,22 @@ function Profile() {
             nicknameForm();
           }
           break;
+        case fontSizeVariants.modalId:
+          if (modalAnswer) {
+            handleFontSize();
+          }
+          break;
+        case screenWidthVariants.modalId:
+          if (modalAnswer) {
+            handleScreenWidth();
+          }
+          break;
         case clearDiariesVariants.modalId:
           if (modalAnswer) {
             clearDiaries();
           }
           break;
+
         case signOutVariants.modalId:
           if (modalAnswer) {
             signOut();
@@ -99,10 +120,8 @@ function Profile() {
             }))
           }
         >{`테마 변경: ${userConfig.isDarkTheme ? "밝게" : "어둡게"}`}</Button>
-        <Button onClick={() => console.log("폰트 사이즈 변경")}>
-          폰트 사이즈 변경
-        </Button>
-        <Button onClick={() => console.log("화면 너비 변경")}>
+        <Button onClick={() => setModalId("fontSize")}>폰트 사이즈 변경</Button>
+        <Button onClick={() => setModalId("screenWidth")}>
           화면 너비 변경
         </Button>
       </UserConfig>
