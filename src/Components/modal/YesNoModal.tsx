@@ -20,17 +20,18 @@ function YesNoModal({ setModalAnswer }: Partial<IModalProp>) {
   );
 }
 const Choice = styled.div`
-  bottom: 30%;
+  bottom: 50%;
   transform: translate(0, 50%);
-  width: 100%;
-  height: 50px;
+  width: 70%;
+  height: 50%;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  align-items: flex-end;
   font-size: 1.2rem;
   font-weight: bold;
   & > * {
     width: 100px;
-    height: 100%;
+    height: 3rem;
     display: flex;
     justify-content: center;
     align-items: center;

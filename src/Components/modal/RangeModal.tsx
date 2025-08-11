@@ -1,20 +1,40 @@
 import styled from "styled-components";
 import { IModalProp } from "../../types/modal";
+import { useState } from "react";
 
-function RangeModal({ setModalAnswer }: Partial<IModalProp>) {
+function RangeModal({ setModalAnswer, modalId }: Partial<IModalProp>) {
+  const [fontSize, setFontSize] = useState<number>(16);
   const onYes = () => {
     if (setModalAnswer) {
+      if (modalId === "fontSize") {
+        console.log(fontSize);
+        //fontsize를 아톰에 적용(아톰에 폰트사이즈 추가할 예정. userConfig에다가.)
+      }
+      if (modalId === "screenWidth") {
+        //화면너비 적용. 위와 동일 예정
+      }
       setModalAnswer(true);
-    }
-  };
-  const onNo = () => {
-    if (setModalAnswer) {
-      setModalAnswer(false);
     }
   };
   return (
     <Choice>
-      <RangeBar type="range"></RangeBar>
+      {modalId === "fontSize" && (
+        <Panel>
+          <Example $fontSize={fontSize}>가나다 ABC abc 123</Example>
+          <RangeBar
+            type="range"
+            min={12}
+            max={24}
+            step={1}
+            value={fontSize}
+            onChange={(event) => setFontSize(Number(event.target.value))}
+          ></RangeBar>
+          <span>{`${fontSize}px`}</span>
+        </Panel>
+      )}
+      {modalId === "screenWidth" && (
+        <div>스마트폰 너비에 맞게 320 ~ 480 옵션 제공할 예정</div>
+      )}
       <Confirm>
         <Yes onClick={onYes}>확인</Yes>
       </Confirm>
@@ -25,57 +45,54 @@ function RangeModal({ setModalAnswer }: Partial<IModalProp>) {
 export default RangeModal;
 
 const Choice = styled.div`
-  background-color: pink;
+  gap: 20px;
   bottom: 30%;
   transform: translate(0, 50%);
-  width: 100%;
-  height: 50px;
+  width: 70%;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
   font-size: 1.2rem;
   font-weight: bold;
-  & > * {
-    width: 100px;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    background-color: ${(props) => props.theme.backgroundDarker};
-  }
 `;
 
-const RangeBar = styled.input``;
+const Panel = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+`;
+
+const Example = styled.span<{ $fontSize: number }>`
+  font-size: ${(props) => props.$fontSize}px;
+  margin-bottom: 10px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+`;
+
+const RangeBar = styled.input.attrs({ type: "range" })`
+  cursor: pointer;
+  width: 100%;
+`;
 
 const Confirm = styled.div`
-  bottom: 30%;
-  transform: translate(0, 50%);
   width: 100%;
-  height: 50px;
   display: flex;
   justify-content: space-around;
   font-size: 1.2rem;
   font-weight: bold;
-  & > * {
-    width: 100px;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    background-color: ${(props) => props.theme.backgroundDarker};
-  }
 `;
 
 const Yes = styled.div`
+  width: 100px;
+  height: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-color: ${(props) => props.theme.backgroundDarker};
   &:hover {
     color: ${(props) => props.theme.highlightPositive};
-  }
-`;
-
-const No = styled.div`
-  &:hover {
-    color: ${(props) => props.theme.highlightNegative};
   }
 `;

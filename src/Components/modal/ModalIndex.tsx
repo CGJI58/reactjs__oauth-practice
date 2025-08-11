@@ -22,7 +22,7 @@ function Modal(props: IModalProp) {
     return () => window.removeEventListener("mousedown", handleOutsideClick);
   }, []);
 
-  const { sentence, modalOption, setModalAnswer } = props;
+  const { sentence, modalOption, modalId, setModalAnswer } = props;
   return (
     <ModalBackground>
       <Wrapper ref={popupRef}>
@@ -31,7 +31,7 @@ function Modal(props: IModalProp) {
           <YesNoModal setModalAnswer={setModalAnswer} />
         )}
         {modalOption === "Range" && (
-          <RangeModal setModalAnswer={setModalAnswer} />
+          <RangeModal setModalAnswer={setModalAnswer} modalId={modalId} />
         )}
       </Wrapper>
     </ModalBackground>
@@ -58,6 +58,8 @@ const Wrapper = styled.div`
   transform: translate(-50%, -50%);
   width: 400px;
   height: 300px;
+  display: flex;
+  justify-content: center;
   background-color: ${(props) => props.theme.backgroundLighter};
   box-shadow: ${(props) => props.theme.boxShadow};
   border-radius: 10px;
