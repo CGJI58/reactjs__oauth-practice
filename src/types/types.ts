@@ -20,6 +20,7 @@ export interface IUserRecord {
 
 export interface IUserConfig {
   nickname: string;
+  fontSize: number;
   isDarkTheme: boolean;
 }
 

@@ -1,14 +1,18 @@
 import styled from "styled-components";
 import { IModalProp } from "../../types/modal";
 import { useState } from "react";
+import { useRecoilState } from "recoil";
+import { IUserConfig } from "../../types/types";
+import { userConfigState } from "../../States/atoms";
 
 function RangeModal({ setModalAnswer, modalId }: Partial<IModalProp>) {
-  const [fontSize, setFontSize] = useState<number>(16);
+  const [userConfig, setUserConfig] =
+    useRecoilState<IUserConfig>(userConfigState);
+  const [fontSize, setFontSize] = useState<number>(userConfig.fontSize);
   const onYes = () => {
     if (setModalAnswer) {
       if (modalId === "fontSize") {
-        console.log(fontSize);
-        //fontsize를 아톰에 적용(아톰에 폰트사이즈 추가할 예정. userConfig에다가.)
+        setUserConfig((prev) => ({ ...prev, fontSize }));
       }
       if (modalId === "screenWidth") {
         //화면너비 적용. 위와 동일 예정
