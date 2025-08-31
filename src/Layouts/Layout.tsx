@@ -68,6 +68,9 @@ const Wrapper = styled.div`
     min-height: 100vh;
     position: relative;
   }
+  * {
+    font-size: ${(props) => props.theme.fontSizes.m}px;
+  }
 `;
 
 export default Layout;

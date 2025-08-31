@@ -125,6 +125,7 @@ const Preview = styled(motion.div)`
 const Title = styled.div<{ $preview: boolean }>`
   font-weight: bold;
   white-space: ${(props) => (props.$preview ? "pre-wrap" : "nowrap")};
+  font-size: ${(props) => props.theme.fontSizes.m}px;
   overflow: ${(props) => (props.$preview ? "visible" : "hidden")};
   text-overflow: ellipsis;
 `;
@@ -132,7 +133,7 @@ const Title = styled.div<{ $preview: boolean }>`
 const TimeStamp = styled.div`
   text-align: right;
   white-space: nowrap;
-  font-size: 0.8rem;
+  font-size: ${(props) => props.theme.fontSizes.s}px;
   overflow: hidden;
 `;
 
@@ -144,7 +145,7 @@ const DiaryBody = styled.div`
   gap: 10px;
   overflow: hidden;
   & > * {
-    font-size: 0.9rem;
+    font-size: ${(props) => props.theme.fontSizes.s}px;
   }
 `;
 

@@ -25,7 +25,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 2rem;
+  font-size: ${(props) => props.theme.fontSizes.xxl}px;
   cursor: pointer;
   opacity: 0.3;
   transition: all 0.3s;

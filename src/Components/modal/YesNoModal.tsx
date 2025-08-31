@@ -27,7 +27,7 @@ const Choice = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  font-size: 1.2rem;
+  font-size: ${(props) => props.theme.fontSizes.l}px;
   font-weight: bold;
   & > * {
     width: 100px;

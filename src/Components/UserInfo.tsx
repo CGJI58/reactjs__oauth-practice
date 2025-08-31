@@ -78,11 +78,13 @@ const DropList = styled.div`
   box-shadow: ${(props) => props.theme.boxShadow};
   cursor: default;
   & > * {
-    font-size: 1rem;
     color: ${(props) => props.theme.text};
     :visited {
       color: ${(props) => props.theme.text};
     }
+  }
+  * {
+    font-size: ${(props) => props.theme.fontSizes.m}px;
   }
 `;
 

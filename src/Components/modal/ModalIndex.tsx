@@ -75,7 +75,7 @@ const Sentence = styled.div`
   display: flex;
   justify-content: center;
   transform: translate(-50%, -50%);
-  font-size: 1.5rem;
+  font-size: ${(props) => props.theme.fontSizes.xl}px;
   font-weight: bold;
 `;
 

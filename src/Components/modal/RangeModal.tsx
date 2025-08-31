@@ -55,7 +55,7 @@ const Choice = styled.div`
   width: 70%;
   display: flex;
   flex-direction: column;
-  font-size: 1.2rem;
+  font-size: ${(props) => props.theme.fontSizes.l}px;
   font-weight: bold;
 `;
 
@@ -84,7 +84,7 @@ const Confirm = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-around;
-  font-size: 1.2rem;
+  font-size: ${(props) => props.theme.fontSizes.l}px;
   font-weight: bold;
 `;
 

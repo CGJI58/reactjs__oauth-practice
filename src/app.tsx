@@ -17,10 +17,24 @@ import EditNickname from "./Routes/edit/EditNickname";
 const FE_BASE_URL = "/reactjs__oauth-practice";
 
 function App() {
-  const { isDarkTheme } = useRecoilValue<IUserConfig>(userConfigState);
+  const { isDarkTheme, fontSize } =
+    useRecoilValue<IUserConfig>(userConfigState);
+
+  const theme = {
+    ...(isDarkTheme ? darkTheme : lightTheme),
+    fontSizes: {
+      xxl: fontSize * 1.7,
+      xl: fontSize * 1.5,
+      l: fontSize * 1.2,
+      m: fontSize * 1,
+      s: fontSize * 0.8,
+      xs: fontSize * 0.5,
+    },
+  };
+
   return (
     <Router basename={`${FE_BASE_URL}`}>
-      <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
+      <ThemeProvider theme={theme}>
         <Helmet>
           <meta
             name="viewport"

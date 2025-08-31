@@ -98,7 +98,7 @@ const ExitBtn = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
+  font-size: ${(props) => props.theme.fontSizes.m}px;
   border-radius: 50%;
   cursor: pointer;
   * {
@@ -107,7 +107,7 @@ const ExitBtn = styled.div`
 `;
 
 const Title = styled.div`
-  font-size: 1.5rem;
+  font-size: ${(props) => props.theme.fontSizes.xl}px;
   font-weight: 800;
   margin-bottom: 10px;
 `;
@@ -124,7 +124,7 @@ const GithubButton = styled.div`
     align-items: center;
     justify-content: center;
     gap: 20px;
-    font-size: 0.9rem;
+    font-size: ${(props) => props.theme.fontSizes.s}px;
     color: ${(props) => props.theme.text};
     text-decoration: none;
     :visited {

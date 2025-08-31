@@ -72,7 +72,6 @@ const Wrapper = styled.div`
   justify-content: space-around;
   align-items: center;
   font-weight: bold;
-  font-size: 1.5rem;
   box-shadow: ${(props) => props.theme.boxShadow};
   a {
     cursor: default;
@@ -98,6 +97,9 @@ const Col = styled.div`
     align-items: center;
     user-select: none;
     color: ${(props) => props.theme.text};
+  }
+  * {
+    font-size: ${(props) => props.theme.fontSizes.xxl}px;
   }
 `;
 
