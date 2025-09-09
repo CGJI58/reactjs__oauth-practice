@@ -102,11 +102,10 @@ const StyledLink = styled(Link)`
 
 const DiaryHead = styled.div`
   display: grid;
-  grid-template-columns: 30px 1fr 100px;
+  grid-template-columns: auto 1fr auto;
   height: 50px;
   min-height: max-content;
   gap: 10px;
-  padding-right: 10px;
   & > * {
     padding: 10px 0px;
     display: flex;
@@ -117,8 +116,12 @@ const DiaryHead = styled.div`
 const Preview = styled(motion.div)`
   justify-content: center;
   transition: 100ms linear;
+  padding: 0 10px;
   &:hover {
     color: ${(props) => props.theme.highlightNegative};
+  }
+  * {
+    font-size: ${(props) => props.theme.fontSizes.m}px;
   }
 `;
 
@@ -134,7 +137,7 @@ const TimeStamp = styled.div`
   text-align: right;
   white-space: nowrap;
   font-size: ${(props) => props.theme.fontSizes.s}px;
-  overflow: hidden;
+  padding: 0 10px;
 `;
 
 const DiaryBody = styled.div`

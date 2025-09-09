@@ -138,6 +138,7 @@ function Profile() {
 
 const Wrapper = styled.div`
   .section {
+    font-size: ${(props) => props.theme.fontSizes.m}px;
     background-color: ${(props) => props.theme.background};
     border-radius: 10px;
     gap: 20px;

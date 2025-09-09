@@ -111,9 +111,9 @@ function Write() {
 }
 
 const Wrapper = styled.div`
+  font-size: ${(props) => props.theme.fontSizes.m}px;
   margin-top: 30px;
   width: 100%;
-  max-width: 600px;
   align-self: center;
   justify-self: center;
   padding: 10px;
@@ -122,7 +122,7 @@ const Wrapper = styled.div`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 50px;
   * {
     margin: 0;
     padding: 10px;
@@ -135,8 +135,9 @@ const Form = styled.form`
     color: inherit;
   }
   #text {
-    height: 300px;
-    resize: none;
+    min-height: 300px;
+    max-height: 600px;
+    resize: vertical;
     line-height: 180%;
   }
   #submit {

@@ -39,8 +39,7 @@ function Home() {
 
   return (
     <Wrapper>
-      {email !== "" ? <UserRecord /> : <span>log in please</span>}
-      {email !== "" ? <ScrollTopBtn /> : null}
+      <UserRecord />
       {modalOn && <Modal {...modalProps} />}
     </Wrapper>
   );

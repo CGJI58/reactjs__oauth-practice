@@ -86,9 +86,9 @@ function Read() {
 }
 
 const Wrapper = styled.div`
+  font-size: ${(props) => props.theme.fontSizes.m}px;
   margin-top: 30px;
   width: 100%;
-  max-width: 600px;
   display: flex;
   flex-direction: column;
   align-self: center;

@@ -14,7 +14,7 @@ import { IUserConfig } from "../types/types";
 function UserInfo() {
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState<boolean>(false);
-  const [{ nickname, isDarkTheme }, setUserConfig] =
+  const [{ isDarkTheme }, setUserConfig] =
     useRecoilState<IUserConfig>(userConfigState);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -32,10 +32,15 @@ function UserInfo() {
   };
   return (
     <Wrapper onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-      <FontAwesomeIcon icon={faCircleUser} />
+      <FontAwesomeIcon icon={faCircleUser} className="headerBtn" />
       {isHovered && (
         <DropList>
-          <DropItem onClick={() => navigate("/profile")}>{"Profile"}</DropItem>
+          <DropItem
+            className="dropItemBtn"
+            onClick={() => navigate("/profile")}
+          >
+            Profile
+          </DropItem>
           <DropItem
             onClick={() =>
               setUserConfig((prev) => ({
@@ -44,14 +49,16 @@ function UserInfo() {
               }))
             }
           >
-            <Label>Dark mode:</Label>
+            <Label className="dropItemBtn">Dark mode:</Label>
             {isDarkTheme ? (
-              <FontAwesomeIcon icon={faToggleOn} />
+              <FontAwesomeIcon className="dropItemBtn" icon={faToggleOn} />
             ) : (
-              <FontAwesomeIcon icon={faToggleOff} />
+              <FontAwesomeIcon className="dropItemBtn" icon={faToggleOff} />
             )}
           </DropItem>
-          <DropItem onClick={() => navigate("/logout")}>Log out</DropItem>
+          <DropItem className="dropItemBtn" onClick={() => navigate("/logout")}>
+            Log out
+          </DropItem>
         </DropList>
       )}
     </Wrapper>
@@ -83,7 +90,7 @@ const DropList = styled.div`
       color: ${(props) => props.theme.text};
     }
   }
-  * {
+  .dropItemBtn {
     font-size: ${(props) => props.theme.fontSizes.m}px;
   }
 `;

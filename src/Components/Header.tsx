@@ -26,7 +26,7 @@ function HomeBtn() {
   return (
     <Col>
       <StyledLink to="/">
-        <FontAwesomeIcon icon={faHouse} />
+        <FontAwesomeIcon className="headerBtn" icon={faHouse} />
       </StyledLink>
     </Col>
   );
@@ -39,7 +39,7 @@ function WriteBtn() {
         to={{ pathname: "/write", search: "?mode=create" }}
         state={{ diary: { id: "", date: "", title: "", text: "" } }}
       >
-        Write
+        <div className="headerBtn">Write</div>
       </StyledLink>
     </Col>
   );
@@ -48,7 +48,9 @@ function WriteBtn() {
 function LoginBtn() {
   return (
     <Col>
-      <StyledLink to="/login">Log in</StyledLink>
+      <StyledLink to="/login">
+        <div className="headerBtn">Log in</div>
+      </StyledLink>
     </Col>
   );
 }
@@ -98,8 +100,8 @@ const Col = styled.div`
     user-select: none;
     color: ${(props) => props.theme.text};
   }
-  * {
-    font-size: ${(props) => props.theme.fontSizes.xxl}px;
+  .headerBtn {
+    font-size: ${(props) => props.theme.fontSizes.xl}px;
   }
 `;
 

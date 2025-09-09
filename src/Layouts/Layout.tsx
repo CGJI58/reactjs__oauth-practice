@@ -9,6 +9,8 @@ import {
   userState,
   userSynchronizedState,
 } from "../States/atoms";
+import ScrollTopBtn from "../Components/ScrollTopBtn";
+import { useLocation } from "react-router-dom";
 
 interface LayoutProps {
   children: ReactNode;
@@ -22,6 +24,8 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   const setSynchronized = useSetRecoilState<boolean>(userSynchronizedState);
 
   const { loadUser, saveUser } = useUser();
+
+  const location = useLocation();
 
   useEffect(() => {
     if (user === defaultUserState) {
@@ -47,7 +51,15 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   return (
     <Wrapper>
       <Header />
-      <main>{children}</main>
+      {userInfo.email !== "" || location.pathname === "/login" ? (
+        <main>{children}</main>
+      ) : (
+        <span className="projectIntroduce">
+          사용자 인증 연습 겸 to do list FE 연습 겸 FE-BE-DB 연결 연습용
+          프로젝트
+        </span>
+      )}
+      {userInfo.email !== "" ? <ScrollTopBtn /> : null}
     </Wrapper>
   );
 };
@@ -62,14 +74,15 @@ const Wrapper = styled.div`
   & > * {
     max-width: 600px;
   }
-  main {
+  & > main {
     padding-top: 50px;
     width: 100%;
     min-height: 100vh;
     position: relative;
   }
-  * {
-    font-size: ${(props) => props.theme.fontSizes.m}px;
+  .projectIntroduce {
+    margin-top: 100px;
+    font-size: ${(props) => props.theme.fontSizes.l}px;
   }
 `;
 

@@ -23,12 +23,12 @@ function App() {
   const theme = {
     ...(isDarkTheme ? darkTheme : lightTheme),
     fontSizes: {
-      xxl: fontSize * 1.7,
-      xl: fontSize * 1.5,
+      xxl: fontSize * 2,
+      xl: fontSize * 1.4,
       l: fontSize * 1.2,
       m: fontSize * 1,
       s: fontSize * 0.8,
-      xs: fontSize * 0.5,
+      xs: fontSize * 0.6,
     },
   };
 
