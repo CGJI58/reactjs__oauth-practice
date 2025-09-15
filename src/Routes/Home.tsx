@@ -45,8 +45,6 @@ function Home() {
   );
 }
 
-const Wrapper = styled.div`
-  padding: 10px;
-`;
+const Wrapper = styled.div``;
 
 export default Home;

@@ -142,7 +142,7 @@ const Wrapper = styled.div`
     background-color: ${(props) => props.theme.background};
     border-radius: 10px;
     gap: 20px;
-    margin: 20px;
+    margin: 20px 0px;
     padding: 20px;
     box-shadow: ${(props) => props.theme.boxShadow};
   }

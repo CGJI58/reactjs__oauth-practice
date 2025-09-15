@@ -76,6 +76,7 @@ const Wrapper = styled.div`
   }
   & > main {
     padding-top: 50px;
+    padding: 50px 10px 0px 10px;
     width: 100%;
     min-height: 100vh;
     position: relative;

@@ -116,7 +116,6 @@ const Wrapper = styled.div`
   width: 100%;
   align-self: center;
   justify-self: center;
-  padding: 10px;
 `;
 
 const Form = styled.form`
