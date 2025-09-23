@@ -1,4 +1,4 @@
-import { IModalVariants } from "../types/modal";
+import { IModalVariants } from "../types/types";
 
 function useScreenWidth() {
   const screenWidthVariants: IModalVariants = {

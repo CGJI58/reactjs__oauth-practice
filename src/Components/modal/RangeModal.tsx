@@ -1,8 +1,7 @@
 import styled from "styled-components";
-import { IModalProp } from "../../types/modal";
+import { IUserConfig, IModalProp } from "../../types/types";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
-import { IUserConfig } from "../../types/types";
 import { userConfigState } from "../../States/atoms";
 
 function RangeModal({ setModalAnswer, modalId }: Partial<IModalProp>) {

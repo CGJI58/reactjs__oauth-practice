@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import YesNoModal from "./YesNoModal";
 import RangeModal from "./RangeModal";
-import { IModalProp } from "../../types/modal";
+import { IModalProp } from "../../types/types";
 import { useEffect, useRef } from "react";
 
 function Modal(props: IModalProp) {
