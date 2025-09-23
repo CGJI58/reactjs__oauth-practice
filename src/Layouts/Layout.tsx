@@ -4,11 +4,8 @@ import styled from "styled-components";
 import useUser from "../Hooks/useUser";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { IUserState } from "../types/types";
-import {
-  defaultUserState,
-  userState,
-  userSynchronizedState,
-} from "../States/atoms";
+import { defaultUserState } from "../constants/defaults";
+import { userState, userSynchronizedState } from "../States/atoms";
 import ScrollTopBtn from "../Components/ScrollTopBtn";
 import { useLocation } from "react-router-dom";
 

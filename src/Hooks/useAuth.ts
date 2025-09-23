@@ -8,7 +8,8 @@ import {
 import useUser from "./useUser";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { IModalVariants, IUserInfo, IUserState } from "../types/types";
-import { defaultUserState, userInfoState, userState } from "../States/atoms";
+import { userInfoState, userState } from "../States/atoms";
+import { defaultUserState } from "../constants/defaults";
 
 function useAuth() {
   const navigate = useNavigate();

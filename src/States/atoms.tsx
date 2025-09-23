@@ -1,23 +1,6 @@
 import { atom, DefaultValue, selector } from "recoil";
 import { IUserState } from "../types/types";
-
-export const defaultUserState: IUserState = {
-  userInfo: {
-    email: "",
-    primary: false,
-    verified: false,
-    visibility: "",
-  },
-  userRecord: {
-    diaries: [],
-  },
-  userConfig: {
-    nickname: "",
-    fontSize: 16,
-    isDarkTheme: false,
-  },
-  synchronized: false,
-};
+import { defaultUserState } from "../constants/defaults";
 
 export const userState = atom<IUserState>({
   key: "userState",

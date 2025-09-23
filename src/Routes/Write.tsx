@@ -7,13 +7,14 @@ import { createDiary } from "../util/diaryUtility";
 import { Subscription } from "react-hook-form/dist/utils/createSubject";
 import { IDiary } from "../types/types";
 import useDiary from "../Hooks/useDiary";
+import { defaultDiary } from "../constants/defaults";
 
 export interface IDiaryForm extends Omit<IDiary, "date" | "id"> {}
 
 function Write() {
   const navigate = useNavigate();
   const location = useLocation();
-  const originalDiary: IDiary = location.state.diary;
+  const originalDiary: IDiary = location.state?.diary ?? defaultDiary;
   const query = new URLSearchParams(location.search);
   const mode = query.get("mode") as "create" | "modify";
   const [diary, setDiary] = useState<IDiary>(originalDiary);

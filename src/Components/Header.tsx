@@ -7,6 +7,7 @@ import { faHouse } from "@fortawesome/free-solid-svg-icons";
 import UserInfo from "./UserInfo";
 import ScrollMeter from "./ScrollMeter";
 import { IUserInfo } from "../types/types";
+import { defaultDiary } from "../constants/defaults";
 
 function Header() {
   const { email } = useRecoilValue<IUserInfo>(userInfoState);
@@ -37,7 +38,7 @@ function WriteBtn() {
     <Col>
       <StyledLink
         to={{ pathname: "/write", search: "?mode=create" }}
-        state={{ diary: { id: "", date: "", title: "", text: "" } }}
+        state={{ diary: defaultDiary }}
       >
         <div className="headerBtn">Write</div>
       </StyledLink>

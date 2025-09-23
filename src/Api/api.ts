@@ -1,4 +1,4 @@
-import { defaultUserState } from "../States/atoms";
+import { defaultUserState } from "../constants/defaults";
 import { IGetUserByCookie, IUserState } from "../types/types";
 
 const BE_BASE_URL = process.env.REACT_APP_BACK_END_URL;
