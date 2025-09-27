@@ -1,7 +1,6 @@
 import { defaultUserState } from "../constants/defaults";
 import { IGetUserByCookie, IUserState } from "../types/types";
-
-const BE_BASE_URL = process.env.REACT_APP_BACK_END_URL;
+import { BE_BASE_URL } from "../constants/urls";
 
 export const loginByGhCode = async (ghCode: string): Promise<void> => {
   console.log("Run loginByGhCode()");

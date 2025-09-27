@@ -13,8 +13,7 @@ import Read from "./Routes/Read";
 import { Helmet } from "react-helmet";
 import { IUserConfig } from "./types/types";
 import EditNickname from "./Routes/edit/EditNickname";
-
-const FE_BASE_URL = "/reactjs__oauth-practice";
+import { FE_BASE_URL } from "./constants/urls";
 
 function App() {
   const { isDarkTheme, fontSize } =
