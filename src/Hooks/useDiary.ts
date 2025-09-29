@@ -1,9 +1,23 @@
 import { useSetRecoilState } from "recoil";
 import { userRecordState } from "../States/atoms";
 import { IDiary, IModalVariants, IUserRecord } from "../types/types";
+import { useNavigate } from "react-router-dom";
 
 function useDiary() {
   const setUserRecord = useSetRecoilState<IUserRecord>(userRecordState);
+  const navigate = useNavigate();
+
+  const deleteVariants: IModalVariants = {
+    modalId: "deleteDiary",
+    modalOption: "YesNo",
+    sentence: "이 게시글을 삭제하시겠습니까?",
+  };
+
+  const modifyVariants: IModalVariants = {
+    modalId: "modifyDiary",
+    modalOption: "YesNo",
+    sentence: "이 게시글을 수정하시겠습니까?",
+  };
 
   const clearDiariesVariants: IModalVariants = {
     modalId: "clearDiaries",
@@ -33,13 +47,26 @@ function useDiary() {
         diaries: newDiaries,
       };
     });
+    navigate("/");
+  };
+
+  const modifyDiary = (diary: IDiary) => {
+    navigate(`../write?mode=modify`, { state: { diary } });
   };
 
   const clearDiaries = () => {
     setUserRecord((prev) => ({ ...prev, diaries: [] }));
   };
 
-  return { saveDiary, deleteDiary, clearDiaries, clearDiariesVariants };
+  return {
+    saveDiary,
+    clearDiaries,
+    deleteDiary,
+    modifyDiary,
+    clearDiariesVariants,
+    modifyVariants,
+    deleteVariants,
+  };
 }
 
 export default useDiary;

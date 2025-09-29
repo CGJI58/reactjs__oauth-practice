@@ -1,36 +1,25 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { useEffect } from "react";
 import Modal from "../Components/modal/ModalIndex";
-import { IDiary, IModalVariants } from "../types/types";
+import { IDiary } from "../types/types";
 import useModal from "../Hooks/useModal";
 import useTempDiary from "../Hooks/useTempDiary";
 import useDiary from "../Hooks/useDiary";
 
-const modifyVariants: IModalVariants = {
-  modalId: "modifyDiary",
-  modalOption: "YesNo",
-  sentence: "이 게시글을 수정하시겠습니까?",
-};
-const deleteVariants: IModalVariants = {
-  modalId: "deleteDiary",
-  modalOption: "YesNo",
-  sentence: "이 게시글을 삭제하시겠습니까?",
-};
-
 function Read() {
+  const location = useLocation();
+  const diary: IDiary = location.state.diary;
+  const { title, date, text, id: diaryId } = diary;
+  const { modalProps, modalAnswer, modalOn, createModal } = useModal();
   const {
     saveTempDiaryVariants,
     tempDiary,
     runSaveTempDiary,
     runRemoveTempDiary,
   } = useTempDiary();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const diary: IDiary = location.state.diary;
-  const { title, date, text, id: diaryId } = diary;
-  const { deleteDiary } = useDiary();
-  const { modalProps, modalAnswer, modalOn, createModal } = useModal();
+  const { modifyVariants, deleteVariants, deleteDiary, modifyDiary } =
+    useDiary();
 
   useEffect(() => {
     if (tempDiary) {
@@ -38,26 +27,17 @@ function Read() {
     }
   }, [tempDiary]);
 
-  const runModify = () => {
-    navigate(`../write?mode=modify`, { state: { diary } });
-  };
-
-  const runDelete = () => {
-    deleteDiary(diaryId);
-    navigate("/");
-  };
-
   useEffect(() => {
     if (modalProps && modalAnswer !== null) {
       const { modalId } = modalProps;
       if (modalId === modifyVariants.modalId) {
         if (modalAnswer) {
-          runModify();
+          modifyDiary(diary);
         }
       }
       if (modalId === deleteVariants.modalId) {
         if (modalAnswer) {
-          runDelete();
+          deleteDiary(diaryId);
         }
       }
       if (modalId === saveTempDiaryVariants.modalId) {
