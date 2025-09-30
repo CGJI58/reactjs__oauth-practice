@@ -7,7 +7,7 @@ import {
 } from "../Api/api";
 import useUser from "./useUser";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { IModalVariants, IUserInfo, IUserState } from "../types/types";
+import { IUserInfo, IUserState } from "../types/types";
 import { userInfoState, userState } from "../States/atoms";
 import { defaultUserState } from "../constants/defaults";
 
@@ -16,11 +16,6 @@ function useAuth() {
   const setUser = useSetRecoilState<IUserState>(userState);
   const { email } = useRecoilValue<IUserInfo>(userInfoState);
   const { loadUser } = useUser();
-  const signOutVariants: IModalVariants = {
-    modalId: "signOut",
-    modalOption: "YesNo",
-    sentence: "회원 탈퇴하시겠습니까?",
-  };
 
   const loadCodeRequestURL = async () => {
     const url = await getCodeRequestURL();
@@ -43,7 +38,7 @@ function useAuth() {
     await logOut();
   };
 
-  return { loadCodeRequestURL, login, logOut, signOut, signOutVariants };
+  return { loadCodeRequestURL, login, logOut, signOut };
 }
 
 export default useAuth;

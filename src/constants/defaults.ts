@@ -19,7 +19,7 @@ export const defaultUserState: IUserState = {
   },
   userConfig: {
     nickname: "",
-    fontSize: 16,
+    UIScale: 1,
     isDarkTheme: false,
   },
   synchronized: false,

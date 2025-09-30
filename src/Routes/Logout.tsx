@@ -5,15 +5,11 @@ import useTempDiary from "../Hooks/useTempDiary";
 import useModal from "../Hooks/useModal";
 import Modal from "../Components/modal/ModalIndex";
 import useAuth from "../Hooks/useAuth";
+import { tempDiaryVariants } from "../constants/variants";
 
 function Logout() {
   const synchronized = useRecoilValue<boolean>(userSynchronizedState);
-  const {
-    saveTempDiaryVariants,
-    tempDiary,
-    runSaveTempDiary,
-    runRemoveTempDiary,
-  } = useTempDiary();
+  const { tempDiary, runSaveTempDiary, runRemoveTempDiary } = useTempDiary();
   const { modalProps, modalAnswer, modalOn, createModal } = useModal();
   const { logOut } = useAuth();
   const [allDone, setAllDone] = useState<boolean>(false);
@@ -21,7 +17,7 @@ function Logout() {
   useEffect(() => {
     if (tempDiary !== undefined) {
       if (tempDiary) {
-        createModal(saveTempDiaryVariants);
+        createModal(tempDiaryVariants);
       } else {
         setAllDone(true);
       }
@@ -31,7 +27,7 @@ function Logout() {
   useEffect(() => {
     if (modalProps && modalAnswer !== null) {
       const { modalId } = modalProps;
-      if (modalId === saveTempDiaryVariants.modalId) {
+      if (modalId === tempDiaryVariants.modalId) {
         if (modalAnswer) {
           runSaveTempDiary();
         }

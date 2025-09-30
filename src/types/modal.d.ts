@@ -7,8 +7,7 @@ export type ModalId =
   | "nickname"
   | "clearDiaries"
   | "signOut"
-  | "fontSize"
-  | "screenWidth"
+  | "UIScale"
   | null;
 
 export type ModalOption = "YesNo" | "Range";

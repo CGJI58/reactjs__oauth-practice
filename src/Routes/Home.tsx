@@ -1,34 +1,25 @@
 import styled from "styled-components";
-import { userInfoState } from "../States/atoms";
-import { useRecoilValue } from "recoil";
 import UserRecord from "../Components/UserRecord";
-import ScrollTopBtn from "../Components/ScrollTopBtn";
-import { IUserInfo } from "../types/types";
 import useTempDiary from "../Hooks/useTempDiary";
 import { useEffect } from "react";
 import useModal from "../Hooks/useModal";
 import Modal from "../Components/modal/ModalIndex";
+import { tempDiaryVariants } from "../constants/variants";
 
 function Home() {
-  const { email } = useRecoilValue<IUserInfo>(userInfoState);
-  const {
-    saveTempDiaryVariants,
-    tempDiary,
-    runSaveTempDiary,
-    runRemoveTempDiary,
-  } = useTempDiary();
+  const { tempDiary, runSaveTempDiary, runRemoveTempDiary } = useTempDiary();
   const { modalProps, modalAnswer, modalOn, createModal } = useModal();
 
   useEffect(() => {
     if (tempDiary) {
-      createModal(saveTempDiaryVariants);
+      createModal(tempDiaryVariants);
     }
   }, [tempDiary]);
 
   useEffect(() => {
     if (modalProps && modalAnswer !== null) {
       const { modalId } = modalProps;
-      if (modalId === saveTempDiaryVariants.modalId) {
+      if (modalId === tempDiaryVariants.modalId) {
         if (modalAnswer) {
           runSaveTempDiary();
         }

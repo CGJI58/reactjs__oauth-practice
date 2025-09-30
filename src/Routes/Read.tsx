@@ -6,41 +6,40 @@ import { IDiary } from "../types/types";
 import useModal from "../Hooks/useModal";
 import useTempDiary from "../Hooks/useTempDiary";
 import useDiary from "../Hooks/useDiary";
+import {
+  deleteDiaryVariants,
+  modifyDiaryVariants,
+  tempDiaryVariants,
+} from "../constants/variants";
 
 function Read() {
   const location = useLocation();
   const diary: IDiary = location.state.diary;
   const { title, date, text, id: diaryId } = diary;
   const { modalProps, modalAnswer, modalOn, createModal } = useModal();
-  const {
-    saveTempDiaryVariants,
-    tempDiary,
-    runSaveTempDiary,
-    runRemoveTempDiary,
-  } = useTempDiary();
-  const { modifyVariants, deleteVariants, deleteDiary, modifyDiary } =
-    useDiary();
+  const { tempDiary, runSaveTempDiary, runRemoveTempDiary } = useTempDiary();
+  const { deleteDiary, modifyDiary } = useDiary();
 
   useEffect(() => {
     if (tempDiary) {
-      createModal(saveTempDiaryVariants);
+      createModal(tempDiaryVariants);
     }
   }, [tempDiary]);
 
   useEffect(() => {
     if (modalProps && modalAnswer !== null) {
       const { modalId } = modalProps;
-      if (modalId === modifyVariants.modalId) {
+      if (modalId === modifyDiaryVariants.modalId) {
         if (modalAnswer) {
           modifyDiary(diary);
         }
       }
-      if (modalId === deleteVariants.modalId) {
+      if (modalId === deleteDiaryVariants.modalId) {
         if (modalAnswer) {
           deleteDiary(diaryId);
         }
       }
-      if (modalId === saveTempDiaryVariants.modalId) {
+      if (modalId === tempDiaryVariants.modalId) {
         if (modalAnswer) {
           runSaveTempDiary();
         }
@@ -52,8 +51,12 @@ function Read() {
   return (
     <Wrapper>
       <Buttons>
-        <ModifyBtn onClick={() => createModal(modifyVariants)}>수정</ModifyBtn>
-        <DeleteBtn onClick={() => createModal(deleteVariants)}>삭제</DeleteBtn>
+        <ModifyBtn onClick={() => createModal(modifyDiaryVariants)}>
+          수정
+        </ModifyBtn>
+        <DeleteBtn onClick={() => createModal(deleteDiaryVariants)}>
+          삭제
+        </DeleteBtn>
       </Buttons>
       <Context>
         <DiaryTitle>{title}</DiaryTitle>

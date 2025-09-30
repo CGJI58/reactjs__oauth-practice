@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { IDiary, IModalVariants } from "../types/types";
+import { IDiary } from "../types/types";
 import { createDiary, getTempDiary } from "../util/diaryUtility";
 import { IDiaryForm } from "../Routes/Write";
 import useDiary from "./useDiary";
@@ -10,11 +10,6 @@ function useTempDiary() {
   const [tempDiary, setTempDiary] = useState<ITempDiary>(undefined);
   const [diary, setDiary] = useState<IDiary | null>(null);
   const { saveDiary } = useDiary();
-  const saveTempDiaryVariants: IModalVariants = {
-    modalId: "tempDiary",
-    modalOption: "YesNo",
-    sentence: "작성하던 내용을 저장하시겠습니까?",
-  };
 
   const runSaveTempDiary = () => {
     if (tempDiary) {
@@ -39,7 +34,6 @@ function useTempDiary() {
   }, [diary]);
 
   return {
-    saveTempDiaryVariants,
     tempDiary,
     runSaveTempDiary,
     runRemoveTempDiary,

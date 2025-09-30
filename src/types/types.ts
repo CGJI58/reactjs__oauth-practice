@@ -20,7 +20,7 @@ export interface IUserRecord {
 
 export interface IUserConfig {
   nickname: string;
-  fontSize: number;
+  UIScale: UIScaleOption;
   isDarkTheme: boolean;
 }
 
@@ -30,6 +30,8 @@ export interface IDiary {
   title: string;
   text: string;
 }
+
+export type UIScaleOption = 0 | 1 | 2 | 3;
 
 export interface IGetUserByCookie {
   userData?: IUserState;

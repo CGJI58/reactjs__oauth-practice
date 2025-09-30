@@ -9,24 +9,24 @@ import Modal from "../Components/modal/ModalIndex";
 import useAuth from "../Hooks/useAuth";
 import useDiary from "../Hooks/useDiary";
 import useNickname from "../Hooks/useNickname";
-import useFontSize from "../Hooks/useFontSize";
-import useScreenWidth from "../Hooks/useScreenWidth";
+import useUIScale from "../Hooks/useUIScale";
+import {
+  clearDiariesVariants,
+  UIScaleVariants,
+  nicknameVariants,
+  signOutVariants,
+  tempDiaryVariants,
+} from "../constants/variants";
 
 function Profile() {
   const { userInfo, userRecord, userConfig } =
     useRecoilValue<IUserState>(userState);
   const setUserConfig = useSetRecoilState<IUserConfig>(userConfigState);
-  const {
-    saveTempDiaryVariants,
-    tempDiary,
-    runSaveTempDiary,
-    runRemoveTempDiary,
-  } = useTempDiary();
-  const { nicknameVariants, nicknameForm } = useNickname();
-  const { clearDiaries, clearDiariesVariants } = useDiary();
-  const { handleFontSize, fontSizeVariants } = useFontSize();
-  const { handleScreenWidth, screenWidthVariants } = useScreenWidth();
-  const { signOut, signOutVariants } = useAuth();
+  const { tempDiary, runSaveTempDiary, runRemoveTempDiary } = useTempDiary();
+  const { nicknameForm } = useNickname();
+  const { clearDiaries } = useDiary();
+  const { handleUIScale } = useUIScale();
+  const { signOut } = useAuth();
   const { modalProps, modalAnswer, modalOn, createModal } = useModal();
   const [modalId, setModalId] = useState<ModalId>(null);
 
@@ -39,16 +39,13 @@ function Profile() {
   useEffect(() => {
     switch (modalId) {
       case "tempDiary":
-        createModal(saveTempDiaryVariants);
+        createModal(tempDiaryVariants);
         break;
       case "nickname":
         createModal(nicknameVariants);
         break;
-      case "fontSize":
-        createModal(fontSizeVariants);
-        break;
-      case "screenWidth":
-        createModal(screenWidthVariants);
+      case "UIScale":
+        createModal(UIScaleVariants);
         break;
       case "clearDiaries":
         createModal(clearDiariesVariants);
@@ -64,7 +61,7 @@ function Profile() {
     if (modalProps && modalAnswer !== null) {
       const { modalId } = modalProps;
       switch (modalId) {
-        case saveTempDiaryVariants.modalId:
+        case tempDiaryVariants.modalId:
           if (modalAnswer) {
             runSaveTempDiary();
           }
@@ -75,14 +72,9 @@ function Profile() {
             nicknameForm();
           }
           break;
-        case fontSizeVariants.modalId:
+        case UIScaleVariants.modalId:
           if (modalAnswer) {
-            handleFontSize();
-          }
-          break;
-        case screenWidthVariants.modalId:
-          if (modalAnswer) {
-            handleScreenWidth();
+            handleUIScale();
           }
           break;
         case clearDiariesVariants.modalId:
@@ -120,10 +112,7 @@ function Profile() {
             }))
           }
         >{`테마 변경: ${userConfig.isDarkTheme ? "밝게" : "어둡게"}`}</Button>
-        <Button onClick={() => setModalId("fontSize")}>폰트 사이즈 변경</Button>
-        <Button onClick={() => setModalId("screenWidth")}>
-          화면 너비 변경
-        </Button>
+        <Button onClick={() => setModalId("UIScale")}>화면 확대 / 축소</Button>
       </UserConfig>
       <DangerZone className="section">
         <Button onClick={() => setModalId("clearDiaries")}>
