@@ -8,7 +8,8 @@ import Profile from "./Routes/Profile";
 import { ThemeProvider } from "styled-components";
 import { useRecoilValue } from "recoil";
 import { userConfigState } from "./States/atoms";
-import { darkTheme, lightTheme } from "./theme/theme";
+import useUserTheme from "./Hooks/useUserTheme";
+import { defaultUserState } from "./constants/defaults";
 import Read from "./Routes/Read";
 import { Helmet } from "react-helmet";
 import { IUserConfig } from "./types/types";
@@ -16,24 +17,11 @@ import EditNickname from "./Routes/edit/EditNickname";
 import { FE_BASE_URL } from "./constants/urls";
 
 function App() {
-  const { isDarkTheme, fontSize } =
-    useRecoilValue<IUserConfig>(userConfigState);
-
-  const theme = {
-    ...(isDarkTheme ? darkTheme : lightTheme),
-    fontSizes: {
-      xxl: fontSize * 2,
-      xl: fontSize * 1.4,
-      l: fontSize * 1.2,
-      m: fontSize * 1,
-      s: fontSize * 0.8,
-      xs: fontSize * 0.6,
-    },
-  };
-
+  const userConfig = useRecoilValue<IUserConfig>(userConfigState);
+  const theme = useUserTheme(userConfig ?? defaultUserState.userConfig);
   return (
-    <Router basename={`${FE_BASE_URL}`}>
-      <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
+      <Router basename={`${FE_BASE_URL}`}>
         <Helmet>
           <meta
             name="viewport"
@@ -51,8 +39,8 @@ function App() {
             <Route path="/edit/nickname" element={<EditNickname />} />
           </Routes>
         </Layout>
-      </ThemeProvider>
-    </Router>
+      </Router>
+    </ThemeProvider>
   );
 }
 
