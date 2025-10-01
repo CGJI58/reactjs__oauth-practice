@@ -149,11 +149,6 @@ const UserInfo = styled.div`
 const UserConfig = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  & > * {
-    &:hover {
-      background-color: ${(props) => props.theme.backgroundDarker};
-    }
-  }
 `;
 
 const DangerZone = styled.div`
@@ -161,7 +156,7 @@ const DangerZone = styled.div`
   grid-template-columns: 1fr 1fr;
   & > * {
     &:hover {
-      background-color: ${(props) => props.theme.highlightNegative};
+      color: ${(props) => props.theme.highlightNegative};
     }
   }
 `;
@@ -175,6 +170,9 @@ const Button = styled.div`
   border-radius: 10px;
   user-select: none;
   cursor: pointer;
+  &:hover {
+    background-color: ${(props) => props.theme.backgroundDarker};
+  }
 `;
 
 export default Profile;

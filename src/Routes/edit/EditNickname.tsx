@@ -14,7 +14,6 @@ const Wrapper = styled.div`
   flex-direction: column;
   margin-top: 30px;
   width: 100%;
-  max-width: 600px;
   align-self: center;
   justify-self: center;
   padding: 10px;
