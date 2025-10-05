@@ -5,7 +5,8 @@ import { useEffect, useRef, useState } from "react";
 import { debounce } from "lodash";
 import { createDiary } from "../util/diaryUtility";
 import { Subscription } from "react-hook-form/dist/utils/createSubject";
-import { IDiary } from "../types/types";
+import { IDiary, WriteOption } from "../types/types";
+import useTypeGuard from "../Hooks/useTypeGuard";
 import useDiary from "../Hooks/useDiary";
 import { defaultDiary } from "../constants/defaults";
 
@@ -16,7 +17,18 @@ function Write() {
   const location = useLocation();
   const originalDiary: IDiary = location.state?.diary ?? defaultDiary;
   const query = new URLSearchParams(location.search);
-  const mode = query.get("mode") as "create" | "modify";
+  const [mode, setMode] = useState<WriteOption>();
+  const { isWriteOption } = useTypeGuard();
+
+  useEffect(() => {
+    const rawMode = query.get("mode");
+    if (isWriteOption(rawMode)) {
+      setMode(rawMode);
+    } else {
+      setMode("create");
+    }
+  }, [mode]);
+
   const [diary, setDiary] = useState<IDiary>(originalDiary);
   const { register, setValue, handleSubmit, watch } = useForm<IDiaryForm>();
   const { saveDiary } = useDiary();

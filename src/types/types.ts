@@ -33,6 +33,8 @@ export interface IDiary {
 
 export type UIScaleOption = 0 | 1 | 2 | 3;
 
+export type WriteOption = "create" | "modify";
+
 export interface IGetUserByCookie {
   userData?: IUserState;
   status: number | null;
