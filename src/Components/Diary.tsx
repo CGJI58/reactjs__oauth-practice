@@ -38,7 +38,7 @@ function Diary({ diary, focus: [focused, setFocused] }: IDiaryComponent) {
   }, [focused]);
 
   return (
-    <Wrapper layout transition={{ duration: 0.1 }}>
+    <Wrapper>
       <StyledLink to="/read" state={{ diary }}>
         <DiaryHead>
           <Preview
@@ -78,14 +78,13 @@ function Diary({ diary, focus: [focused, setFocused] }: IDiaryComponent) {
   );
 }
 
-const Wrapper = styled(motion.div)`
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   box-shadow: ${(props) => props.theme.boxShadow};
   border-radius: 5px;
   user-select: none;
-  transition: 100ms ease-out 100ms;
   &:hover {
     background-color: ${(props) => props.theme.backgroundDarker};
   }
