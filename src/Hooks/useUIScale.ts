@@ -1,6 +1,13 @@
+import { useSetRecoilState } from "recoil";
+import { userConfigState } from "../States/atoms";
+import { IUserConfig, UIScaleOption } from "../types/types";
+
 function useUIScale() {
-  const handleUIScale = () => {
-    console.log("Run handleUIScale");
+  const setUserConfig = useSetRecoilState<IUserConfig>(userConfigState);
+  const handleUIScale = (rangeValue?: UIScaleOption) => {
+    if (rangeValue !== undefined) {
+      setUserConfig((prev) => ({ ...prev, UIScale: rangeValue }));
+    }
   };
 
   return { handleUIScale };
