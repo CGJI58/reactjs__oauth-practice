@@ -6,11 +6,12 @@ import useModal from "../Hooks/useModal";
 import Modal from "../Components/modal/ModalIndex";
 import useAuth from "../Hooks/useAuth";
 import { tempDiaryVariants } from "../constants/variants";
+import { defaultModalResponse } from "../constants/defaults";
 
 function Logout() {
   const synchronized = useRecoilValue<boolean>(userSynchronizedState);
   const { tempDiary, runSaveTempDiary, runRemoveTempDiary } = useTempDiary();
-  const { modalProps, modalAnswer, modalOn, createModal } = useModal();
+  const { modalProps, modalResponse, createModal } = useModal();
   const { logOut } = useAuth();
   const [allDone, setAllDone] = useState<boolean>(false);
 
@@ -25,19 +26,16 @@ function Logout() {
   }, [tempDiary]);
 
   useEffect(() => {
-    if (modalProps && modalAnswer !== null) {
-      const { modalId } = modalProps;
-      if (modalId === tempDiaryVariants.modalId) {
-        if (modalAnswer) {
-          runSaveTempDiary();
-        }
-        runRemoveTempDiary();
-        if (synchronized) {
-          setAllDone(true);
-        }
+    if (modalResponse !== defaultModalResponse) {
+      if (modalResponse.confirm) {
+        runSaveTempDiary();
+      }
+      runRemoveTempDiary();
+      if (synchronized) {
+        setAllDone(true);
       }
     }
-  }, [modalAnswer]);
+  }, [modalResponse]);
 
   useEffect(() => {
     if (synchronized && allDone) {
@@ -50,7 +48,7 @@ function Logout() {
   return (
     <>
       <span>로그아웃 하는 중 입니다...</span>
-      {modalOn && <Modal {...modalProps} />}
+      <Modal {...modalProps} />
     </>
   );
 }

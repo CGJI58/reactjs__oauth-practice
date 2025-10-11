@@ -1,4 +1,10 @@
-import { IDiary, IUserState } from "../types/types";
+import {
+  IDiary,
+  IModalProp,
+  IModalResponse,
+  IModalVariants,
+  IUserState,
+} from "../types/types";
 
 export const defaultDiary: IDiary = {
   id: "",
@@ -23,4 +29,21 @@ export const defaultUserState: IUserState = {
     isDarkTheme: false,
   },
   synchronized: false,
+};
+
+export const defaultModalVariants: IModalVariants = {
+  modalId: null,
+  modalOption: "YesNo",
+  sentence: "",
+};
+
+export const defaultModalResponse: IModalResponse = {
+  visible: false,
+  confirm: null,
+};
+
+export const defaultModalProps: IModalProp = {
+  ...defaultModalVariants,
+  ...defaultModalResponse,
+  onAnswer: () => {},
 };

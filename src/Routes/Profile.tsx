@@ -17,6 +17,7 @@ import {
   signOutVariants,
   tempDiaryVariants,
 } from "../constants/variants";
+import { defaultModalResponse } from "../constants/defaults";
 
 function Profile() {
   const { userInfo, userRecord, userConfig } =
@@ -27,7 +28,7 @@ function Profile() {
   const { clearDiaries } = useDiary();
   const { handleUIScale } = useUIScale();
   const { signOut } = useAuth();
-  const { modalProps, modalAnswer, modalOn, createModal } = useModal();
+  const { modalProps, modalResponse, createModal } = useModal();
   const [modalId, setModalId] = useState<ModalId>(null);
 
   useEffect(() => {
@@ -58,39 +59,32 @@ function Profile() {
   }, [modalId]);
 
   useEffect(() => {
-    if (modalProps && modalAnswer !== null) {
-      const { modalId } = modalProps;
-      switch (modalId) {
-        case tempDiaryVariants.modalId:
-          if (modalAnswer) {
+    if (modalResponse !== defaultModalResponse) {
+      if (modalResponse.confirm) {
+        switch (modalProps.modalId) {
+          case tempDiaryVariants.modalId:
             runSaveTempDiary();
-          }
-          runRemoveTempDiary();
-          break;
-        case nicknameVariants.modalId:
-          if (modalAnswer) {
+            break;
+          case nicknameVariants.modalId:
             nicknameForm();
-          }
-          break;
-        case UIScaleVariants.modalId:
-          if (modalAnswer) {
-            handleUIScale();
-          }
-          break;
-        case clearDiariesVariants.modalId:
-          if (modalAnswer) {
+            break;
+          case UIScaleVariants.modalId:
+            handleUIScale(modalResponse.rangeValue);
+            break;
+          case clearDiariesVariants.modalId:
             clearDiaries();
-          }
-          break;
-
-        case signOutVariants.modalId:
-          if (modalAnswer) {
+            break;
+          case signOutVariants.modalId:
             signOut();
-          }
-          break;
+            break;
+        }
       }
+      if (modalId === "tempDiary") {
+        runRemoveTempDiary();
+      }
+      setModalId(null);
     }
-  }, [modalAnswer]);
+  }, [modalResponse]);
 
   return (
     <Wrapper>
@@ -120,7 +114,7 @@ function Profile() {
         </Button>
         <Button onClick={() => setModalId("signOut")}>회원 탈퇴</Button>
       </DangerZone>
-      {modalOn && <Modal {...modalProps} />}
+      <Modal {...modalProps} />
     </Wrapper>
   );
 }

@@ -1,45 +1,53 @@
 import styled from "styled-components";
-import { IUserConfig, IModalProp } from "../../types/types";
+import {
+  IUserConfig,
+  OnAnswer,
+  RangeProps,
+  UIScaleOption,
+} from "../../types/types";
 import { useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { userConfigState } from "../../States/atoms";
+import useTypeGuard from "../../Hooks/useTypeGuard";
 
-function RangeModal({ setModalAnswer, modalId }: Partial<IModalProp>) {
-  const [userConfig, setUserConfig] =
-    useRecoilState<IUserConfig>(userConfigState);
-  const [fontSize, setFontSize] = useState<number>(userConfig.fontSize);
-  const onYes = () => {
-    if (setModalAnswer) {
-      if (modalId === "fontSize") {
-        setUserConfig((prev) => ({ ...prev, fontSize }));
-      }
-      if (modalId === "screenWidth") {
-        //화면너비 적용. 위와 동일 예정
-      }
-      setModalAnswer(true);
-    }
-  };
+interface IRangeModal {
+  onAnswer: OnAnswer;
+  rangeProps: RangeProps;
+}
+
+function RangeModal({ onAnswer, rangeProps }: IRangeModal) {
+  const { isUIScaleOption } = useTypeGuard();
+  const { UIScale } = useRecoilValue<IUserConfig>(userConfigState);
+  const [rangeValue, setRangeValue] = useState<UIScaleOption>(UIScale);
+
   return (
     <Choice>
-      {modalId === "fontSize" && (
-        <Panel>
-          <Example $fontSize={fontSize}>가나다 ABC abc 123</Example>
-          <RangeBar
-            type="range"
-            min={12}
-            max={24}
-            step={1}
-            value={fontSize}
-            onChange={(event) => setFontSize(Number(event.target.value))}
-          ></RangeBar>
-          <span>{`${fontSize}px`}</span>
-        </Panel>
-      )}
-      {modalId === "screenWidth" && (
-        <div>스마트폰 너비에 맞게 320 ~ 480 옵션 제공할 예정</div>
-      )}
+      <Notice>
+        {rangeProps?.indexArray[rangeValue] ?? "error: no rangeIndexArray"}
+      </Notice>
+      <Panel>
+        <RangeBar
+          type="range"
+          min={0}
+          max={rangeProps?.indexArray.length - 1}
+          step={1}
+          value={rangeValue}
+          onChange={(event) => {
+            const rawRangeValue = Number(event.target.value);
+            if (isUIScaleOption(rawRangeValue)) {
+              setRangeValue(rawRangeValue);
+            }
+          }}
+        ></RangeBar>
+      </Panel>
       <Confirm>
-        <Yes onClick={onYes}>확인</Yes>
+        <Yes
+          onClick={() =>
+            onAnswer({ visible: false, confirm: true, rangeValue })
+          }
+        >
+          확인
+        </Yes>
       </Confirm>
     </Choice>
   );
@@ -56,7 +64,10 @@ const Choice = styled.div`
   flex-direction: column;
   font-size: ${(props) => props.theme.fontSizes.l}px;
   font-weight: bold;
+  align-items: center;
 `;
+
+const Notice = styled.span``;
 
 const Panel = styled.div`
   display: flex;

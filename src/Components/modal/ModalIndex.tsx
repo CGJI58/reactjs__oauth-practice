@@ -4,8 +4,9 @@ import RangeModal from "./RangeModal";
 import { IModalProp } from "../../types/types";
 import { useEffect, useRef } from "react";
 
-function Modal(props: IModalProp) {
+function Modal(modalProps: IModalProp) {
   const popupRef = useRef<HTMLDivElement | null>(null);
+  const { sentence, modalOption, rangeProps, onAnswer, visible } = modalProps;
 
   const handleOutsideClick = (event: MouseEvent) => {
     if (
@@ -13,7 +14,7 @@ function Modal(props: IModalProp) {
       event.target instanceof Node &&
       !popupRef.current.contains(event.target)
     ) {
-      setModalAnswer(false);
+      onAnswer({ visible: false, confirm: false });
     }
   };
 
@@ -22,20 +23,20 @@ function Modal(props: IModalProp) {
     return () => window.removeEventListener("mousedown", handleOutsideClick);
   }, []);
 
-  const { sentence, modalOption, modalId, setModalAnswer } = props;
-  return (
+  return visible ? (
     <ModalBackground>
       <Wrapper ref={popupRef}>
         <Sentence>{sentence}</Sentence>
-        {modalOption === "YesNo" && (
-          <YesNoModal setModalAnswer={setModalAnswer} />
-        )}
+        {modalOption === "YesNo" && <YesNoModal onAnswer={onAnswer} />}
         {modalOption === "Range" && (
-          <RangeModal setModalAnswer={setModalAnswer} modalId={modalId} />
+          <RangeModal
+            onAnswer={onAnswer}
+            rangeProps={rangeProps ?? { indexArray: [] }}
+          />
         )}
       </Wrapper>
     </ModalBackground>
-  );
+  ) : null;
 }
 
 const ModalBackground = styled.div`

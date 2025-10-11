@@ -1,21 +1,17 @@
 import styled from "styled-components";
-import { IModalProp } from "../../types/types";
+import { OnAnswer } from "../../types/types";
 
-function YesNoModal({ setModalAnswer }: Partial<IModalProp>) {
-  const onYes = () => {
-    if (setModalAnswer) {
-      setModalAnswer(true);
-    }
-  };
-  const onNo = () => {
-    if (setModalAnswer) {
-      setModalAnswer(false);
-    }
-  };
+interface IYesNoModal {
+  onAnswer: OnAnswer;
+}
+
+function YesNoModal({ onAnswer }: IYesNoModal) {
   return (
     <Choice>
-      <Yes onClick={() => onYes()}>예</Yes>
-      <No onClick={() => onNo()}>아니오</No>
+      <Yes onClick={() => onAnswer({ visible: false, confirm: true })}>예</Yes>
+      <No onClick={() => onAnswer({ visible: false, confirm: false })}>
+        아니오
+      </No>
     </Choice>
   );
 }

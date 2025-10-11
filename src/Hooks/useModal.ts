@@ -1,36 +1,31 @@
 import { useEffect, useState } from "react";
-import { IModalProp, IModalVariants } from "../types/types";
+import { IModalProp, IModalResponse, IModalVariants } from "../types/types";
+import { defaultModalProps, defaultModalResponse } from "../constants/defaults";
 
 function useModal() {
-  const [modalAnswer, setModalAnswer] = useState<boolean | null>(null);
-  const [modalProps, setModalProps] = useState<IModalProp>({
-    modalId: null,
-    modalOption: "YesNo",
-    sentence: "",
-    setModalAnswer,
-  });
-  const [modalOn, setModalOn] = useState<boolean>(false);
+  const [modalResponse, setModalResponse] =
+    useState<IModalResponse>(defaultModalResponse);
+  const [modalProps, setModalProps] = useState<IModalProp>(defaultModalProps);
 
-  const createModal = (variants: IModalVariants) => {
-    setModalProps({ ...variants, setModalAnswer });
-    setModalOn(true);
+  const createModal = (modalVariants: IModalVariants) => {
+    const onAnswer = (response: IModalResponse) => {
+      setModalResponse(response);
+    };
+    setModalProps({
+      ...modalVariants,
+      ...modalResponse,
+      visible: true,
+      onAnswer,
+    });
   };
 
   useEffect(() => {
-    // modalAnswer 값 반환 후 초기화
-    if (!modalOn && modalProps) {
-      modalProps.setModalAnswer(null);
+    if (modalResponse !== defaultModalResponse) {
+      setModalProps((prev) => ({ ...prev, ...modalResponse }));
     }
-  }, [modalOn]);
+  }, [modalResponse]);
 
-  useEffect(() => {
-    // modalAnswer 초기화 후 modal 창 종료
-    if (modalAnswer !== null) {
-      setModalOn(false);
-    }
-  }, [modalAnswer]);
-
-  return { modalProps, modalAnswer, modalOn, createModal };
+  return { modalProps, modalResponse, createModal };
 }
 
 export default useModal;

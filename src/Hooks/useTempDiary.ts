@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
-import { IDiary } from "../types/types";
+import { IDiary, ITempDiary } from "../types/types";
 import { createDiary, getTempDiary } from "../util/diaryUtility";
-import { IDiaryForm } from "../Routes/Write";
 import useDiary from "./useDiary";
-
-type ITempDiary = IDiaryForm | null | undefined;
 
 function useTempDiary() {
   const [tempDiary, setTempDiary] = useState<ITempDiary>(undefined);

@@ -1,37 +1,44 @@
 import styled from "styled-components";
 import UserRecord from "../Components/UserRecord";
 import useTempDiary from "../Hooks/useTempDiary";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useModal from "../Hooks/useModal";
 import Modal from "../Components/modal/ModalIndex";
 import { tempDiaryVariants } from "../constants/variants";
+import { ModalId } from "../types/modal";
+import { defaultModalResponse } from "../constants/defaults";
 
 function Home() {
   const { tempDiary, runSaveTempDiary, runRemoveTempDiary } = useTempDiary();
-  const { modalProps, modalAnswer, modalOn, createModal } = useModal();
+  const { modalProps, modalResponse, createModal } = useModal();
+  const [modalId, setModalId] = useState<ModalId>(null);
 
   useEffect(() => {
     if (tempDiary) {
-      createModal(tempDiaryVariants);
+      setModalId("tempDiary");
     }
   }, [tempDiary]);
 
   useEffect(() => {
-    if (modalProps && modalAnswer !== null) {
-      const { modalId } = modalProps;
-      if (modalId === tempDiaryVariants.modalId) {
-        if (modalAnswer) {
-          runSaveTempDiary();
-        }
-        runRemoveTempDiary();
-      }
+    if (modalId === "tempDiary") {
+      createModal(tempDiaryVariants);
     }
-  }, [modalAnswer]);
+  }, [modalId]);
+
+  useEffect(() => {
+    if (modalResponse !== defaultModalResponse) {
+      if (modalResponse.confirm) {
+        runSaveTempDiary();
+      }
+      runRemoveTempDiary();
+      setModalId(null);
+    }
+  }, [modalResponse]);
 
   return (
     <Wrapper>
       <UserRecord />
-      {modalOn && <Modal {...modalProps} />}
+      <Modal {...modalProps} />
     </Wrapper>
   );
 }

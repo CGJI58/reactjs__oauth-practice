@@ -31,6 +31,10 @@ export interface IDiary {
   text: string;
 }
 
+export interface IDiaryForm extends Omit<IDiary, "date" | "id"> {}
+
+export type ITempDiary = IDiaryForm | null | undefined;
+
 export type UIScaleOption = 0 | 1 | 2 | 3;
 
 export type WriteOption = "create" | "modify";

@@ -5,12 +5,10 @@ import { useEffect, useRef, useState } from "react";
 import { debounce } from "lodash";
 import { createDiary } from "../util/diaryUtility";
 import { Subscription } from "react-hook-form/dist/utils/createSubject";
-import { IDiary, WriteOption } from "../types/types";
+import { IDiary, IDiaryForm, WriteOption } from "../types/types";
 import useTypeGuard from "../Hooks/useTypeGuard";
 import useDiary from "../Hooks/useDiary";
 import { defaultDiary } from "../constants/defaults";
-
-export interface IDiaryForm extends Omit<IDiary, "date" | "id"> {}
 
 function Write() {
   const navigate = useNavigate();
