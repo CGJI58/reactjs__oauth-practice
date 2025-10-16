@@ -16,14 +16,13 @@ function Logout() {
   const [allDone, setAllDone] = useState<boolean>(false);
 
   useEffect(() => {
-    if (tempDiary !== undefined) {
-      if (tempDiary) {
-        createModal(tempDiaryVariants);
-      } else {
-        setAllDone(true);
-      }
+    if (tempDiary.status === "loaded") {
+      createModal(tempDiaryVariants);
     }
-  }, [tempDiary]);
+    if (tempDiary.status === "empty") {
+      setAllDone(true);
+    }
+  }, [tempDiary.status]);
 
   useEffect(() => {
     if (modalResponse !== defaultModalResponse) {

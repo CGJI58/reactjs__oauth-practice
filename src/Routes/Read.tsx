@@ -23,10 +23,10 @@ function Read() {
   const [modalId, setModalId] = useState<ModalId>(null);
 
   useEffect(() => {
-    if (tempDiary) {
+    if (tempDiary.status === "loaded") {
       setModalId("tempDiary");
     }
-  }, [tempDiary]);
+  }, [tempDiary.status]);
 
   useEffect(() => {
     switch (modalId) {
@@ -88,6 +88,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-self: center;
   justify-self: center;
+  padding-bottom: 30px;
   gap: 30px;
   & > * {
     display: flex;

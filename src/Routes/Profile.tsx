@@ -32,10 +32,10 @@ function Profile() {
   const [modalId, setModalId] = useState<ModalId>(null);
 
   useEffect(() => {
-    if (tempDiary) {
+    if (tempDiary.status === "loaded") {
       setModalId("tempDiary");
     }
-  }, [tempDiary]);
+  }, [tempDiary.status]);
 
   useEffect(() => {
     switch (modalId) {

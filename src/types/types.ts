@@ -31,9 +31,17 @@ export interface IDiary {
   text: string;
 }
 
+export type IDiaryState = {
+  mode?: WriteOption;
+  status: "original" | "editing" | "ready";
+  diary: IDiary;
+};
+
 export interface IDiaryForm extends Omit<IDiary, "date" | "id"> {}
 
-export type ITempDiary = IDiaryForm | null | undefined;
+export type ITempDiary =
+  | { status: "loading" | "empty"; data: null }
+  | { status: "loaded"; data: IDiaryForm };
 
 export type UIScaleOption = 0 | 1 | 2 | 3;
 

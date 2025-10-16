@@ -14,10 +14,10 @@ function Home() {
   const [modalId, setModalId] = useState<ModalId>(null);
 
   useEffect(() => {
-    if (tempDiary) {
+    if (tempDiary.status === "loaded") {
       setModalId("tempDiary");
     }
-  }, [tempDiary]);
+  }, [tempDiary.status]);
 
   useEffect(() => {
     if (modalId === "tempDiary") {

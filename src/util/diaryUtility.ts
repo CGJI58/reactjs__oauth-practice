@@ -1,4 +1,4 @@
-import { IDiary, IDiaryForm } from "../types/types";
+import { IDiary, IDiaryForm, ITempDiary } from "../types/types";
 
 export const createDiary = ({ title, text }: IDiaryForm): IDiary => {
   const generateDate = (dateValue: number) => {
@@ -18,12 +18,16 @@ export const createDiary = ({ title, text }: IDiaryForm): IDiary => {
   return newDiary;
 };
 
-export const getTempDiary = () => {
+type GetTempDiary = () => ITempDiary;
+
+export const getTempDiary: GetTempDiary = () => {
   const tempDiaryString = localStorage.getItem("tempDiary");
 
   if (tempDiaryString) {
     const tempDiary: IDiaryForm = JSON.parse(tempDiaryString);
-    return tempDiary;
+    if (tempDiary.title !== "" && tempDiary.text !== "") {
+      return { data: tempDiary, status: "loaded" };
+    }
   }
-  return null;
+  return { data: null, status: "empty" };
 };
