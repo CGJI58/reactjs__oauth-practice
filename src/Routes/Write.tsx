@@ -133,7 +133,6 @@ function Write() {
 
 const Wrapper = styled.div`
   font-size: ${(props) => props.theme.fontSizes.m}px;
-  margin-top: 30px;
   width: 100%;
   align-self: center;
   justify-self: center;

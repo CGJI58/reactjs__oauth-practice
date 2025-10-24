@@ -6,6 +6,7 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { IUserState } from "../types/types";
 import { defaultUserState } from "../constants/defaults";
 import { userState, userSynchronizedState } from "../States/atoms";
+import useScrollProgress from "../Hooks/useScrollProgress";
 import ScrollTopBtn from "../Components/ScrollTopBtn";
 import { useLocation } from "react-router-dom";
 
@@ -15,14 +16,11 @@ interface LayoutProps {
 
 const Layout: FC<LayoutProps> = ({ children }) => {
   const user = useRecoilValue<IUserState>(userState);
-
   const { userConfig, userInfo, userRecord, synchronized } = user;
-
   const setSynchronized = useSetRecoilState<boolean>(userSynchronizedState);
-
   const { loadUser, saveUser } = useUser();
-
   const location = useLocation();
+  const { noScroll } = useScrollProgress();
 
   useEffect(() => {
     if (user === defaultUserState) {
@@ -56,7 +54,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
           프로젝트
         </span>
       )}
-      {userInfo.email !== "" ? <ScrollTopBtn /> : null}
+      {noScroll ? null : <ScrollTopBtn />}
     </Wrapper>
   );
 };
@@ -72,8 +70,7 @@ const Wrapper = styled.div`
     max-width: ${(props) => props.theme.UIWidth}px;
   }
   & > main {
-    padding-top: 50px;
-    padding: 50px 10px 0px 10px;
+    padding: 80px 10px 30px 10px;
     width: 100%;
     min-height: 100vh;
     position: relative;
