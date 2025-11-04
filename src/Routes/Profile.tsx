@@ -1,90 +1,24 @@
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { IUserConfig, IUserState, ModalId } from "../types/types";
+import { IUserConfig, IUserState } from "../types/types";
 import { userConfigState, userState } from "../States/atoms";
 import useTempDiary from "../Hooks/useTempDiary";
 import useModal from "../Hooks/useModal";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Modal from "../Components/modal/ModalIndex";
-import useAuth from "../Hooks/useAuth";
-import useDiary from "../Hooks/useDiary";
-import useNickname from "../Hooks/useNickname";
-import useUIScale from "../Hooks/useUIScale";
-import {
-  clearDiariesVariants,
-  UIScaleVariants,
-  nicknameVariants,
-  signOutVariants,
-  tempDiaryVariants,
-} from "../constants/variants";
-import { defaultModalResponse } from "../constants/defaults";
 
 function Profile() {
   const { userInfo, userRecord, userConfig } =
     useRecoilValue<IUserState>(userState);
   const setUserConfig = useSetRecoilState<IUserConfig>(userConfigState);
-  const { tempDiary, runSaveTempDiary, runRemoveTempDiary } = useTempDiary();
-  const { nicknameForm } = useNickname();
-  const { clearDiaries } = useDiary();
-  const { handleUIScale } = useUIScale();
-  const { signOut } = useAuth();
-  const { modalProps, modalResponse, createModal } = useModal();
-  const [modalId, setModalId] = useState<ModalId>(null);
+  const { tempDiary } = useTempDiary();
+  const { modalProps, modalAction } = useModal();
 
   useEffect(() => {
     if (tempDiary.status === "loaded") {
-      setModalId("tempDiary");
+      modalAction({ modalId: "tempDiary" });
     }
   }, [tempDiary.status]);
-
-  useEffect(() => {
-    switch (modalId) {
-      case "tempDiary":
-        createModal(tempDiaryVariants);
-        break;
-      case "nickname":
-        createModal(nicknameVariants);
-        break;
-      case "UIScale":
-        createModal(UIScaleVariants);
-        break;
-      case "clearDiaries":
-        createModal(clearDiariesVariants);
-        break;
-      case "signOut":
-        createModal(signOutVariants);
-        break;
-    }
-    setModalId(null);
-  }, [modalId]);
-
-  useEffect(() => {
-    if (modalResponse !== defaultModalResponse) {
-      if (modalResponse.confirm) {
-        switch (modalProps.modalId) {
-          case tempDiaryVariants.modalId:
-            runSaveTempDiary();
-            break;
-          case nicknameVariants.modalId:
-            nicknameForm();
-            break;
-          case UIScaleVariants.modalId:
-            handleUIScale(modalResponse.rangeValue);
-            break;
-          case clearDiariesVariants.modalId:
-            clearDiaries();
-            break;
-          case signOutVariants.modalId:
-            signOut();
-            break;
-        }
-      }
-      if (modalId === "tempDiary") {
-        runRemoveTempDiary();
-      }
-      setModalId(null);
-    }
-  }, [modalResponse]);
 
   return (
     <Wrapper>
@@ -97,7 +31,9 @@ function Profile() {
         <Value>{userRecord.diaries.length}</Value>
       </UserInfo>
       <UserConfig className="section">
-        <Button onClick={() => setModalId("nickname")}>닉네임 변경</Button>
+        <Button onClick={() => modalAction({ modalId: "nickname" })}>
+          닉네임 변경
+        </Button>
         <Button
           onClick={() =>
             setUserConfig((prev) => ({
@@ -106,13 +42,17 @@ function Profile() {
             }))
           }
         >{`테마 변경: ${userConfig.isDarkTheme ? "밝게" : "어둡게"}`}</Button>
-        <Button onClick={() => setModalId("UIScale")}>화면 확대 / 축소</Button>
+        <Button onClick={() => modalAction({ modalId: "UIScale" })}>
+          화면 확대 / 축소
+        </Button>
       </UserConfig>
       <DangerZone className="section">
-        <Button onClick={() => setModalId("clearDiaries")}>
+        <Button onClick={() => modalAction({ modalId: "clearDiaries" })}>
           모든 다이어리 삭제
         </Button>
-        <Button onClick={() => setModalId("signOut")}>회원 탈퇴</Button>
+        <Button onClick={() => modalAction({ modalId: "signOut" })}>
+          회원 탈퇴
+        </Button>
       </DangerZone>
       <Modal {...modalProps} />
     </Wrapper>

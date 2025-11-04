@@ -1,74 +1,37 @@
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Modal from "../Components/modal/ModalIndex";
-import { IDiary, ModalId } from "../types/types";
+import { IDiary } from "../types/types";
 import useModal from "../Hooks/useModal";
 import useTempDiary from "../Hooks/useTempDiary";
-import useDiary from "../Hooks/useDiary";
-import {
-  deleteDiaryVariants,
-  modifyDiaryVariants,
-  tempDiaryVariants,
-} from "../constants/variants";
-import { defaultModalResponse } from "../constants/defaults";
 
 function Read() {
   const location = useLocation();
   const diary: IDiary = location.state.diary;
   const { title, date, text, id: diaryId } = diary;
-  const { modalProps, modalResponse, createModal } = useModal();
-  const { tempDiary, runSaveTempDiary, runRemoveTempDiary } = useTempDiary();
-  const { deleteDiary, modifyDiary } = useDiary();
-  const [modalId, setModalId] = useState<ModalId>(null);
+  const { modalProps, modalAction } = useModal();
+  const { tempDiary } = useTempDiary();
 
   useEffect(() => {
     if (tempDiary.status === "loaded") {
-      setModalId("tempDiary");
+      modalAction({ modalId: "tempDiary" });
     }
   }, [tempDiary.status]);
-
-  useEffect(() => {
-    switch (modalId) {
-      case "tempDiary":
-        createModal(tempDiaryVariants);
-        break;
-      case "modifyDiary":
-        createModal(modifyDiaryVariants);
-        break;
-      case "deleteDiary":
-        createModal(deleteDiaryVariants);
-        break;
-    }
-  }, [modalId]);
-
-  useEffect(() => {
-    if (modalResponse !== defaultModalResponse) {
-      if (modalResponse.confirm) {
-        switch (modalProps.modalId) {
-          case tempDiaryVariants.modalId:
-            runSaveTempDiary();
-            break;
-          case modifyDiaryVariants.modalId:
-            modifyDiary(diary);
-            break;
-          case deleteDiaryVariants.modalId:
-            deleteDiary(diaryId);
-            break;
-        }
-      }
-      if (modalId === "tempDiary") {
-        runRemoveTempDiary();
-      }
-      setModalId(null);
-    }
-  }, [modalResponse]);
 
   return (
     <Wrapper>
       <Buttons>
-        <ModifyBtn onClick={() => setModalId("modifyDiary")}>수정</ModifyBtn>
-        <DeleteBtn onClick={() => setModalId("deleteDiary")}>삭제</DeleteBtn>
+        <ModifyBtn
+          onClick={() => modalAction({ modalId: "modifyDiary", diary })}
+        >
+          수정
+        </ModifyBtn>
+        <DeleteBtn
+          onClick={() => modalAction({ modalId: "deleteDiary", diaryId })}
+        >
+          삭제
+        </DeleteBtn>
       </Buttons>
       <Context>
         <DiaryTitle>{title}</DiaryTitle>

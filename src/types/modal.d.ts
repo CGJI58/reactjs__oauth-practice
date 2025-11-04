@@ -34,3 +34,9 @@ export interface IModalResponse {
 export interface IModalProp extends IModalVariants, IModalResponse {
   onAnswer: OnAnswer;
 }
+
+export interface IModalActionProps {
+  modalId: ModalId;
+  diaryId?: string;
+  diary?: IDiary;
+}
