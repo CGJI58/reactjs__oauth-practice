@@ -9,6 +9,7 @@ import { userState, userSynchronizedState } from "../States/atoms";
 import useScrollProgress from "../Hooks/useScrollProgress";
 import ScrollTopBtn from "../Components/ScrollTopBtn";
 import { useLocation } from "react-router-dom";
+import { isEqual } from "lodash";
 
 interface LayoutProps {
   children: ReactNode;
@@ -23,13 +24,13 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   const { noScroll } = useScrollProgress();
 
   useEffect(() => {
-    if (user === defaultUserState) {
+    if (isEqual(user, defaultUserState)) {
       loadUser();
     }
   }, [user]);
 
   useEffect(() => {
-    if (user !== defaultUserState) {
+    if (!isEqual(user, defaultUserState)) {
       setSynchronized(() => {
         console.log("변화 감지됨.");
         return false;
@@ -38,7 +39,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   }, [userConfig, userInfo, userRecord]);
 
   useEffect(() => {
-    if (!synchronized && user !== defaultUserState) {
+    if (!synchronized && !isEqual(user, defaultUserState)) {
       saveUser(user);
     }
   }, [synchronized]);
