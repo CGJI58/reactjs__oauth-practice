@@ -10,7 +10,7 @@ function useTempDiary() {
   const { saveDiary } = useDiary();
 
   const runSaveTempDiary = () => {
-    if (tempDiary.status === "loaded") {
+    if (tempDiary.data) {
       const newDiary = createDiary(tempDiary.data);
       setDiary(newDiary);
     }
@@ -22,8 +22,11 @@ function useTempDiary() {
   };
 
   useEffect(() => {
-    setTempDiary(() => getTempDiary());
-  }, []);
+    if (tempDiary.status === "loading") {
+      const newTempDiary = getTempDiary();
+      setTempDiary(newTempDiary);
+    }
+  }, [tempDiary]);
 
   useEffect(() => {
     if (diary) {

@@ -26,8 +26,8 @@ export const getTempDiary: GetTempDiary = () => {
   if (tempDiaryString) {
     const tempDiary: IDiaryForm = JSON.parse(tempDiaryString);
     if (tempDiary.title !== "" && tempDiary.text !== "") {
-      return { data: tempDiary, status: "loaded" };
+      return { status: "loaded", data: { ...tempDiary } };
     }
   }
-  return { data: null, status: "empty" };
+  return { status: "empty", data: null };
 };
