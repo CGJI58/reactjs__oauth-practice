@@ -1,26 +1,32 @@
 import styled from "styled-components";
 import YesNoModal from "./YesNoModal";
 import RangeModal from "./RangeModal";
-import { IModalProp } from "../../types/types";
+import { IModalProp, OnAnswer } from "../../types/types";
 import { useEffect, useRef } from "react";
 
 function Modal(modalProps: IModalProp) {
   const popupRef = useRef<HTMLDivElement | null>(null);
   const { sentence, modalOption, rangeProps, onAnswer, visible } = modalProps;
+  const onAnswerRef = useRef<OnAnswer>();
 
   const handleOutsideClick = (event: MouseEvent) => {
     if (
       popupRef.current &&
+      onAnswerRef.current &&
       event.target instanceof Node &&
       !popupRef.current.contains(event.target)
     ) {
-      onAnswer({ visible: false, confirm: false });
+      onAnswerRef.current({ visible: false, confirm: false });
     }
   };
 
   useEffect(() => {
+    onAnswerRef.current = onAnswer;
+  }, [onAnswer]);
+
+  useEffect(() => {
     document.addEventListener("mousedown", handleOutsideClick);
-    return () => window.removeEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
 
   return visible ? (

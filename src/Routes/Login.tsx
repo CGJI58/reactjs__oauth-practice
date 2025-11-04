@@ -25,7 +25,8 @@ function Login() {
   };
 
   useEffect(() => {
-    document.addEventListener("mousedown", handleOutsideClick, { once: true });
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
 
   useEffect(() => {
