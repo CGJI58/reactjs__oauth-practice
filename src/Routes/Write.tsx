@@ -15,6 +15,7 @@ function Write() {
   const navigate = useNavigate();
   const location = useLocation();
   const originalDiary: IDiary = location.state?.diary ?? defaultDiary;
+  const template: IDiaryForm = pick(originalDiary, ["title", "text"]);
   const query = new URLSearchParams(location.search);
   const { isWriteOption } = useTypeGuard();
   const { saveDiary } = useDiary();
@@ -23,7 +24,7 @@ function Write() {
   const subscriptionRef = useRef<Subscription | null>(null);
   const [diaryState, setDiaryState] = useState<IDiaryState>({
     mode: undefined,
-    status: "original",
+    ready: false,
     diary: originalDiary,
   });
 
@@ -32,24 +33,18 @@ function Write() {
     const rawMode = query.get("mode");
     if (isWriteOption(rawMode)) {
       setDiaryState((prev) => ({ ...prev, mode: rawMode }));
+      if (rawMode === "modify") {
+        const { title, text } = diaryState.diary;
+        setValue("title", title);
+        setValue("text", text);
+      }
     } else {
       console.error("Unauthorized access attempt detected.");
       navigate("/");
     }
   }, []);
 
-  useEffect(() => {
-    // if (mode === "modify")
-    // Load diary information into the form
-    if (diaryState.mode === "modify" && diaryState.status === "original") {
-      const { title, text } = diaryState.diary;
-      setValue("title", title);
-      setValue("text", text);
-    }
-  }, [diaryState.mode]);
-
   const tempSave = debounce((tempDiary: IDiaryForm) => {
-    const template: IDiaryForm = pick(originalDiary, ["title", "text"]);
     const okToSave: boolean = !(
       tempDiary.title === "" ||
       tempDiary.text === "" ||
@@ -91,26 +86,27 @@ function Write() {
     };
   }, [watch]);
 
-  const onValid = ({ title, text }: IDiaryForm) => {
-    tempSave.cancel();
+  const onValid = (validDiaryForm: IDiaryForm) => {
     subscriptionRef.current?.unsubscribe();
+    tempSave.cancel();
+    runRemoveTempDiary();
+    const { date, id } = originalDiary;
+    const createdDiary = createDiary(validDiaryForm);
+    const modifiedDiary = { ...createdDiary, date, id };
     if (diaryState.mode === "create") {
-      const createdDiary = createDiary({ title, text });
-      setDiaryState(() => ({ diary: createdDiary, status: "ready" }));
+      setDiaryState((prev) => ({ ...prev, diary: createdDiary, ready: true }));
     }
     if (diaryState.mode === "modify") {
-      const modifiedDiary = { ...diaryState.diary, title, text };
-      setDiaryState(() => ({ diary: modifiedDiary, status: "ready" }));
+      setDiaryState((prev) => ({ ...prev, diary: modifiedDiary, ready: true }));
     }
   };
 
   useEffect(() => {
-    if (diaryState.status === "ready") {
+    if (diaryState.ready) {
       saveDiary(diaryState.diary);
-      localStorage.removeItem("tempDiary");
       navigate("/");
     }
-  }, [diaryState]);
+  }, [diaryState.ready]);
 
   return (
     <Wrapper>

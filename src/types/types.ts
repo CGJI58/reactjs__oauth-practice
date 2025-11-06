@@ -33,7 +33,7 @@ export interface IDiary {
 
 export type IDiaryState = {
   mode?: WriteOption;
-  status: "original" | "editing" | "ready";
+  ready: boolean;
   diary: IDiary;
 };
 
