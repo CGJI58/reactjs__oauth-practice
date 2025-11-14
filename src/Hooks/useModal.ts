@@ -17,7 +17,7 @@ import {
   modifyDiaryVariants,
   nicknameVariants,
   signOutVariants,
-  tempDiaryVariants,
+  saveDiaryVariants,
   UIScaleVariants,
 } from "../constants/variants";
 import { isEqual } from "lodash";
@@ -54,8 +54,8 @@ function useModal() {
   useEffect(() => {
     if (modalActionProps.modalId !== null) {
       switch (modalActionProps.modalId) {
-        case "tempDiary":
-          createModal(tempDiaryVariants);
+        case "saveDiary":
+          createModal(saveDiaryVariants);
           break;
         case "nickname":
           createModal(nicknameVariants);
@@ -81,9 +81,10 @@ function useModal() {
 
   useEffect(() => {
     if (!isEqual(modalResponse, defaultModalResponse)) {
-      if (modalResponse.confirm) {
+      if (modalResponse.confirm === true) {
         switch (modalProps.modalId) {
-          case tempDiaryVariants.modalId:
+          case saveDiaryVariants.modalId:
+            console.log("saveDiary logic here.");
             runSaveTempDiary();
             break;
           case nicknameVariants.modalId:
@@ -110,9 +111,9 @@ function useModal() {
             break;
         }
       }
-      if (modalActionProps.modalId === "tempDiary") {
-        runRemoveTempDiary();
-      }
+      // if (modalActionProps.modalId === "saveDiary") {
+      //   runRemoveTempDiary();
+      // }
       setModalResponse(defaultModalResponse);
       setModalProps(defaultModalProps);
       setModalActionProps({ modalId: null });

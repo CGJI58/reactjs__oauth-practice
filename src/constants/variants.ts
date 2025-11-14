@@ -39,8 +39,8 @@ export const nicknameVariants: IModalVariants = {
   sentence: "닉네임을 변경하시겠습니까?",
 };
 
-export const tempDiaryVariants: IModalVariants = {
-  modalId: "tempDiary",
+export const saveDiaryVariants: IModalVariants = {
+  modalId: "saveDiary",
   modalOption: "YesNo",
-  sentence: "작성하던 내용을 저장하시겠습니까?",
+  sentence: "저장하시겠습니까?",
 };

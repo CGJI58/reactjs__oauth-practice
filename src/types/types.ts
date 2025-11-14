@@ -37,11 +37,9 @@ export type IDiaryState = {
   diary: IDiary;
 };
 
-export interface IDiaryForm extends Omit<IDiary, "date" | "id"> {}
-
-export type ITempDiary = {
-  status: "loading" | "empty" | "loaded";
-  data: null | IDiaryForm;
+export type ITempDiaryState = {
+  ready: boolean;
+  diary?: null | IDiary;
 };
 
 export type UIScaleOption = 0 | 1 | 2 | 3;

@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction } from "react";
 export type ModalId =
   | "modifyDiary"
   | "deleteDiary"
-  | "tempDiary"
+  | "saveDiary"
   | "nickname"
   | "clearDiaries"
   | "signOut"

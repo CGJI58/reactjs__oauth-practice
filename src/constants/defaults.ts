@@ -3,7 +3,7 @@ import {
   IModalProp,
   IModalResponse,
   IModalVariants,
-  ITempDiary,
+  ITempDiaryState,
   IUserState,
 } from "../types/types";
 
@@ -14,9 +14,8 @@ export const defaultDiary: IDiary = {
   text: "",
 };
 
-export const defaultTempDiary: ITempDiary = {
-  status: "loading",
-  data: null,
+export const defaultTempDiaryState: ITempDiaryState = {
+  ready: false,
 };
 
 export const defaultUserState: IUserState = {

@@ -2,10 +2,10 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { debounce, isEqual, pick } from "lodash";
-import { createDiary } from "../util/diaryUtility";
+import { debounce, isEqual } from "lodash";
+import { generateTimestamp } from "../util/diaryUtility";
 import { Subscription } from "react-hook-form/dist/utils/createSubject";
-import { IDiary, IDiaryForm, IDiaryState } from "../types/types";
+import { IDiary, IDiaryState } from "../types/types";
 import useTypeGuard from "../Hooks/useTypeGuard";
 import useDiary from "../Hooks/useDiary";
 import { defaultDiary } from "../constants/defaults";
@@ -15,12 +15,13 @@ function Write() {
   const navigate = useNavigate();
   const location = useLocation();
   const originalDiary: IDiary = location.state?.diary ?? defaultDiary;
-  const template: IDiaryForm = pick(originalDiary, ["title", "text"]);
   const query = new URLSearchParams(location.search);
   const { isWriteOption } = useTypeGuard();
   const { saveDiary } = useDiary();
   const { runRemoveTempDiary } = useTempDiary();
-  const { register, setValue, handleSubmit, watch } = useForm<IDiaryForm>();
+  const { register, setValue, handleSubmit, watch } = useForm<IDiary>({
+    defaultValues: defaultDiary,
+  });
   const subscriptionRef = useRef<Subscription | null>(null);
   const [diaryState, setDiaryState] = useState<IDiaryState>({
     mode: undefined,
@@ -34,9 +35,11 @@ function Write() {
     if (isWriteOption(rawMode)) {
       setDiaryState((prev) => ({ ...prev, mode: rawMode }));
       if (rawMode === "modify") {
-        const { title, text } = diaryState.diary;
+        const { title, text, date, id } = diaryState.diary;
         setValue("title", title);
         setValue("text", text);
+        setValue("date", date);
+        setValue("id", id);
       }
     } else {
       console.error("Unauthorized access attempt detected.");
@@ -44,11 +47,11 @@ function Write() {
     }
   }, []);
 
-  const tempSave = debounce((tempDiary: IDiaryForm) => {
+  const tempSave = debounce((tempDiary: IDiary) => {
     const okToSave: boolean = !(
       tempDiary.title === "" ||
       tempDiary.text === "" ||
-      isEqual(tempDiary, template)
+      isEqual(tempDiary, originalDiary)
     );
     if (okToSave) {
       localStorage.setItem("tempDiary", JSON.stringify(tempDiary));
@@ -62,9 +65,11 @@ function Write() {
     // Pause and show alert message
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       event.preventDefault();
+      console.log("handleBeforeUnload.");
     };
     const handleUnload = () => {
       localStorage.removeItem("tempDiary");
+      console.log("handleUnload.");
     };
 
     window.addEventListener("beforeunload", handleBeforeUnload);
@@ -77,28 +82,33 @@ function Write() {
 
   useEffect(() => {
     // Dynamically store validated Form data into Local Storage in real-time
-    subscriptionRef.current = watch(({ title = "", text = "" }) => {
-      tempSave({ title, text });
-    });
+    subscriptionRef.current = watch(
+      ({ title = "", text = "", date = "", id = "" }) => {
+        tempSave({ title, text, date, id });
+      }
+    );
+
     return () => {
       tempSave.cancel();
       subscriptionRef.current?.unsubscribe();
     };
   }, [watch]);
 
-  const onValid = (validDiaryForm: IDiaryForm) => {
+  const onValid = (validDiaryForm: IDiary) => {
     subscriptionRef.current?.unsubscribe();
     tempSave.cancel();
+    setDiaryState(({ mode }) => {
+      if (mode === "create") {
+        const newTimeStamp = generateTimestamp();
+        return {
+          diary: { ...validDiaryForm, ...newTimeStamp },
+          ready: true,
+        };
+      } else {
+        return { diary: { ...validDiaryForm }, ready: true };
+      }
+    });
     runRemoveTempDiary();
-    const { date, id } = originalDiary;
-    const createdDiary = createDiary(validDiaryForm);
-    const modifiedDiary = { ...createdDiary, date, id };
-    if (diaryState.mode === "create") {
-      setDiaryState((prev) => ({ ...prev, diary: createdDiary, ready: true }));
-    }
-    if (diaryState.mode === "modify") {
-      setDiaryState((prev) => ({ ...prev, diary: modifiedDiary, ready: true }));
-    }
   };
 
   useEffect(() => {
