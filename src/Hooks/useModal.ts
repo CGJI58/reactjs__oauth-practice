@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   IModalActionProps,
-  IModalProp,
+  IModalProps,
   IModalResponse,
   IModalVariants,
 } from "../types/types";
@@ -33,7 +33,7 @@ function useModal() {
   });
   const [modalResponse, setModalResponse] =
     useState<IModalResponse>(defaultModalResponse);
-  const [modalProps, setModalProps] = useState<IModalProp>(defaultModalProps);
+  const [modalProps, setModalProps] = useState<IModalProps>(defaultModalProps);
 
   const modalAction = (props: IModalActionProps) => {
     setModalActionProps(props);

@@ -31,7 +31,7 @@ export interface IModalResponse {
   rangeValue?: UIScaleOption;
 }
 
-export interface IModalProp extends IModalVariants, IModalResponse {
+export interface IModalProps extends IModalVariants, IModalResponse {
   onAnswer: OnAnswer;
 }
 

@@ -1,6 +1,6 @@
 import {
   IDiary,
-  IModalProp,
+  IModalProps,
   IModalResponse,
   IModalVariants,
   ITempDiaryState,
@@ -47,7 +47,7 @@ export const defaultModalResponse: IModalResponse = {
   confirm: null,
 };
 
-export const defaultModalProps: IModalProp = {
+export const defaultModalProps: IModalProps = {
   ...defaultModalVariants,
   ...defaultModalResponse,
   onAnswer: () => {},

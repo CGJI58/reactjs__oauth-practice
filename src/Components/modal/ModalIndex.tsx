@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import YesNoModal from "./YesNoModal";
 import RangeModal from "./RangeModal";
-import { IModalProp, OnAnswer } from "../../types/types";
+import { IModalProps, OnAnswer } from "../../types/types";
 import { useEffect, useRef } from "react";
 
-function Modal(modalProps: IModalProp) {
+function Modal(modalProps: IModalProps) {
   const popupRef = useRef<HTMLDivElement | null>(null);
   const { sentence, modalOption, rangeProps, onAnswer, visible } = modalProps;
   const onAnswerRef = useRef<OnAnswer>();

@@ -64,7 +64,7 @@ function UserInfoBtn() {
   );
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.header`
   z-index: 99;
   position: fixed;
   top: 0;
