@@ -1,23 +1,13 @@
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { useEffect } from "react";
-import Modal from "../Components/modal/ModalIndex";
 import { IDiary } from "../types/types";
-import useModal from "../Hooks/useModal";
-import useTempDiary from "../Hooks/useTempDiary";
+import useModalContext from "../Hooks/useModalContext";
 
 function Read() {
   const location = useLocation();
   const diary: IDiary = location.state.diary;
   const { title, date, text, id: diaryId } = diary;
-  const { modalProps, modalAction } = useModal();
-  const { tempDiary } = useTempDiary();
-
-  useEffect(() => {
-    if (tempDiary.status === "loaded") {
-      modalAction({ modalId: "tempDiary" });
-    }
-  }, [tempDiary.status]);
+  const { modalAction } = useModalContext();
 
   return (
     <Wrapper>
@@ -38,7 +28,6 @@ function Read() {
         <DiaryDate>{date}</DiaryDate>
         <DiaryText>{text}</DiaryText>
       </Context>
-      <Modal {...modalProps} />
     </Wrapper>
   );
 }

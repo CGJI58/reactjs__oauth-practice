@@ -3,9 +3,9 @@ import { IUserConfig } from "../types/types";
 import { darkTheme, lightTheme } from "../theme/theme";
 
 function useUserTheme({ isDarkTheme, UIScale }: IUserConfig) {
-  const baseFontSize = 14 + UIScale * 2;
-  const UIWidth = 500 + UIScale * 100;
   return useMemo(() => {
+    const baseFontSize = 14 + UIScale * 2;
+    const UIWidth = 500 + UIScale * 100;
     return {
       ...(isDarkTheme ? darkTheme : lightTheme),
       fontSizes: {

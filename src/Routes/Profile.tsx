@@ -2,23 +2,13 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { IUserConfig, IUserState } from "../types/types";
 import { userConfigState, userState } from "../States/atoms";
-import useTempDiary from "../Hooks/useTempDiary";
-import useModal from "../Hooks/useModal";
-import { useEffect } from "react";
-import Modal from "../Components/modal/ModalIndex";
+import useModalContext from "../Hooks/useModalContext";
 
 function Profile() {
   const { userInfo, userRecord, userConfig } =
     useRecoilValue<IUserState>(userState);
   const setUserConfig = useSetRecoilState<IUserConfig>(userConfigState);
-  const { tempDiary } = useTempDiary();
-  const { modalProps, modalAction } = useModal();
-
-  useEffect(() => {
-    if (tempDiary.status === "loaded") {
-      modalAction({ modalId: "tempDiary" });
-    }
-  }, [tempDiary.status]);
+  const { modalAction } = useModalContext();
 
   return (
     <Wrapper>
@@ -54,7 +44,6 @@ function Profile() {
           회원 탈퇴
         </Button>
       </DangerZone>
-      <Modal {...modalProps} />
     </Wrapper>
   );
 }
