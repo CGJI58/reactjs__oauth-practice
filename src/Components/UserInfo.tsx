@@ -10,12 +10,14 @@ import styled from "styled-components";
 import { useRecoilState } from "recoil";
 import { userConfigState } from "../States/atoms";
 import { IUserConfig } from "../types/types";
+import useModalContext from "../Hooks/useModalContext";
 
 function UserInfo() {
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [{ isDarkTheme }, setUserConfig] =
     useRecoilState<IUserConfig>(userConfigState);
+  const { modalAction } = useModalContext();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleMouseLeave = () => {
@@ -56,7 +58,10 @@ function UserInfo() {
               <FontAwesomeIcon className="dropItemBtn" icon={faToggleOff} />
             )}
           </DropItem>
-          <DropItem className="dropItemBtn" onClick={() => navigate("/logout")}>
+          <DropItem
+            className="dropItemBtn"
+            onClick={() => modalAction({ modalId: "logOut" })}
+          >
             Log out
           </DropItem>
         </DropList>

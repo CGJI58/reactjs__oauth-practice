@@ -75,8 +75,8 @@ const Layout: FC<LayoutProps> = ({ children }) => {
 
   return (
     <Wrapper>
-      <Header />
       <ModalContext.Provider value={contextValue}>
+        <Header />
         {/* 
         여기 개선 필요.
         현재 로직 상에서는 사용자 정보가 있을 때도 /login 라우트 접근이 가능한데

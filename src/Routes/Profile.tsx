@@ -35,6 +35,9 @@ function Profile() {
         <Button onClick={() => modalAction({ modalId: "UIScale" })}>
           화면 확대 / 축소
         </Button>
+        <Button onClick={() => modalAction({ modalId: "logOut" })}>
+          로그 아웃
+        </Button>
       </UserConfig>
       <DangerZone className="section">
         <Button onClick={() => modalAction({ modalId: "clearDiaries" })}>

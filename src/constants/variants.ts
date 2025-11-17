@@ -18,6 +18,12 @@ export const clearDiariesVariants: IModalVariants = {
   sentence: "모든 다이어리를 삭제하시겠습니까?",
 };
 
+export const logOutVariants: IModalVariants = {
+  modalId: "logOut",
+  modalOption: "YesNo",
+  sentence: "로그아웃 하시겠습니까?",
+};
+
 export const signOutVariants: IModalVariants = {
   modalId: "signOut",
   modalOption: "YesNo",

@@ -19,10 +19,13 @@ import {
   signOutVariants,
   saveDiaryVariants,
   UIScaleVariants,
+  logOutVariants,
 } from "../constants/variants";
 import { isEqual } from "lodash";
+import { useNavigate } from "react-router-dom";
 
 function useModal() {
+  const navigate = useNavigate();
   const { runSaveTempDiary, runRemoveTempDiary } = useTempDiary();
   const { nicknameForm } = useNickname();
   const { handleUIScale } = useUIScale();
@@ -63,6 +66,9 @@ function useModal() {
         case "UIScale":
           createModal(UIScaleVariants);
           break;
+        case "logOut":
+          createModal(logOutVariants);
+          break;
         case "clearDiaries":
           createModal(clearDiariesVariants);
           break;
@@ -92,6 +98,9 @@ function useModal() {
             break;
           case UIScaleVariants.modalId:
             handleUIScale(modalResponse.rangeValue);
+            break;
+          case logOutVariants.modalId:
+            navigate("/logout");
             break;
           case clearDiariesVariants.modalId:
             clearDiaries();

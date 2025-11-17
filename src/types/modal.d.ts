@@ -6,6 +6,7 @@ export type ModalId =
   | "saveDiary"
   | "nickname"
   | "clearDiaries"
+  | "logOut"
   | "signOut"
   | "UIScale"
   | null;
