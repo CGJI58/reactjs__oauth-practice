@@ -18,7 +18,7 @@ export const generateTimestamp: GenerateTimestamp = () => {
 type GetTempDiary = () => ITempDiaryState;
 
 export const getTempDiary: GetTempDiary = () => {
-  const rawTempDiary = localStorage.getItem("tempDiary");
+  const rawTempDiary = sessionStorage.getItem("tempDiary");
 
   if (rawTempDiary) {
     const tempDiary: IDiary = JSON.parse(rawTempDiary);

@@ -54,7 +54,7 @@ function Write() {
       isEqual(tempDiary, originalDiary)
     );
     if (okToSave) {
-      localStorage.setItem("tempDiary", JSON.stringify(tempDiary));
+      sessionStorage.setItem("tempDiary", JSON.stringify(tempDiary));
     } else {
       runRemoveTempDiary();
     }
@@ -64,11 +64,13 @@ function Write() {
     // if (user close or refresh page)
     // Pause and show alert message
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      //새로고침
       event.preventDefault();
       console.log("handleBeforeUnload.");
     };
     const handleUnload = () => {
-      localStorage.removeItem("tempDiary");
+      //페이지 나감
+      runRemoveTempDiary();
       console.log("handleUnload.");
     };
 

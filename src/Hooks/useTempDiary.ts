@@ -20,7 +20,7 @@ function useTempDiary() {
   };
 
   const runRemoveTempDiary = () => {
-    localStorage.removeItem("tempDiary");
+    sessionStorage.removeItem("tempDiary");
     setTempDiary(defaultTempDiaryState);
   };
 

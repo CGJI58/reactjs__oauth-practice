@@ -35,20 +35,21 @@ const Layout: FC<LayoutProps> = ({ children }) => {
    * userState 에서 정보 가져오는것들 싹 다 useMemo [user] 하는게 좋을지 검토
    *
    * useCallback:
-   * 모달 창 띄우는 함수들, 로컬스토리지 가져오는 함수 같은 것들 검토
+   * 모달 창 띄우는 함수들, 세션스토리지 가져오는 함수 같은 것들 검토
    */
   useEffect(() => {
     if (location.pathname === "/write") {
       setTempDiaryFlag(true);
-    }
-    if (location.pathname !== "/write" && tempDiaryFlag) {
-      // 이 if문에서 추가적으로 검사해야 할 조건:
-      // form을 제출하는 것이 아닌 다른 방법으로 write를 빠져나왔는지 ( not 'form 제출')
-      console.log("tempDiary trigger");
+    } else if (tempDiaryFlag) {
+      //세션 스토리지 가져와서 아래 if문의 조건에 넣어 검사.
+      if (true) {
+        //세션 스토리지에 'tempDiary'가 존재하는가?
+        modalAction({ modalId: "saveDiary" });
+      }
       setTempDiaryFlag(false);
     }
-    // 로컬스토리지 확인: tempDiary 존재  --- 없으면 바로 exit
-    // 임시저장모달 트리거 발동  --- 아니오는 로컬스토리지 비우고 exit
+    // 세션스토리지 확인: tempDiary 존재  --- 없으면 폼이 제출된 것이니 바로 exit
+    // 임시저장모달 트리거 발동  --- 아니오는 세션스토리지 비우고 exit
     // onValid(tempDiary) 실행
   }, [location]);
 
