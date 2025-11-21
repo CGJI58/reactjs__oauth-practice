@@ -23,7 +23,7 @@ export const getTempDiary: GetTempDiary = () => {
   if (rawTempDiary) {
     const tempDiary: IDiary = JSON.parse(rawTempDiary);
     // 이후 타입가드 검사로직 추가 할 것
-    return { ready: true, data: { ...tempDiary } };
+    return { ready: true, diary: { ...tempDiary } };
   }
-  return { ready: true, data: null };
+  return { ready: true, diary: null };
 };

@@ -6,7 +6,6 @@ import {
   IModalVariants,
 } from "../types/types";
 import { defaultModalProps, defaultModalResponse } from "../constants/defaults";
-import useTempDiary from "./useTempDiary";
 import useNickname from "./useNickname";
 import useUIScale from "./useUIScale";
 import useDiary from "./useDiary";
@@ -26,7 +25,7 @@ import { useNavigate } from "react-router-dom";
 
 function useModal() {
   const navigate = useNavigate();
-  const { runSaveTempDiary, runRemoveTempDiary } = useTempDiary();
+  const { saveDiary, removeTempDiary } = useDiary();
   const { nicknameForm } = useNickname();
   const { handleUIScale } = useUIScale();
   const { clearDiaries, modifyDiary, deleteDiary } = useDiary();
@@ -93,8 +92,9 @@ function useModal() {
       if (modalResponse.confirm === true) {
         switch (modalProps.modalId) {
           case saveDiaryVariants.modalId:
-            console.log("saveDiary logic here.");
-            runSaveTempDiary();
+            if (modalActionProps.diary) {
+              saveDiary(modalActionProps.diary);
+            }
             break;
           case nicknameVariants.modalId:
             nicknameForm();
@@ -122,10 +122,9 @@ function useModal() {
             }
             break;
         }
+      } else if (modalActionProps.modalId === "saveDiary") {
+        removeTempDiary();
       }
-      // if (modalActionProps.modalId === "saveDiary") {
-      //   runRemoveTempDiary();
-      // }
       setModalResponse(defaultModalResponse);
       setModalProps(defaultModalProps);
       setModalActionProps({ modalId: null });

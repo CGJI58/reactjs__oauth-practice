@@ -3,13 +3,11 @@ import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { debounce, isEqual } from "lodash";
-import { generateTimestamp } from "../util/diaryUtility";
 import { Subscription } from "react-hook-form/dist/utils/createSubject";
 import { IDiary, IDiaryState } from "../types/types";
 import useTypeGuard from "../Hooks/useTypeGuard";
 import useDiary from "../Hooks/useDiary";
 import { defaultDiary } from "../constants/defaults";
-import useTempDiary from "../Hooks/useTempDiary";
 
 function Write() {
   const navigate = useNavigate();
@@ -17,8 +15,7 @@ function Write() {
   const originalDiary: IDiary = location.state?.diary ?? defaultDiary;
   const query = new URLSearchParams(location.search);
   const { isWriteOption } = useTypeGuard();
-  const { saveDiary } = useDiary();
-  const { runRemoveTempDiary } = useTempDiary();
+  const { removeTempDiary, saveDiary } = useDiary();
   const { register, setValue, handleSubmit, watch } = useForm<IDiary>({
     defaultValues: defaultDiary,
   });
@@ -56,7 +53,7 @@ function Write() {
     if (okToSave) {
       sessionStorage.setItem("tempDiary", JSON.stringify(tempDiary));
     } else {
-      runRemoveTempDiary();
+      removeTempDiary();
     }
   }, 500);
 
@@ -70,7 +67,7 @@ function Write() {
     };
     const handleUnload = () => {
       //페이지 나감
-      runRemoveTempDiary();
+      removeTempDiary();
       console.log("handleUnload.");
     };
 
@@ -99,24 +96,13 @@ function Write() {
   const onValid = (validDiaryForm: IDiary) => {
     subscriptionRef.current?.unsubscribe();
     tempSave.cancel();
-    setDiaryState(({ mode }) => {
-      if (mode === "create") {
-        const newTimeStamp = generateTimestamp();
-        return {
-          diary: { ...validDiaryForm, ...newTimeStamp },
-          ready: true,
-        };
-      } else {
-        return { diary: { ...validDiaryForm }, ready: true };
-      }
-    });
-    runRemoveTempDiary();
+    setDiaryState(() => ({ diary: { ...validDiaryForm }, ready: true }));
+    removeTempDiary();
   };
 
   useEffect(() => {
     if (diaryState.ready) {
       saveDiary(diaryState.diary);
-      navigate("/");
     }
   }, [diaryState.ready]);
 

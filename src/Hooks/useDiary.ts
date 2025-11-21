@@ -2,23 +2,39 @@ import { useSetRecoilState } from "recoil";
 import { userRecordState } from "../States/atoms";
 import { IDiary, IUserRecord } from "../types/types";
 import { useNavigate } from "react-router-dom";
+import { generateTimestamp } from "../util/diaryUtility";
+import { useEffect, useState } from "react";
+import { defaultDiary } from "../constants/defaults";
+import { isEqual } from "lodash";
 
 function useDiary() {
   const setUserRecord = useSetRecoilState<IUserRecord>(userRecordState);
   const navigate = useNavigate();
+  const [diary, setDiary] = useState<IDiary>(defaultDiary);
 
-  const saveDiary = (newDiary: IDiary) => {
-    if (newDiary) {
+  useEffect(() => {
+    if (!isEqual(diary, defaultDiary)) {
       setUserRecord((prev) => {
         const originalDiaries = prev.diaries;
         const modifiedDiaries = originalDiaries.filter(
-          (diary) => diary.id !== newDiary.id
+          (item) => item.id !== diary.id
         );
         const newUserRecord: IUserRecord = {
-          diaries: [newDiary, ...modifiedDiaries],
+          diaries: [diary, ...modifiedDiaries],
         };
         return newUserRecord;
       });
+      removeTempDiary();
+      navigate("/");
+    }
+  }, [diary]);
+
+  const saveDiary = (newDiary: IDiary) => {
+    if (newDiary.date === "" || newDiary.id === "") {
+      const newTimeStamp = generateTimestamp();
+      setDiary(() => ({ ...newDiary, ...newTimeStamp }));
+    } else {
+      setDiary(() => newDiary);
     }
   };
 
@@ -40,11 +56,16 @@ function useDiary() {
     setUserRecord((prev) => ({ ...prev, diaries: [] }));
   };
 
+  const removeTempDiary = () => {
+    sessionStorage.removeItem("tempDiary");
+  };
+
   return {
     saveDiary,
     clearDiaries,
     deleteDiary,
     modifyDiary,
+    removeTempDiary,
   };
 }
 

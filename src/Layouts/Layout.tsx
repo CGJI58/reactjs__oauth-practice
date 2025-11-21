@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect, useMemo, useState } from "react";
+import { FC, ReactNode, useEffect, useMemo } from "react";
 import Header from "../Components/Header";
 import styled from "styled-components";
 import useUser from "../Hooks/useUser";
@@ -13,6 +13,7 @@ import { isEqual } from "lodash";
 import useModal from "../Hooks/useModal";
 import { ModalContext } from "../Contexts/ModalContext";
 import Modal from "../Components/modal/ModalIndex";
+import { getTempDiary } from "../util/diaryUtility";
 
 interface LayoutProps {
   children: ReactNode;
@@ -20,13 +21,13 @@ interface LayoutProps {
 
 const Layout: FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
-  const [tempDiaryFlag, setTempDiaryFlag] = useState<boolean>(false);
   const user = useRecoilValue<IUserState>(userState);
   const { userConfig, userInfo, userRecord, synchronized } = user;
   const setSynchronized = useSetRecoilState<boolean>(userSynchronizedState);
   const { loadUser, saveUser } = useUser();
   const { modalProps, modalAction } = useModal();
   const { noScroll } = useScrollProgress();
+  const { ready, diary } = getTempDiary();
   const contextValue = useMemo(() => ({ modalAction }), [modalAction]);
 
   // 이후에 useMemo, useCallback 필요한 부분들 다 찾아서 적용할 예정
@@ -35,23 +36,15 @@ const Layout: FC<LayoutProps> = ({ children }) => {
    * userState 에서 정보 가져오는것들 싹 다 useMemo [user] 하는게 좋을지 검토
    *
    * useCallback:
-   * 모달 창 띄우는 함수들, 세션스토리지 가져오는 함수 같은 것들 검토
+   * 모달 관련해서 다양한 컴포넌트들에서 호출하는, 특히 매개변수 있는 함수들 검토
    */
   useEffect(() => {
-    if (location.pathname === "/write") {
-      setTempDiaryFlag(true);
-    } else if (tempDiaryFlag) {
-      //세션 스토리지 가져와서 아래 if문의 조건에 넣어 검사.
-      if (true) {
-        //세션 스토리지에 'tempDiary'가 존재하는가?
-        modalAction({ modalId: "saveDiary" });
+    if (location.pathname !== "/write" && ready) {
+      if (diary !== null) {
+        modalAction({ modalId: "saveDiary", diary });
       }
-      setTempDiaryFlag(false);
     }
-    // 세션스토리지 확인: tempDiary 존재  --- 없으면 폼이 제출된 것이니 바로 exit
-    // 임시저장모달 트리거 발동  --- 아니오는 세션스토리지 비우고 exit
-    // onValid(tempDiary) 실행
-  }, [location]);
+  }, [location.pathname, ready]);
 
   useEffect(() => {
     if (isEqual(user, defaultUserState)) {
