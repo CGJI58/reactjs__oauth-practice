@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   IModalActionProps,
   IModalProps,
@@ -38,9 +38,12 @@ function useModal() {
     useState<IModalResponse>(defaultModalResponse);
   const [modalProps, setModalProps] = useState<IModalProps>(defaultModalProps);
 
-  const modalAction = (props: IModalActionProps) => {
-    setModalActionProps(props);
-  };
+  const modalAction = useCallback(
+    (props: IModalActionProps) => {
+      setModalActionProps(props);
+    },
+    [setModalActionProps]
+  );
 
   const createModal = (modalVariants: IModalVariants) => {
     const onAnswer = (response: IModalResponse) => {
