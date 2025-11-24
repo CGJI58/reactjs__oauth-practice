@@ -25,10 +25,13 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   const { userConfig, userInfo, userRecord, synchronized } = user;
   const setSynchronized = useSetRecoilState<boolean>(userSynchronizedState);
   const { loadUser, saveUser } = useUser();
-  const { modalProps, modalAction } = useModal();
+  const { modalProps, modalAction, modalResponse } = useModal();
   const { noScroll } = useScrollProgress();
   const { ready, diary } = getTempDiary();
-  const contextValue = useMemo(() => ({ modalAction }), [modalAction]);
+  const contextValue = useMemo(
+    () => ({ modalAction, modalResponse }),
+    [modalAction, modalResponse]
+  );
 
   // 이후에 useMemo, useCallback 필요한 부분들 다 찾아서 적용할 예정
   /**

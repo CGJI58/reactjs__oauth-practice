@@ -1,8 +1,4 @@
 import { createContext } from "react";
-import { IModalActionProps } from "../types/modal";
-
-interface IModalContext {
-  modalAction: (props: IModalActionProps) => void;
-}
+import { IModalContext } from "../types/modal";
 
 export const ModalContext = createContext<IModalContext | null>(null);

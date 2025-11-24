@@ -41,3 +41,8 @@ export interface IModalActionProps {
   diaryId?: string;
   diary?: IDiary;
 }
+
+export interface IModalContext {
+  modalAction: (props: IModalActionProps) => void;
+  modalResponse: IModalResponse;
+}
