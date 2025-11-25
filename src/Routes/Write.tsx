@@ -59,7 +59,7 @@ function Write() {
     } else {
       removeTempDiary();
     }
-  }, 500);
+  }, 200);
 
   useEffect(() => {
     // if (user close or refresh page)
@@ -98,6 +98,7 @@ function Write() {
   }, [watch]);
 
   const onValid = (validDiaryForm: IDiary) => {
+    tempSave.cancel();
     setDiaryState(() => ({ diary: { ...validDiaryForm }, ready: true }));
   };
 
