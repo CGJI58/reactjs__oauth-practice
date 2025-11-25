@@ -1,28 +1,26 @@
-배포 버전: v3
+배포 버전: v4
 
-코드 정리 및 최적화:  
-custom hook 으로 각종 FE함수, BE(api)함수, recoilState 최적화.  
-폴더 구조 및 파일명 표준화하여 가독성 향상.
+Nickname:
+중복 검사 기능 추가.
 
-Write:  
-작업 내용 실시간 추적하여 로컬스토리지에 저장하고, form을 제출하지 않고 페이지를 나갈 시 '임시저장' 할 수 있도록 하는 기능 추가.
+Modal:
+모달 호출 및 실행 로직 개선.
+컴포넌트 내 로직과 모달 내 로직 간의 동기성 이슈 해결.
+백그라운드 클릭 시 닫기 기능 추가.
+modalOption 추가. 선택지 형태에 따라 YesNo 모달, Range 모달로 구분.
+logOut, Write 모달 추가.
 
-Diaries:  
-동시에 하나의 다이어리만 미리보기를 열 수 있게 함.
+userConfig:
+사용자가 UI scale 을 4 단계로 조절할 수 있도록 하는 기능 추가.
 
-Diary:  
-미리보기-간략히 / 자세히 전환 기능 추가.  
-Read 페이지로 이동하여 볼 수도 있음.
+useTypeGuard:
+타입 안정성 강화를 위해 타입 검사 로직을 담당하는 훅 추가.
 
-Theme:  
-themeProvider를 사용하여 통합관리.  
-dark mode / light mode 구분하여 관리.
+Diary & tempDiary:
+tempDiary 사용 목적과 조건을 고려하여 localStorage 대신 sessionStorage를 사용하도록 변경.
+diary 의 상태 관리성 개선.
+저장 로직 개선.
 
-Header:  
-home / write / user 로 구분하고, user 에서 droplist를 열어 userinfo / dark mode / log out 에 접근할 수 있도록 하였음.
-
-UI/UX:  
-windows.alert 가 사용된 부분들에서 alert 창들을 모두 Modal 로 대체함.
-
-Api:  
-회원탈퇴 api 추가.
+기타:
+컴포넌트, 라우트 파일명 표준화.
+각종 eventListener 메모리 누수 이슈 해결.
