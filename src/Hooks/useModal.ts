@@ -6,10 +6,6 @@ import {
   IModalVariants,
 } from "../types/types";
 import { defaultModalProps, defaultModalResponse } from "../constants/defaults";
-import useNickname from "./useNickname";
-import useUIScale from "./useUIScale";
-import useDiary from "./useDiary";
-import useAuth from "./useAuth";
 import {
   clearDiariesVariants,
   deleteDiaryVariants,
@@ -20,16 +16,8 @@ import {
   UIScaleVariants,
   logOutVariants,
 } from "../constants/variants";
-import { isEqual } from "lodash";
-import { useNavigate } from "react-router-dom";
 
 function useModal() {
-  const navigate = useNavigate();
-  const { saveDiary, removeTempDiary } = useDiary();
-  const { nicknameForm } = useNickname();
-  const { handleUIScale } = useUIScale();
-  const { clearDiaries, modifyDiary, deleteDiary } = useDiary();
-  const { signOut } = useAuth();
   const [modalActionProps, setModalActionProps] = useState<IModalActionProps>({
     modalId: null,
   });
@@ -88,43 +76,7 @@ function useModal() {
   }, [modalActionProps.modalId]);
 
   useEffect(() => {
-    if (!isEqual(modalResponse, defaultModalResponse)) {
-      if (modalResponse.confirm === true) {
-        switch (modalProps.modalId) {
-          case saveDiaryVariants.modalId:
-            if (modalActionProps.diary) {
-              saveDiary(modalActionProps.diary);
-            }
-            break;
-          case nicknameVariants.modalId:
-            nicknameForm();
-            break;
-          case UIScaleVariants.modalId:
-            handleUIScale(modalResponse.rangeValue);
-            break;
-          case logOutVariants.modalId:
-            navigate("/logout");
-            break;
-          case clearDiariesVariants.modalId:
-            clearDiaries();
-            break;
-          case signOutVariants.modalId:
-            signOut();
-            break;
-          case modifyDiaryVariants.modalId:
-            if (modalActionProps.diary) {
-              modifyDiary(modalActionProps.diary);
-            }
-            break;
-          case deleteDiaryVariants.modalId:
-            if (modalActionProps.diaryId) {
-              deleteDiary(modalActionProps.diaryId);
-            }
-            break;
-        }
-      } else if (modalActionProps.modalId === "saveDiary") {
-        removeTempDiary();
-      }
+    if (modalResponse.modalId !== null) {
       setModalResponse(defaultModalResponse);
       setModalProps(defaultModalProps);
       setModalActionProps({ modalId: null });

@@ -2,24 +2,33 @@ import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { IDiary } from "../types/types";
 import useModalContext from "../Hooks/useModalContext";
+import { useEffect } from "react";
+import useDiary from "../Hooks/useDiary";
 
 function Read() {
   const location = useLocation();
   const diary: IDiary = location.state.diary;
   const { title, date, text, id: diaryId } = diary;
-  const { modalAction } = useModalContext();
+  const { modalAction, modalResponse } = useModalContext();
+  const { modifyDiary, deleteDiary } = useDiary();
+
+  useEffect(() => {
+    if (modalResponse.confirm) {
+      if (modalResponse.modalId === "modifyDiary") {
+        modifyDiary(diary);
+      } else if (modalResponse.modalId === "deleteDiary") {
+        deleteDiary(diaryId);
+      }
+    }
+  }, [modalResponse]);
 
   return (
     <Wrapper>
       <Buttons>
-        <ModifyBtn
-          onClick={() => modalAction({ modalId: "modifyDiary", diary })}
-        >
+        <ModifyBtn onClick={() => modalAction({ modalId: "modifyDiary" })}>
           수정
         </ModifyBtn>
-        <DeleteBtn
-          onClick={() => modalAction({ modalId: "deleteDiary", diaryId })}
-        >
+        <DeleteBtn onClick={() => modalAction({ modalId: "deleteDiary" })}>
           삭제
         </DeleteBtn>
       </Buttons>

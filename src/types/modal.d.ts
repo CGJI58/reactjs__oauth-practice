@@ -19,14 +19,17 @@ export type RangeProps = {
 
 export type OnAnswer = (answer: IModalResponse) => void;
 
-export interface IModalVariants {
+export interface IModalActionProps {
   modalId: ModalId;
+}
+
+export interface IModalVariants extends IModalActionProps {
   modalOption: ModalOption;
   sentence: string;
   rangeProps?: RangeProps;
 }
 
-export interface IModalResponse {
+export interface IModalResponse extends IModalActionProps {
   visible: boolean;
   confirm: boolean | null;
   rangeValue?: UIScaleOption;
@@ -34,12 +37,6 @@ export interface IModalResponse {
 
 export interface IModalProps extends IModalVariants, IModalResponse {
   onAnswer: OnAnswer;
-}
-
-export interface IModalActionProps {
-  modalId: ModalId;
-  diaryId?: string;
-  diary?: IDiary;
 }
 
 export interface IModalContext {

@@ -38,6 +38,7 @@ export const defaultModalVariants: IModalVariants = {
 };
 
 export const defaultModalResponse: IModalResponse = {
+  modalId: null,
   visible: false,
   confirm: null,
 };

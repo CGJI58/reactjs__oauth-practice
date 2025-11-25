@@ -4,7 +4,7 @@ import {
   faToggleOn,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
@@ -17,7 +17,7 @@ function UserInfo() {
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [{ isDarkTheme }, setUserConfig] =
     useRecoilState<IUserConfig>(userConfigState);
-  const { modalAction } = useModalContext();
+  const { modalAction, modalResponse } = useModalContext();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleMouseLeave = () => {
@@ -32,6 +32,13 @@ function UserInfo() {
     }
     setIsHovered(true);
   };
+
+  useEffect(() => {
+    if (modalResponse.confirm && modalResponse.modalId === "logOut") {
+      navigate("/logout");
+    }
+  }, [modalResponse]);
+
   return (
     <Wrapper onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <FontAwesomeIcon icon={faCircleUser} className="headerBtn" />

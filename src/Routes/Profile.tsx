@@ -3,12 +3,40 @@ import styled from "styled-components";
 import { IUserConfig, IUserState } from "../types/types";
 import { userConfigState, userState } from "../States/atoms";
 import useModalContext from "../Hooks/useModalContext";
+import useNickname from "../Hooks/useNickname";
+import useUIScale from "../Hooks/useUIScale";
+import useDiary from "../Hooks/useDiary";
+import useAuth from "../Hooks/useAuth";
+import { useEffect } from "react";
 
 function Profile() {
   const { userInfo, userRecord, userConfig } =
     useRecoilValue<IUserState>(userState);
   const setUserConfig = useSetRecoilState<IUserConfig>(userConfigState);
-  const { modalAction } = useModalContext();
+  const { nicknameForm } = useNickname();
+  const { handleUIScale } = useUIScale();
+  const { clearDiaries } = useDiary();
+  const { signOut } = useAuth();
+  const { modalAction, modalResponse } = useModalContext();
+
+  useEffect(() => {
+    if (modalResponse.confirm) {
+      switch (modalResponse.modalId) {
+        case "nickname":
+          nicknameForm();
+          break;
+        case "UIScale":
+          handleUIScale(modalResponse.rangeValue);
+          break;
+        case "clearDiaries":
+          clearDiaries();
+          break;
+        case "signOut":
+          signOut();
+          break;
+      }
+    }
+  }, [modalResponse]);
 
   return (
     <Wrapper>

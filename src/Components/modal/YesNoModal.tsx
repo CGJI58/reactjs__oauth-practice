@@ -1,15 +1,18 @@
 import styled from "styled-components";
-import { OnAnswer } from "../../types/types";
+import { ModalId, OnAnswer } from "../../types/types";
 
 interface IYesNoModal {
+  modalId: ModalId;
   onAnswer: OnAnswer;
 }
 
-function YesNoModal({ onAnswer }: IYesNoModal) {
+function YesNoModal({ modalId, onAnswer }: IYesNoModal) {
   return (
     <Choice>
-      <Yes onClick={() => onAnswer({ visible: false, confirm: true })}>예</Yes>
-      <No onClick={() => onAnswer({ visible: false, confirm: false })}>
+      <Yes onClick={() => onAnswer({ modalId, visible: false, confirm: true })}>
+        예
+      </Yes>
+      <No onClick={() => onAnswer({ modalId, visible: false, confirm: false })}>
         아니오
       </No>
     </Choice>

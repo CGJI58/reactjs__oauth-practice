@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import {
   IUserConfig,
+  ModalId,
   OnAnswer,
   RangeProps,
   UIScaleOption,
@@ -11,11 +12,12 @@ import { userConfigState } from "../../States/atoms";
 import useTypeGuard from "../../Hooks/useTypeGuard";
 
 interface IRangeModal {
+  modalId: ModalId;
   onAnswer: OnAnswer;
   rangeProps: RangeProps;
 }
 
-function RangeModal({ onAnswer, rangeProps }: IRangeModal) {
+function RangeModal({ modalId, onAnswer, rangeProps }: IRangeModal) {
   const { isUIScaleOption } = useTypeGuard();
   const { UIScale } = useRecoilValue<IUserConfig>(userConfigState);
   const [rangeValue, setRangeValue] = useState<UIScaleOption>(UIScale);
@@ -43,7 +45,7 @@ function RangeModal({ onAnswer, rangeProps }: IRangeModal) {
       <Confirm>
         <Yes
           onClick={() =>
-            onAnswer({ visible: false, confirm: true, rangeValue })
+            onAnswer({ modalId, visible: false, confirm: true, rangeValue })
           }
         >
           확인

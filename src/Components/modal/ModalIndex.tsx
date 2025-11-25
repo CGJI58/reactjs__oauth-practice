@@ -6,7 +6,8 @@ import { useEffect, useRef } from "react";
 
 function Modal(modalProps: IModalProps) {
   const popupRef = useRef<HTMLDivElement | null>(null);
-  const { sentence, modalOption, rangeProps, onAnswer, visible } = modalProps;
+  const { modalId, sentence, modalOption, rangeProps, onAnswer, visible } =
+    modalProps;
   const onAnswerRef = useRef<OnAnswer>();
 
   const handleOutsideClick = (event: MouseEvent) => {
@@ -16,7 +17,7 @@ function Modal(modalProps: IModalProps) {
       event.target instanceof Node &&
       !popupRef.current.contains(event.target)
     ) {
-      onAnswerRef.current({ visible: false, confirm: false });
+      onAnswerRef.current({ modalId, visible: false, confirm: false });
     }
   };
 
@@ -33,9 +34,12 @@ function Modal(modalProps: IModalProps) {
     <ModalBackground>
       <Wrapper ref={popupRef}>
         <Sentence>{sentence}</Sentence>
-        {modalOption === "YesNo" && <YesNoModal onAnswer={onAnswer} />}
+        {modalOption === "YesNo" && (
+          <YesNoModal modalId={modalId} onAnswer={onAnswer} />
+        )}
         {modalOption === "Range" && (
           <RangeModal
+            modalId={modalId}
             onAnswer={onAnswer}
             rangeProps={rangeProps ?? { indexArray: [] }}
           />

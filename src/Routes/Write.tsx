@@ -16,7 +16,7 @@ function Write() {
   const originalDiary: IDiary = location.state?.diary ?? defaultDiary;
   const query = new URLSearchParams(location.search);
   const { isWriteOption } = useTypeGuard();
-  const { removeTempDiary } = useDiary();
+  const { removeTempDiary, saveDiary } = useDiary();
   const { register, setValue, handleSubmit, watch } = useForm<IDiary>({
     defaultValues: defaultDiary,
   });
@@ -103,17 +103,16 @@ function Write() {
 
   useEffect(() => {
     if (diaryState.ready) {
-      modalAction({
-        modalId: "saveDiary",
-        diary: diaryState.diary,
-      });
+      modalAction({ modalId: "saveDiary" });
     }
   }, [diaryState.ready]);
 
   useEffect(() => {
     const answer = modalResponse.confirm;
-    if (answer !== null) {
-      setDiaryState((prev) => ({ ...prev, ready: answer }));
+    if (answer === true) {
+      saveDiary(diaryState.diary);
+    } else if (answer === false) {
+      setDiaryState((prev) => ({ ...prev, ready: false }));
     }
   }, [modalResponse]);
 

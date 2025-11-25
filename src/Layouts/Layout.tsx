@@ -14,6 +14,7 @@ import useModal from "../Hooks/useModal";
 import { ModalContext } from "../Contexts/ModalContext";
 import Modal from "../Components/modal/ModalIndex";
 import { getTempDiary } from "../util/diaryUtility";
+import useDiary from "../Hooks/useDiary";
 
 interface LayoutProps {
   children: ReactNode;
@@ -25,6 +26,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   const { userConfig, userInfo, userRecord, synchronized } = user;
   const setSynchronized = useSetRecoilState<boolean>(userSynchronizedState);
   const { loadUser, saveUser } = useUser();
+  const { saveDiary, removeTempDiary } = useDiary();
   const { modalProps, modalAction, modalResponse } = useModal();
   const { noScroll } = useScrollProgress();
   const { ready, diary } = getTempDiary();
@@ -44,10 +46,22 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   useEffect(() => {
     if (location.pathname !== "/write" && ready) {
       if (diary !== null) {
-        modalAction({ modalId: "saveDiary", diary });
+        modalAction({ modalId: "saveDiary" });
       }
     }
   }, [location.pathname, ready]);
+
+  useEffect(() => {
+    if (modalResponse.modalId === "saveDiary" && diary) {
+      if (modalResponse.confirm === true) {
+        saveDiary(diary);
+      } else if (modalResponse.confirm === false) {
+        if (location.pathname !== "/write") {
+          removeTempDiary();
+        }
+      }
+    }
+  }, [location.pathname, modalResponse]);
 
   useEffect(() => {
     if (isEqual(user, defaultUserState)) {
