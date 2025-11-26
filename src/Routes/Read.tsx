@@ -24,17 +24,22 @@ function Read() {
 
   return (
     <Wrapper>
-      <Buttons>
-        <ModifyBtn onClick={() => modalAction({ modalId: "modifyDiary" })}>
-          수정
-        </ModifyBtn>
-        <DeleteBtn onClick={() => modalAction({ modalId: "deleteDiary" })}>
-          삭제
-        </DeleteBtn>
-      </Buttons>
+      <Headline>
+        <DiaryDate>
+          <div>작성일</div>
+          <div>{date}</div>
+        </DiaryDate>
+        <Buttons>
+          <ModifyBtn onClick={() => modalAction({ modalId: "modifyDiary" })}>
+            수정
+          </ModifyBtn>
+          <DeleteBtn onClick={() => modalAction({ modalId: "deleteDiary" })}>
+            삭제
+          </DeleteBtn>
+        </Buttons>
+      </Headline>
       <Context>
         <DiaryTitle>{title}</DiaryTitle>
-        <DiaryDate>{date}</DiaryDate>
         <DiaryText>{text}</DiaryText>
       </Context>
     </Wrapper>
@@ -50,19 +55,29 @@ const Wrapper = styled.div`
   align-self: center;
   justify-self: center;
   padding-bottom: 30px;
-  gap: 30px;
-  & > * {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
+  gap: 10px;
+`;
+
+const Headline = styled.div`
+  display: grid;
+  grid-template-columns: 1fr auto;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const DiaryDate = styled.div`
+  display: flex;
+  margin-left: 10px;
+  gap: 20px;
 `;
 
 const Buttons = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+  gap: 10px;
   & > * {
+    font-weight: bold;
     cursor: pointer;
     user-select: none;
     padding: 10px;
@@ -78,6 +93,9 @@ const ModifyBtn = styled.div``;
 const DeleteBtn = styled.div``;
 
 const Context = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   & > * {
     margin: 0;
     padding: 10px;
@@ -91,12 +109,10 @@ const Context = styled.div`
   }
 `;
 
-const DiaryDate = styled.div`
-  width: 100%;
-`;
-
 const DiaryTitle = styled.div`
   width: 100%;
+  font-size: ${(props) => props.theme.fontSizes.l}px;
+  font-weight: bold;
 `;
 
 const DiaryText = styled.div`
