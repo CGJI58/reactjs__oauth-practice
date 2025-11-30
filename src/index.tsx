@@ -47,6 +47,13 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+input[type="button"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: none;
+  border-radius: 5px; 
+}
 * {
 	box-sizing:border-box;
 }

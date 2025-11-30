@@ -4,6 +4,7 @@ import { IDiary } from "../types/types";
 import useModalContext from "../Hooks/useModalContext";
 import { useEffect } from "react";
 import useDiary from "../Hooks/useDiary";
+import { backgroundGradient } from "../theme/animations";
 
 function Read() {
   const location = useLocation();
@@ -30,12 +31,16 @@ function Read() {
           <div>{date}</div>
         </DiaryDate>
         <Buttons>
-          <ModifyBtn onClick={() => modalAction({ modalId: "modifyDiary" })}>
-            수정
-          </ModifyBtn>
-          <DeleteBtn onClick={() => modalAction({ modalId: "deleteDiary" })}>
-            삭제
-          </DeleteBtn>
+          <ModifyBtn
+            type="button"
+            value="수정"
+            onClick={() => modalAction({ modalId: "modifyDiary" })}
+          />
+          <DeleteBtn
+            type="button"
+            value="삭제"
+            onClick={() => modalAction({ modalId: "deleteDiary" })}
+          />
         </Buttons>
       </Headline>
       <Context>
@@ -77,20 +82,37 @@ const Buttons = styled.div`
   justify-content: flex-end;
   gap: 10px;
   & > * {
+    color: ${(props) => props.theme.text};
+    font-size: ${(props) => props.theme.fontSizes.l}px;
     font-weight: bold;
     cursor: pointer;
     user-select: none;
-    padding: 10px;
+    padding: 5px 10px;
     background-color: ${(props) => props.theme.backgroundDarker};
-    &:hover {
-      color: ${(props) => props.theme.highlightNegative};
-    }
   }
 `;
 
-const ModifyBtn = styled.div``;
+const ModifyBtn = styled.input`
+  &:focus {
+    animation: ${({ theme }) =>
+        backgroundGradient(theme.backgroundDarker, theme.highlightPositive)}
+      1s infinite linear;
+  }
+  &:hover {
+    background-color: ${(props) => props.theme.highlightPositive};
+  }
+`;
 
-const DeleteBtn = styled.div``;
+const DeleteBtn = styled.input`
+  &:focus {
+    animation: ${({ theme }) =>
+        backgroundGradient(theme.backgroundDarker, theme.highlightNegative)}
+      1s infinite linear;
+  }
+  &:hover {
+    background-color: ${(props) => props.theme.highlightNegative};
+  }
+`;
 
 const Context = styled.div`
   display: flex;

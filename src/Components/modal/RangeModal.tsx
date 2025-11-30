@@ -6,10 +6,11 @@ import {
   RangeProps,
   UIScaleOption,
 } from "../../types/types";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { userConfigState } from "../../States/atoms";
 import useTypeGuard from "../../Hooks/useTypeGuard";
+import { backgroundGradient } from "../../theme/animations";
 
 interface IRangeModal {
   modalId: ModalId;
@@ -21,6 +22,13 @@ function RangeModal({ modalId, onAnswer, rangeProps }: IRangeModal) {
   const { isUIScaleOption } = useTypeGuard();
   const { UIScale } = useRecoilValue<IUserConfig>(userConfigState);
   const [rangeValue, setRangeValue] = useState<UIScaleOption>(UIScale);
+  const defaultInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (defaultInputRef.current) {
+      defaultInputRef.current.focus();
+    }
+  }, []);
 
   return (
     <Choice>
@@ -29,6 +37,7 @@ function RangeModal({ modalId, onAnswer, rangeProps }: IRangeModal) {
       </Notice>
       <Panel>
         <RangeBar
+          ref={defaultInputRef}
           type="range"
           min={0}
           max={rangeProps?.indexArray.length - 1}
@@ -44,12 +53,12 @@ function RangeModal({ modalId, onAnswer, rangeProps }: IRangeModal) {
       </Panel>
       <Confirm>
         <Yes
+          type="button"
+          value="확인"
           onClick={() =>
             onAnswer({ modalId, visible: false, confirm: true, rangeValue })
           }
-        >
-          확인
-        </Yes>
+        />
       </Confirm>
     </Choice>
   );
@@ -79,14 +88,6 @@ const Panel = styled.div`
   width: 100%;
 `;
 
-const Example = styled.span<{ $fontSize: number }>`
-  font-size: ${(props) => props.$fontSize}px;
-  margin-bottom: 10px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-`;
-
 const RangeBar = styled.input.attrs({ type: "range" })`
   cursor: pointer;
   width: 100%;
@@ -100,7 +101,10 @@ const Confirm = styled.div`
   font-weight: bold;
 `;
 
-const Yes = styled.div`
+const Yes = styled.input`
+  color: ${(props) => props.theme.text};
+  font-size: ${(props) => props.theme.fontSizes.l}px;
+  font-weight: bold;
   width: 100px;
   height: 3rem;
   display: flex;
@@ -108,7 +112,12 @@ const Yes = styled.div`
   align-items: center;
   cursor: pointer;
   background-color: ${(props) => props.theme.backgroundDarker};
+  &:focus {
+    animation: ${({ theme }) =>
+        backgroundGradient(theme.backgroundDarker, theme.highlightPositive)}
+      1s infinite linear;
+  }
   &:hover {
-    color: ${(props) => props.theme.highlightPositive};
+    background-color: ${(props) => props.theme.highlightPositive};
   }
 `;

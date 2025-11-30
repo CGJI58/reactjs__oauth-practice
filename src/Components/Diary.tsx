@@ -85,7 +85,8 @@ const Wrapper = styled.div`
   box-shadow: ${(props) => props.theme.boxShadow};
   border-radius: 5px;
   user-select: none;
-  &:hover {
+  & > *:hover,
+  & > *:focus {
     background-color: ${(props) => props.theme.backgroundDarker};
   }
 `;

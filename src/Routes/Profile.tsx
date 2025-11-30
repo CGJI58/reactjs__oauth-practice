@@ -8,6 +8,7 @@ import useUIScale from "../Hooks/useUIScale";
 import useDiary from "../Hooks/useDiary";
 import useAuth from "../Hooks/useAuth";
 import { useEffect } from "react";
+import { backgroundGradient } from "../theme/animations";
 
 function Profile() {
   const { userInfo, userRecord, userConfig } =
@@ -49,31 +50,37 @@ function Profile() {
         <Value>{userRecord.diaries.length}</Value>
       </UserInfo>
       <UserConfig className="section">
-        <Button onClick={() => modalAction({ modalId: "nickname" })}>
-          닉네임 변경
-        </Button>
         <Button
+          value="닉네임 변경"
+          onClick={() => modalAction({ modalId: "nickname" })}
+        />
+        <Button
+          value={`테마 변경: ${userConfig.isDarkTheme ? "밝게" : "어둡게"}`}
           onClick={() =>
             setUserConfig((prev) => ({
               ...prev,
               isDarkTheme: !prev.isDarkTheme,
             }))
           }
-        >{`테마 변경: ${userConfig.isDarkTheme ? "밝게" : "어둡게"}`}</Button>
-        <Button onClick={() => modalAction({ modalId: "UIScale" })}>
-          화면 확대 / 축소
-        </Button>
-        <Button onClick={() => modalAction({ modalId: "logOut" })}>
-          로그 아웃
-        </Button>
+        />
+        <Button
+          value="화면 확대 / 축소"
+          onClick={() => modalAction({ modalId: "UIScale" })}
+        />
+        <Button
+          value="로그 아웃"
+          onClick={() => modalAction({ modalId: "logOut" })}
+        />
       </UserConfig>
       <DangerZone className="section">
-        <Button onClick={() => modalAction({ modalId: "clearDiaries" })}>
-          모든 다이어리 삭제
-        </Button>
-        <Button onClick={() => modalAction({ modalId: "signOut" })}>
-          회원 탈퇴
-        </Button>
+        <Button
+          value="모든 다이어리 삭제"
+          onClick={() => modalAction({ modalId: "clearDiaries" })}
+        />
+        <Button
+          value="회원 탈퇴"
+          onClick={() => modalAction({ modalId: "signOut" })}
+        />
       </DangerZone>
     </Wrapper>
   );
@@ -82,7 +89,7 @@ function Profile() {
 const Wrapper = styled.div`
   .section {
     font-size: ${(props) => props.theme.fontSizes.m}px;
-    background-color: ${(props) => props.theme.background};
+    background-color: ${(props) => props.theme.backgroundRegular};
     border-radius: 10px;
     gap: 20px;
     margin: 20px 0px;
@@ -103,19 +110,30 @@ const UserInfo = styled.div`
 const UserConfig = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
+
+  & > *:hover,
+  & > *:focus {
+    background-color: ${(props) => props.theme.backgroundDarker};
+  }
 `;
 
 const DangerZone = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   & > * {
+    &:focus {
+      animation: ${({ theme }) =>
+          backgroundGradient(theme.backgroundDarker, theme.highlightNegative)}
+        1s infinite linear;
+    }
     &:hover {
-      color: ${(props) => props.theme.highlightNegative};
+      background-color: ${(props) => props.theme.highlightNegative};
     }
   }
 `;
 
-const Button = styled.div`
+const Button = styled.input.attrs({ type: "button" })`
+  color: ${(props) => props.theme.text};
   display: flex;
   justify-content: center;
   padding: 10px;
@@ -124,9 +142,6 @@ const Button = styled.div`
   border-radius: 10px;
   user-select: none;
   cursor: pointer;
-  &:hover {
-    background-color: ${(props) => props.theme.backgroundDarker};
-  }
 `;
 
 export default Profile;
