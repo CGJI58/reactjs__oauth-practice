@@ -7,18 +7,18 @@ const baseTheme: DefaultTheme = {
 export const darkTheme: DefaultTheme = {
   ...baseTheme,
   text: "whitesmoke",
-  highlightPositive: "springgreen",
-  highlightNegative: "red",
+  highlightPositive: "forestGreen",
+  highlightNegative: "firebrick",
   backgroundRegular: "#374151",
-  backgroundLighter: "#374251",
+  backgroundLighter: "#3D4758",
   backgroundDarker: "#2A303E",
 };
 
 export const lightTheme: DefaultTheme = {
   ...baseTheme,
   text: "black",
-  highlightPositive: "green",
-  highlightNegative: "firebrick",
+  highlightPositive: "springgreen",
+  highlightNegative: "crimson",
   backgroundRegular: "#F9FAFB",
   backgroundLighter: "#FFFFFF",
   backgroundDarker: "#E5E7EB",
