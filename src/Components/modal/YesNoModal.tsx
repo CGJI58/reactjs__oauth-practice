@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { ModalId, OnAnswer } from "../../types/types";
 import { useEffect, useRef } from "react";
 import { backgroundGradient } from "../../theme/animations";
+import { defaultFocusVariants } from "../../constants/variants";
 
 interface IYesNoModal {
   modalId: ModalId;
@@ -11,13 +12,7 @@ interface IYesNoModal {
 function YesNoModal({ modalId, onAnswer }: IYesNoModal) {
   const yesRef = useRef<HTMLInputElement>(null);
   const noRef = useRef<HTMLInputElement>(null);
-  const yesArr: Array<ModalId> = ["modifyDiary", "saveDiary", "nickname"];
-  const noArr: Array<ModalId> = [
-    "deleteDiary",
-    "clearDiaries",
-    "logOut",
-    "signOut",
-  ];
+  const { yesArr, noArr } = defaultFocusVariants;
 
   useEffect(() => {
     if (modalId !== null) {
@@ -34,19 +29,21 @@ function YesNoModal({ modalId, onAnswer }: IYesNoModal) {
       <Yes
         ref={yesRef}
         type="button"
+        tabIndex={1}
         value="예"
         onClick={() => onAnswer({ modalId, visible: false, confirm: true })}
       />
       <No
         ref={noRef}
         type="button"
+        tabIndex={2}
         value="아니오"
         onClick={() => onAnswer({ modalId, visible: false, confirm: false })}
       />
     </Choice>
   );
 }
-const Choice = styled.div`
+const Choice = styled.form`
   bottom: 50%;
   transform: translate(0, 50%);
   width: 70%;

@@ -1,4 +1,4 @@
-import { IModalVariants } from "../types/modal";
+import { IDefaultFocusVariants, IModalVariants } from "../types/modal";
 
 export const deleteDiaryVariants: IModalVariants = {
   modalId: "deleteDiary",
@@ -49,4 +49,9 @@ export const saveDiaryVariants: IModalVariants = {
   modalId: "saveDiary",
   modalOption: "YesNo",
   sentence: "저장하시겠습니까?",
+};
+
+export const defaultFocusVariants: IDefaultFocusVariants = {
+  yesArr: ["modifyDiary", "saveDiary", "nickname"],
+  noArr: ["deleteDiary", "clearDiaries", "logOut", "signOut"],
 };

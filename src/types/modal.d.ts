@@ -43,3 +43,8 @@ export interface IModalContext {
   modalAction: (props: IModalActionProps) => void;
   modalResponse: IModalResponse;
 }
+
+export interface IDefaultFocusVariants {
+  yesArr: Array<ModalId>;
+  noArr: Array<ModalId>;
+}
