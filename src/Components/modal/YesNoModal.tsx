@@ -3,6 +3,7 @@ import { ModalId, OnAnswer } from "../../types/types";
 import { useEffect, useRef } from "react";
 import { backgroundGradient } from "../../theme/animations";
 import { defaultFocusVariants } from "../../constants/variants";
+import useFocusTrap from "../../Hooks/useFocusTrap";
 
 interface IYesNoModal {
   modalId: ModalId;
@@ -13,6 +14,8 @@ function YesNoModal({ modalId, onAnswer }: IYesNoModal) {
   const yesRef = useRef<HTMLInputElement>(null);
   const noRef = useRef<HTMLInputElement>(null);
   const { yesArr, noArr } = defaultFocusVariants;
+  const { runFocusTrap } = useFocusTrap();
+  const choiceRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     if (modalId !== null) {
@@ -24,8 +27,15 @@ function YesNoModal({ modalId, onAnswer }: IYesNoModal) {
     }
   }, [modalId]);
 
+  useEffect(() => {
+    if (choiceRef?.current) {
+      const container = choiceRef.current;
+      runFocusTrap({ container });
+    }
+  }, []);
+
   return (
-    <Choice>
+    <Choice ref={choiceRef}>
       <Yes
         ref={yesRef}
         type="button"

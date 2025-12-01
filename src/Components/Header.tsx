@@ -26,7 +26,7 @@ function Header() {
 function HomeBtn() {
   return (
     <Col>
-      <StyledLink to="/">
+      <StyledLink to="/" tabIndex={-1}>
         <FontAwesomeIcon className="headerBtn" icon={faHouse} />
       </StyledLink>
     </Col>
@@ -39,6 +39,7 @@ function WriteBtn() {
       <StyledLink
         to={{ pathname: "/write", search: "?mode=create" }}
         state={{ diary: defaultDiary }}
+        tabIndex={-1}
       >
         <div className="headerBtn">Write</div>
       </StyledLink>
@@ -49,7 +50,7 @@ function WriteBtn() {
 function LoginBtn() {
   return (
     <Col>
-      <StyledLink to="/login">
+      <StyledLink to="/login" tabIndex={-1}>
         <div className="headerBtn">Log in</div>
       </StyledLink>
     </Col>

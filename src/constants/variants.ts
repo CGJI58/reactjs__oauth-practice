@@ -55,3 +55,11 @@ export const defaultFocusVariants: IDefaultFocusVariants = {
   yesArr: ["modifyDiary", "saveDiary", "nickname"],
   noArr: ["deleteDiary", "clearDiaries", "logOut", "signOut"],
 };
+
+export const focusableSelectors = [
+  "a[href]",
+  "button",
+  "textarea",
+  "input",
+  "select",
+];

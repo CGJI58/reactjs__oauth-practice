@@ -1,4 +1,11 @@
-import { FC, ReactNode, useEffect, useMemo } from "react";
+import {
+  FC,
+  ReactNode,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+} from "react";
 import Header from "../Components/Header";
 import styled from "styled-components";
 import useUser from "../Hooks/useUser";
@@ -15,6 +22,7 @@ import { ModalContext } from "../Contexts/ModalContext";
 import Modal from "../Components/modal/ModalIndex";
 import { getTempDiary } from "../util/diaryUtility";
 import useDiary from "../Hooks/useDiary";
+import useFocusTrap from "../Hooks/useFocusTrap";
 
 interface LayoutProps {
   children: ReactNode;
@@ -34,15 +42,16 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     () => ({ modalAction, modalResponse }),
     [modalAction, modalResponse]
   );
+  const mainRef = useRef<HTMLDivElement>(null);
+  const { runFocusTrap } = useFocusTrap();
 
-  // 이후에 useMemo, useCallback 필요한 부분들 다 찾아서 적용할 예정
-  /**
-   * useMemo:
-   * userState 에서 정보 가져오는것들 싹 다 useMemo [user] 하는게 좋을지 검토
-   *
-   * useCallback:
-   * 모달 관련해서 다양한 컴포넌트들에서 호출하는, 특히 매개변수 있는 함수들 검토
-   */
+  useLayoutEffect(() => {
+    if (mainRef?.current) {
+      const container = mainRef.current;
+      runFocusTrap({ container });
+    }
+  }, [location.pathname, children]);
+
   useEffect(() => {
     if (location.pathname !== "/write" && ready) {
       if (diary !== null) {
@@ -94,7 +103,9 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         이거 막아야 함
          */}
         {userInfo.email !== "" || location.pathname === "/login" ? (
-          <main>{children}</main>
+          <main key={location.pathname} ref={mainRef}>
+            {children}
+          </main>
         ) : (
           <span className="projectIntroduce">
             사용자 인증 연습 겸 to do list FE 연습 겸 FE-BE-DB 연결 연습용

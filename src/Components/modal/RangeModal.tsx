@@ -11,6 +11,7 @@ import { useRecoilValue } from "recoil";
 import { userConfigState } from "../../States/atoms";
 import useTypeGuard from "../../Hooks/useTypeGuard";
 import { backgroundGradient } from "../../theme/animations";
+import useFocusTrap from "../../Hooks/useFocusTrap";
 
 interface IRangeModal {
   modalId: ModalId;
@@ -23,15 +24,23 @@ function RangeModal({ modalId, onAnswer, rangeProps }: IRangeModal) {
   const { UIScale } = useRecoilValue<IUserConfig>(userConfigState);
   const [rangeValue, setRangeValue] = useState<UIScaleOption>(UIScale);
   const defaultInputRef = useRef<HTMLInputElement>(null);
+  const { runFocusTrap } = useFocusTrap();
+  const choiceRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (defaultInputRef.current) {
       defaultInputRef.current.focus();
     }
   }, []);
+  useEffect(() => {
+    if (choiceRef?.current) {
+      const container = choiceRef.current;
+      runFocusTrap({ container });
+    }
+  }, []);
 
   return (
-    <Choice>
+    <Choice ref={choiceRef}>
       <Notice>
         {rangeProps?.indexArray[rangeValue] ?? "error: no rangeIndexArray"}
       </Notice>
@@ -93,7 +102,7 @@ const RangeBar = styled.input.attrs({ type: "range" })`
   width: 100%;
 `;
 
-const Confirm = styled.div`
+const Confirm = styled.input`
   width: 100%;
   display: flex;
   justify-content: space-around;
