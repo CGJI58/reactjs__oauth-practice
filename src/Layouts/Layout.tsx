@@ -95,6 +95,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
 
   return (
     <Wrapper>
+      <Modal {...modalProps} />
       <ModalContext.Provider value={contextValue}>
         <Header />
         {/* 
@@ -114,7 +115,6 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         )}
       </ModalContext.Provider>
       {noScroll ? null : <ScrollTopBtn />}
-      <Modal {...modalProps} />
     </Wrapper>
   );
 };

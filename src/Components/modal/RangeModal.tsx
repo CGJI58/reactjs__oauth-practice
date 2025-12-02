@@ -102,7 +102,7 @@ const RangeBar = styled.input.attrs({ type: "range" })`
   width: 100%;
 `;
 
-const Confirm = styled.input`
+const Confirm = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-around;

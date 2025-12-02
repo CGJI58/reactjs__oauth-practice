@@ -39,14 +39,12 @@ function YesNoModal({ modalId, onAnswer }: IYesNoModal) {
       <Yes
         ref={yesRef}
         type="button"
-        tabIndex={1}
         value="예"
         onClick={() => onAnswer({ modalId, visible: false, confirm: true })}
       />
       <No
         ref={noRef}
         type="button"
-        tabIndex={2}
         value="아니오"
         onClick={() => onAnswer({ modalId, visible: false, confirm: false })}
       />
