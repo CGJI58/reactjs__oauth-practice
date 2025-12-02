@@ -38,7 +38,6 @@ function NicknameForm() {
   }, [nickname]);
 
   const onValid = async ({ newNickname }: INicknameForm) => {
-    console.log(newNickname);
     const apiResult = await validateNickname(newNickname);
     if (apiResult === true) {
       setIsValidNickname("valid");
@@ -79,7 +78,6 @@ function NicknameForm() {
     <Wrapper>
       <Form onSubmit={handleSubmit(onValid)}>
         <input
-          id="newNickname"
           {...register("newNickname", {
             required: true,
             minLength: 3,
@@ -88,7 +86,7 @@ function NicknameForm() {
           placeholder="write your new nickname"
         />
         {isValidNickname === null && (
-          <Submit id="isValidNickname" type="submit" value="중복확인" />
+          <CheckNicknameBtn className="button" type="submit" value="중복확인" />
         )}
       </Form>
       {isValidNickname === "same" && (
@@ -107,7 +105,12 @@ function NicknameForm() {
         <Notice>사용 가능한 닉네임입니다.</Notice>
       )}
       {isValidNickname === "valid" && (
-        <SaveBtn onClick={() => setRunSave(true)}>저장</SaveBtn>
+        <SaveBtn
+          type="button"
+          className="button"
+          value="저장"
+          onClick={() => setRunSave(true)}
+        />
       )}
     </Wrapper>
   );
@@ -116,12 +119,6 @@ function NicknameForm() {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
-`;
-
-const Form = styled.form`
-  display: grid;
-  grid-template-columns: 7fr 3fr;
   gap: 10px;
   input {
     margin: 0;
@@ -134,7 +131,8 @@ const Form = styled.form`
     font: inherit;
     color: inherit;
   }
-  #isValidNickname {
+  .button {
+    cursor: pointer;
     transition: 100ms ease-in-out;
     &:hover,
     &:focus {
@@ -143,24 +141,18 @@ const Form = styled.form`
   }
 `;
 
+const Form = styled.form`
+  display: grid;
+  grid-template-columns: 7fr 3fr;
+  gap: 10px;
+`;
+
 const Notice = styled.span`
   height: 20px;
 `;
 
-const Submit = styled.input``;
+const CheckNicknameBtn = styled.input``;
 
-const SaveBtn = styled.div`
-  display: flex;
-  cursor: pointer;
-  justify-content: center;
-  padding: 10px;
-  background: ${(props) => props.theme.backgroundLighter};
-  box-shadow: ${(props) => props.theme.boxShadow};
-  transition: 100ms ease-in-out;
-  &:hover,
-  &:focus {
-    background-color: ${(props) => props.theme.backgroundDarker};
-  }
-`;
+const SaveBtn = styled.input``;
 
 export default NicknameForm;

@@ -47,7 +47,8 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-input[type="button"] {
+input[type="button"],
+input[type="submit"] {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
