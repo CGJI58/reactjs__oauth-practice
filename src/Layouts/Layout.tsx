@@ -6,23 +6,23 @@ import {
   useMemo,
   useRef,
 } from "react";
-import Header from "../Components/Header";
 import styled from "styled-components";
-import useUser from "../Hooks/useUser";
+import { useLocation } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+import { isEqual } from "lodash";
+import Header from "../Components/Header";
+import ScrollTopBtn from "../Components/ScrollTopBtn";
+import Modal from "../Components/modal/ModalIndex";
+import useUser from "../Hooks/useUser";
+import useScrollProgress from "../Hooks/useScrollProgress";
+import useModal from "../Hooks/useModal";
+import useDiary from "../Hooks/useDiary";
+import useFocusTrap from "../Hooks/useFocusTrap";
 import { IUserState } from "../types/types";
 import { defaultUserState } from "../constants/defaults";
 import { userState, userSynchronizedState } from "../States/atoms";
-import useScrollProgress from "../Hooks/useScrollProgress";
-import ScrollTopBtn from "../Components/ScrollTopBtn";
-import { useLocation } from "react-router-dom";
-import { isEqual } from "lodash";
-import useModal from "../Hooks/useModal";
 import { ModalContext } from "../Contexts/ModalContext";
-import Modal from "../Components/modal/ModalIndex";
 import { getTempDiary } from "../util/diaryUtility";
-import useDiary from "../Hooks/useDiary";
-import useFocusTrap from "../Hooks/useFocusTrap";
 
 interface LayoutProps {
   children: ReactNode;
@@ -95,6 +95,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
 
   return (
     <Wrapper>
+      <input className="focusWall" />
       <Modal {...modalProps} />
       <ModalContext.Provider value={contextValue}>
         <Header />
@@ -139,6 +140,11 @@ const Wrapper = styled.div`
   .projectIntroduce {
     margin-top: 100px;
     font-size: ${(props) => props.theme.fontSizes.l}px;
+  }
+  .focusWall {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
   }
 `;
 

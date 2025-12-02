@@ -21,25 +21,41 @@ export function useFocusTrap() {
       );
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== "Tab") return;
+      if (event.key !== "Tab" && event.key !== "Escape") return;
 
       const focusableEls = getFocusableElements();
-      if (focusableEls.length === 0) return;
+      if (focusableEls.length <= 1) return;
 
       const firstEl = focusableEls[0];
       const lastEl = focusableEls[focusableEls.length - 1];
 
-      if (event.shiftKey) {
-        // Shift+Tab
-        if (document.activeElement === firstEl) {
-          event.preventDefault();
-          lastEl.focus();
+      if (event.key === "Escape") {
+        const focusWall = document.querySelector<HTMLElement>(".focusWall");
+        if (focusWall) {
+          const index = focusableEls.findIndex(
+            (el) => el === document.activeElement
+          );
+          if (index > 0) {
+            focusableEls[index - 1]?.focus();
+            focusableEls[index - 1]?.blur();
+          } else {
+            focusWall.focus();
+            focusWall.blur();
+          }
         }
       } else {
-        // Tab
-        if (document.activeElement === lastEl) {
-          event.preventDefault();
-          firstEl.focus();
+        if (event.shiftKey) {
+          // Shift+Tab
+          if (document.activeElement === firstEl) {
+            event.preventDefault();
+            lastEl.focus();
+          }
+        } else {
+          // Tab
+          if (document.activeElement === lastEl) {
+            event.preventDefault();
+            firstEl.focus();
+          }
         }
       }
     };
