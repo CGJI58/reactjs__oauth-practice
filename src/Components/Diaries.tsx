@@ -31,7 +31,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-self: center;
-  min-width: 100%;
+  width: 100%;
 `;
 
 const DiariesList = styled.div`
@@ -40,9 +40,6 @@ const DiariesList = styled.div`
   align-items: center;
   gap: 10px;
   padding: 10px 0px;
-  & > * {
-    min-width: 100%;
-  }
 `;
 
 export default Diaries;

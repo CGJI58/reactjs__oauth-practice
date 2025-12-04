@@ -54,7 +54,7 @@ function Diary({ diary, focusIndex, focusIndexHandler }: IDiaryComponent) {
           <TimeStamp>{date}</TimeStamp>
         </DiaryHead>
         {preview ? (
-          <DiaryBody>
+          <DiaryBody $isTruncated={isTruncated} $more={more}>
             <Text ref={textRef} $more={more}>
               {text}
             </Text>
@@ -77,12 +77,14 @@ function Diary({ diary, focusIndex, focusIndexHandler }: IDiaryComponent) {
 }
 
 const Wrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   box-shadow: ${(props) => props.theme.boxShadow};
   border-radius: 5px;
   user-select: none;
+  width: 100%;
   & > *:hover,
   & > *:focus {
     background-color: ${(props) => props.theme.backgroundDarker};
@@ -138,8 +140,11 @@ const TimeStamp = styled.div`
   padding: 0 10px;
 `;
 
-const DiaryBody = styled.div`
+const DiaryBody = styled.div<{ $isTruncated: boolean; $more: boolean }>`
   width: 100%;
+  ${({ $isTruncated }) => ($isTruncated ? "padding-bottom: 30px" : "")};
+  ${({ $isTruncated, $more }) =>
+    $isTruncated && !$more ? "max-height: 100px" : ""};
   margin-bottom: 10px;
   display: flex;
   flex-direction: column;
@@ -150,21 +155,24 @@ const DiaryBody = styled.div`
   }
 `;
 
+// UISacle 연동해서 max-height 값을 결정할 것.
+// modal도 같은 작업 필요하니까 그거 할 때 같이할 것.
 const Text = styled.div<{ $more: boolean }>`
   width: 100%;
   padding: 0px 30px;
   line-height: 180%;
   white-space: pre-wrap;
-  overflow: ${(props) => (props.$more ? "visible" : "hidden")};
-  display: ${(props) => (props.$more ? "flex" : "-webkit-box")};
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  overflow-wrap: break-word;
+  overflow-y: hidden;
+  max-height: ${(props) => (!props.$more ? "60px" : "")};
 `;
 
 const More = styled.span`
+  position: absolute;
+  bottom: 10px;
+  left: 30px;
   width: max-content;
   padding: 5px;
-  margin-left: 30px;
   transition: 100ms linear;
   &:hover {
     background-color: rgba(0, 0, 0, 0.1);
