@@ -7,12 +7,20 @@ import { IUserRecord } from "../types/types";
 
 function Diaries() {
   const { diaries } = useRecoilValue<IUserRecord>(userRecordState);
-  const [focused, setFocused] = useState<number>(0);
+  const [focusIndex, setFocusIndex] = useState<number>(0);
+  const focusIndexHandler = (index: number) => {
+    setFocusIndex((prev) => (prev === index ? 0 : index));
+  };
   return (
     <Wrapper>
       <DiariesList>
         {diaries.map((diary) => (
-          <Diary key={diary.id} diary={diary} focus={[focused, setFocused]} />
+          <Diary
+            key={diary.id}
+            diary={diary}
+            focusIndex={focusIndex}
+            focusIndexHandler={focusIndexHandler}
+          />
         ))}
       </DiariesList>
     </Wrapper>

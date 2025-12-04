@@ -8,13 +8,11 @@ import { IDiary } from "../types/types";
 
 interface IDiaryComponent {
   diary: IDiary;
-  focus: [
-    focused: number,
-    setFocused: React.Dispatch<React.SetStateAction<number>>
-  ];
+  focusIndex: number;
+  focusIndexHandler: (index: number) => void;
 }
 
-function Diary({ diary, focus: [focused, setFocused] }: IDiaryComponent) {
+function Diary({ diary, focusIndex, focusIndexHandler }: IDiaryComponent) {
   const { id, date, title, text } = diary;
   const [preview, setPreview] = useState<boolean>(false);
   const textRef = useRef<null | HTMLDivElement>(null);
@@ -29,13 +27,13 @@ function Diary({ diary, focus: [focused, setFocused] }: IDiaryComponent) {
   }, [more, preview]);
 
   useEffect(() => {
-    if (focused === Number(id)) {
+    if (focusIndex === Number(id)) {
       setPreview(true);
     } else {
       setPreview(false);
       setMore(false);
     }
-  }, [focused]);
+  }, [focusIndex]);
 
   return (
     <Wrapper>
@@ -47,7 +45,7 @@ function Diary({ diary, focus: [focused, setFocused] }: IDiaryComponent) {
             onClick={(event: React.MouseEvent<HTMLDivElement>) => {
               event.stopPropagation();
               event.preventDefault();
-              setFocused((prev) => (prev === Number(id) ? 0 : Number(id)));
+              focusIndexHandler(Number(id));
             }}
           >
             <FontAwesomeIcon icon={faAngleRight} />
