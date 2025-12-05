@@ -129,7 +129,7 @@ const Wrapper = styled.div`
   color: ${(props) => props.theme.text};
   header,
   main {
-    max-width: ${(props) => props.theme.UIWidth}px;
+    max-width: ${(props) => props.theme.UIMaxWidth}px;
   }
   & > main {
     padding: 80px 10px 30px 10px;

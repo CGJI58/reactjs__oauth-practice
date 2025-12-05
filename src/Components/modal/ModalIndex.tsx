@@ -72,8 +72,10 @@ const Wrapper = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 400px;
-  height: 300px;
+  width: ${({ theme }) => theme.UIMaxWidth * 0.8}px;
+  height: ${({ theme }) => theme.UIMaxWidth * 0.6}px;
+  max-width: 480px;
+  max-height: 360px;
   display: flex;
   justify-content: center;
   background-color: ${(props) => props.theme.backgroundLighter};
@@ -92,6 +94,8 @@ const Sentence = styled.div`
   justify-content: center;
   transform: translate(-50%, -50%);
   font-size: ${(props) => props.theme.fontSizes.xl}px;
+  line-height: ${({ theme }) => theme.fontSizes.xl * 1.6}px;
+  text-align: center;
   font-weight: bold;
 `;
 

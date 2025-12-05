@@ -155,8 +155,6 @@ const DiaryBody = styled.div<{ $isTruncated: boolean; $more: boolean }>`
   }
 `;
 
-// UISacle 연동해서 max-height 값을 결정할 것.
-// modal도 같은 작업 필요하니까 그거 할 때 같이할 것.
 const Text = styled.div<{ $more: boolean }>`
   width: 100%;
   padding: 0px 30px;

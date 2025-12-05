@@ -4,8 +4,8 @@ import { darkTheme, lightTheme } from "../theme/theme";
 
 function useUserTheme({ isDarkTheme, UIScale }: IUserConfig) {
   return useMemo(() => {
-    const baseFontSize = 14 + UIScale * 2;
-    const UIWidth = 500 + UIScale * 100;
+    const baseFontSize = 14 + UIScale * 2; // 14, 16, 18, 20
+    const UIMaxWidth = 500 + UIScale * 100; // 500, 600, 700, 800
     return {
       ...(isDarkTheme ? darkTheme : lightTheme),
       fontSizes: {
@@ -13,10 +13,10 @@ function useUserTheme({ isDarkTheme, UIScale }: IUserConfig) {
         xl: baseFontSize * 1.4,
         l: baseFontSize * 1.2,
         m: baseFontSize * 1,
-        s: baseFontSize * 0.8,
-        xs: baseFontSize * 0.6,
+        s: baseFontSize * 0.7,
+        xs: baseFontSize * 0.4,
       },
-      UIWidth,
+      UIMaxWidth,
     };
   }, [isDarkTheme, UIScale]);
 }
