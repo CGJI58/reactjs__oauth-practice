@@ -73,6 +73,7 @@ export const updateUser = async (user: IUserState): Promise<boolean> => {
     const response = await fetch(`${BE_BASE_URL}/users/update`, {
       method: "POST",
       mode: "cors",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
