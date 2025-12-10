@@ -121,25 +121,21 @@ const Context = styled.div`
   & > * {
     margin: 0;
     padding: 10px;
-    border: none;
     border-radius: 5px;
     background: ${(props) => props.theme.backgroundLighter};
     box-shadow: ${(props) => props.theme.boxShadow};
-    outline: none;
-    font: inherit;
-    color: inherit;
+    width: 100%;
+    line-height: 180%;
+    overflow-wrap: break-word;
   }
 `;
 
 const DiaryTitle = styled.div`
-  width: 100%;
   font-size: ${(props) => props.theme.fontSizes.l}px;
   font-weight: bold;
 `;
 
 const DiaryText = styled.div`
-  width: 100%;
-  line-height: 180%;
   white-space: pre-wrap;
 `;
 

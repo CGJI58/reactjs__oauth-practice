@@ -127,10 +127,11 @@ const Preview = styled(motion.div)`
 
 const Title = styled.div<{ $preview: boolean }>`
   font-weight: bold;
-  white-space: ${(props) => (props.$preview ? "pre-wrap" : "nowrap")};
+  white-space: ${(props) => (props.$preview ? "normal" : "nowrap")};
   font-size: ${(props) => props.theme.fontSizes.m}px;
+  line-height: 180%;
+  word-break: break-all;
   overflow: ${(props) => (props.$preview ? "visible" : "hidden")};
-  text-overflow: ellipsis;
 `;
 
 const TimeStamp = styled.div`
