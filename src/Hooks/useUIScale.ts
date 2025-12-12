@@ -1,5 +1,5 @@
 import { useSetRecoilState } from "recoil";
-import { userConfigState } from "../States/atoms";
+import { userConfigState } from "../States/userAtom";
 import { IUserConfig, UIScaleOption } from "../types/types";
 
 function useUIScale() {

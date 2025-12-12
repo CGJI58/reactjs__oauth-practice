@@ -1,7 +1,7 @@
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { IUserConfig, IUserState } from "../types/types";
-import { userConfigState, userState } from "../States/atoms";
+import { userConfigState, userState } from "../States/userAtom";
 import useModalContext from "../Hooks/useModalContext";
 import useNickname from "../Hooks/useNickname";
 import useUIScale from "../Hooks/useUIScale";
@@ -11,8 +11,7 @@ import { useEffect } from "react";
 import { backgroundGradient } from "../theme/animations";
 
 function Profile() {
-  const { userInfo, userRecord, userConfig } =
-    useRecoilValue<IUserState>(userState);
+  const { userInfo, userConfig } = useRecoilValue<IUserState>(userState);
   const setUserConfig = useSetRecoilState<IUserConfig>(userConfigState);
   const { nicknameForm } = useNickname();
   const { handleUIScale } = useUIScale();
@@ -46,8 +45,6 @@ function Profile() {
         <Value>{userInfo.email}</Value>
         <Label>NickName</Label>
         <Value>{userConfig.nickname}</Value>
-        <Label>Diaries</Label>
-        <Value>{userRecord.diaries.length}</Value>
       </UserInfo>
       <UserConfig className="section">
         <Button

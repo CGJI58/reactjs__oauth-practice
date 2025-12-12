@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { validateNickname } from "../../Api/api";
+import { validateNickname } from "../../Api/userApi";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { userConfigState } from "../../States/atoms";
+import { userConfigState } from "../../States/userAtom";
 import { IUserConfig } from "../../types/types";
 
 interface INicknameForm {

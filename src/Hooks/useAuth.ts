@@ -1,15 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import {
-  deleteCookie,
-  deleteUser,
-  getCodeRequestURL,
-  loginByGhCode,
-} from "../Api/api";
+import { deleteUser } from "../Api/userApi";
 import useUser from "./useUser";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { IUserInfo, IUserState } from "../types/types";
-import { userInfoState, userState } from "../States/atoms";
+import { userInfoState, userState } from "../States/userAtom";
 import { defaultUserState } from "../constants/defaults";
+import { deleteCookie, getCodeRequestURL, loginByGhCode } from "../Api/authApi";
 
 function useAuth() {
   const navigate = useNavigate();

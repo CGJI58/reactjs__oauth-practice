@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useRecoilValue } from "recoil";
-import { userSynchronizedState } from "../States/atoms";
+import { userSynchronizedState } from "../States/userAtom";
 import useAuth from "../Hooks/useAuth";
 
 /**

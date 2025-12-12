@@ -7,7 +7,7 @@ import Logout from "./Routes/Logout";
 import Profile from "./Routes/Profile";
 import { ThemeProvider } from "styled-components";
 import { useRecoilValue } from "recoil";
-import { userConfigState } from "./States/atoms";
+import { userConfigState } from "./States/userAtom";
 import useUserTheme from "./Hooks/useUserTheme";
 import { defaultUserState } from "./constants/defaults";
 import Read from "./Routes/Read";

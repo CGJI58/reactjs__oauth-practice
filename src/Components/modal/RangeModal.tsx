@@ -8,7 +8,7 @@ import {
 } from "../../types/types";
 import { useEffect, useRef, useState } from "react";
 import { useRecoilValue } from "recoil";
-import { userConfigState } from "../../States/atoms";
+import { userConfigState } from "../../States/userAtom";
 import useTypeGuard from "../../Hooks/useTypeGuard";
 import { backgroundGradient } from "../../theme/animations";
 import useFocusTrap from "../../Hooks/useFocusTrap";

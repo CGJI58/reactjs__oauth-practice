@@ -1,5 +1,5 @@
 import { useSetRecoilState } from "recoil";
-import { userRecordState } from "../States/atoms";
+import { userRecordState } from "../States/userAtom";
 import { IDiary, IUserRecord } from "../types/types";
 import { useNavigate } from "react-router-dom";
 import { generateTimestamp } from "../util/diaryUtility";

@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
-import { userConfigState } from "../States/atoms";
+import { userConfigState } from "../States/userAtom";
 import { IUserConfig } from "../types/types";
 import useModalContext from "../Hooks/useModalContext";
 

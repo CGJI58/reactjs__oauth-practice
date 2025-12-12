@@ -20,7 +20,7 @@ import useDiary from "../Hooks/useDiary";
 import useFocusTrap from "../Hooks/useFocusTrap";
 import { IUserState } from "../types/types";
 import { defaultUserState } from "../constants/defaults";
-import { userState, userSynchronizedState } from "../States/atoms";
+import { userState, userSynchronizedState } from "../States/userAtom";
 import { ModalContext } from "../Contexts/ModalContext";
 import { getTempDiary } from "../util/diaryUtility";
 

@@ -1,8 +1,9 @@
 import { useSetRecoilState } from "recoil";
-import { userState, userSynchronizedState } from "../States/atoms";
-import { getUserByCookie, updateUser } from "../Api/api";
+import { userState, userSynchronizedState } from "../States/userAtom";
+import { updateUser } from "../Api/userApi";
 import { IGetUserByCookie, IUserState } from "../types/types";
 import { useNavigate } from "react-router-dom";
+import { getUserByCookie } from "../Api/authApi";
 
 function useUser() {
   const setUser = useSetRecoilState<IUserState>(userState);
