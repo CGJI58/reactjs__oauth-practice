@@ -7,7 +7,7 @@ import {
 } from "../types/types";
 import { defaultModalProps, defaultModalResponse } from "../constants/defaults";
 import {
-  clearDiariesVariants,
+  clearBoardVariants,
   deleteDiaryVariants,
   modifyDiaryVariants,
   nicknameVariants,
@@ -59,8 +59,8 @@ function useModal() {
         case "logOut":
           createModal(logOutVariants);
           break;
-        case "clearDiaries":
-          createModal(clearDiariesVariants);
+        case "clearBoard":
+          createModal(clearBoardVariants);
           break;
         case "signOut":
           createModal(signOutVariants);

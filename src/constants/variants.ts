@@ -12,8 +12,8 @@ export const modifyDiaryVariants: IModalVariants = {
   sentence: "이 게시글을 수정하시겠습니까?",
 };
 
-export const clearDiariesVariants: IModalVariants = {
-  modalId: "clearDiaries",
+export const clearBoardVariants: IModalVariants = {
+  modalId: "clearBoard",
   modalOption: "YesNo",
   sentence: "모든 다이어리를 삭제하시겠습니까?",
 };
@@ -53,7 +53,7 @@ export const saveDiaryVariants: IModalVariants = {
 
 export const defaultFocusVariants: IDefaultFocusVariants = {
   yesArr: ["modifyDiary", "saveDiary", "nickname"],
-  noArr: ["deleteDiary", "clearDiaries", "logOut", "signOut"],
+  noArr: ["deleteDiary", "clearBoard", "logOut", "signOut"],
 };
 
 export const focusableSelectors = [

@@ -15,7 +15,7 @@ function Profile() {
   const setUserConfig = useSetRecoilState<IUserConfig>(userConfigState);
   const { nicknameForm } = useNickname();
   const { handleUIScale } = useUIScale();
-  const { clearDiaries } = useDiary();
+  const { clearBoard } = useDiary();
   const { signOut } = useAuth();
   const { modalAction, modalResponse } = useModalContext();
 
@@ -28,8 +28,8 @@ function Profile() {
         case "UIScale":
           handleUIScale(modalResponse.rangeValue);
           break;
-        case "clearDiaries":
-          clearDiaries();
+        case "clearBoard":
+          clearBoard();
           break;
         case "signOut":
           signOut();
@@ -72,7 +72,7 @@ function Profile() {
       <DangerZone className="section">
         <Button
           value="모든 다이어리 삭제"
-          onClick={() => modalAction({ modalId: "clearDiaries" })}
+          onClick={() => modalAction({ modalId: "clearBoard" })}
         />
         <Button
           value="회원 탈퇴"

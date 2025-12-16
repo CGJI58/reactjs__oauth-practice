@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import Diaries from "./Diaries";
+import Board from "./Board";
 
 function UserRecord() {
   return (
     <Wrapper>
-      <Diaries />
+      <Board />
     </Wrapper>
   );
 }

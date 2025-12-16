@@ -3,7 +3,7 @@ export type ModalId =
   | "deleteDiary"
   | "saveDiary"
   | "nickname"
-  | "clearDiaries"
+  | "clearBoard"
   | "logOut"
   | "signOut"
   | "UIScale"
