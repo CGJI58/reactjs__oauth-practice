@@ -15,7 +15,7 @@ export interface IUserInfo {
 }
 
 export interface IUserRecord {
-  diaries: Array<IDiary>;
+  myDiaries: Array<number>;
 }
 
 export interface IUserConfig {
@@ -24,8 +24,14 @@ export interface IUserConfig {
   isDarkTheme: boolean;
 }
 
+export interface IBoardState {
+  diaries: Array<IDiary>;
+  synchronized: boolean;
+}
+
 export interface IDiary {
-  id: string;
+  id: number;
+  writer: string;
   date: string;
   title: string;
   text: string;

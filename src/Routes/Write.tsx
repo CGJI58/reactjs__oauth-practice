@@ -1,26 +1,26 @@
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
-import { debounce, isEqual } from "lodash";
-import { Subscription } from "react-hook-form/dist/utils/createSubject";
-import { IDiary, IDiaryState } from "../types/types";
+import { useEffect, useState } from "react";
+import { IDiary, IDiaryState, IUserConfig } from "../types/types";
 import useTypeGuard from "../Hooks/useTypeGuard";
 import useDiary from "../Hooks/useDiary";
 import { defaultDiary } from "../constants/defaults";
 import useModalContext from "../Hooks/useModalContext";
+import { useRecoilValue } from "recoil";
+import { userConfigState } from "../States/userAtom";
 
 function Write() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { nickname } = useRecoilValue<IUserConfig>(userConfigState);
   const originalDiary: IDiary = location.state?.diary ?? defaultDiary;
   const query = new URLSearchParams(location.search);
   const { isWriteOption } = useTypeGuard();
-  const { removeTempDiary, saveDiary } = useDiary();
-  const { register, setValue, handleSubmit, watch } = useForm<IDiary>({
+  const { saveDiary } = useDiary();
+  const { register, setValue, handleSubmit } = useForm<IDiary>({
     defaultValues: defaultDiary,
   });
-  const subscriptionRef = useRef<Subscription | null>(null);
   const [diaryState, setDiaryState] = useState<IDiaryState>({
     mode: undefined,
     ready: false,
@@ -36,84 +36,48 @@ function Write() {
         setDiaryState((prev) => ({ ...prev, mode: rawMode }));
         if (rawMode === "modify") {
           const { title, text, date, id } = diaryState.diary;
+          setValue("id", id);
+          setValue("date", date);
           setValue("title", title);
           setValue("text", text);
-          setValue("date", date);
-          setValue("id", id);
         }
       } else {
         console.error("Unauthorized access attempt detected.");
         navigate("/");
       }
+    } else {
+      modalAction({ modalId: "saveDiary" });
     }
   }, [diaryState.ready]);
-
-  const tempSave = debounce((tempDiary: IDiary) => {
-    const okToSave: boolean = !(
-      tempDiary.title === "" ||
-      tempDiary.text === "" ||
-      isEqual(tempDiary, originalDiary)
-    );
-    if (okToSave) {
-      sessionStorage.setItem("tempDiary", JSON.stringify(tempDiary));
-    } else {
-      removeTempDiary();
-    }
-  }, 200);
-
   useEffect(() => {
     // if (user close or refresh page)
     // Pause and show alert message
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       //새로고침
       event.preventDefault();
-      console.log("handleBeforeUnload.");
-    };
-    const handleUnload = () => {
-      //페이지 나감
-      removeTempDiary();
-      console.log("handleUnload.");
     };
 
     window.addEventListener("beforeunload", handleBeforeUnload);
-    window.addEventListener("unload", handleUnload);
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
-      window.removeEventListener("unload", handleUnload);
     };
   }, []);
 
-  useEffect(() => {
-    // Dynamically store validated Form data into Local Storage in real-time
-    subscriptionRef.current = watch(
-      ({ title = "", text = "", date = "", id = "" }) => {
-        tempSave({ title, text, date, id });
-      }
-    );
-
-    return () => {
-      tempSave.cancel();
-      subscriptionRef.current?.unsubscribe();
-    };
-  }, [watch]);
-
   const onValid = (validDiaryForm: IDiary) => {
-    tempSave.cancel();
-    setDiaryState(() => ({ diary: { ...validDiaryForm }, ready: true }));
+    setDiaryState(() => ({
+      diary: { ...validDiaryForm, writer: nickname },
+      ready: true,
+    }));
   };
 
   useEffect(() => {
     if (diaryState.ready) {
-      modalAction({ modalId: "saveDiary" });
-    }
-  }, [diaryState.ready]);
-
-  useEffect(() => {
-    const answer = modalResponse.confirm;
-    if (answer === true) {
-      saveDiary(diaryState.diary);
-    } else if (answer === false) {
-      setDiaryState((prev) => ({ ...prev, ready: false }));
+      const answer = modalResponse.confirm;
+      if (answer === true) {
+        saveDiary(diaryState.diary);
+      } else if (answer === false) {
+        setDiaryState((prev) => ({ ...prev, ready: false }));
+      }
     }
   }, [modalResponse]);
 

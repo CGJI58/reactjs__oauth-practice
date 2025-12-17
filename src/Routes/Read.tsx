@@ -11,12 +11,12 @@ function Read() {
   const diary: IDiary = location.state.diary;
   const { title, date, text, id: diaryId } = diary;
   const { modalAction, modalResponse } = useModalContext();
-  const { modifyDiary, deleteDiary } = useDiary();
+  const { navigateToModifyPage, deleteDiary } = useDiary();
 
   useEffect(() => {
     if (modalResponse.confirm) {
       if (modalResponse.modalId === "modifyDiary") {
-        modifyDiary(diary);
+        navigateToModifyPage(diary);
       } else if (modalResponse.modalId === "deleteDiary") {
         deleteDiary(diaryId);
       }

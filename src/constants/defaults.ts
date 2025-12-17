@@ -1,4 +1,5 @@
 import {
+  IBoardState,
   IDiary,
   IModalProps,
   IModalResponse,
@@ -6,9 +7,15 @@ import {
   IUserState,
 } from "../types/types";
 
+export const defaultBoardState: IBoardState = {
+  diaries: [],
+  synchronized: false,
+};
+
 export const defaultDiary: IDiary = {
-  id: "",
+  id: 0,
   date: "",
+  writer: "",
   title: "",
   text: "",
 };
@@ -21,7 +28,7 @@ export const defaultUserState: IUserState = {
     visibility: "",
   },
   userRecord: {
-    diaries: [],
+    myDiaries: [],
   },
   userConfig: {
     nickname: "",

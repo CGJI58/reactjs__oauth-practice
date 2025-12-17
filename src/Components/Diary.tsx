@@ -13,7 +13,7 @@ interface IDiaryComponent {
 }
 
 function Diary({ diary, focusIndex, focusIndexHandler }: IDiaryComponent) {
-  const { id, date, title, text } = diary;
+  const { id, date, writer, title, text } = diary;
   const [preview, setPreview] = useState<boolean>(false);
   const textRef = useRef<null | HTMLDivElement>(null);
   const [more, setMore] = useState<boolean>(false);
@@ -51,7 +51,8 @@ function Diary({ diary, focusIndex, focusIndexHandler }: IDiaryComponent) {
             <FontAwesomeIcon icon={faAngleRight} />
           </Preview>
           <Title $preview={preview}>{title}</Title>
-          <TimeStamp>{date}</TimeStamp>
+          <DiaryInfo>{writer}</DiaryInfo>
+          <DiaryInfo>{date}</DiaryInfo>
         </DiaryHead>
         {preview ? (
           <DiaryBody $isTruncated={isTruncated} $more={more}>
@@ -102,7 +103,7 @@ const StyledLink = styled(Link)`
 
 const DiaryHead = styled.div`
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto 1fr auto auto;
   height: 50px;
   min-height: max-content;
   gap: 10px;
@@ -134,7 +135,7 @@ const Title = styled.div<{ $preview: boolean }>`
   overflow: ${(props) => (props.$preview ? "visible" : "hidden")};
 `;
 
-const TimeStamp = styled.div`
+const DiaryInfo = styled.div`
   text-align: right;
   white-space: nowrap;
   font-size: ${(props) => props.theme.fontSizes.s}px;
