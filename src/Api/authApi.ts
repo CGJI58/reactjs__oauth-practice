@@ -5,7 +5,10 @@ import { IGetUserByCookie, IUserState } from "../types/types";
 export const getCodeRequestURL = async (): Promise<string> => {
   try {
     const { codeRequestURL }: { codeRequestURL: string } = await (
-      await fetch(`${BE_BASE_URL}`)
+      await fetch(`${BE_BASE_URL}`, {
+        method: "GET",
+        mode: "cors",
+      })
     ).json();
     return codeRequestURL;
   } catch (error) {
@@ -17,7 +20,7 @@ export const getCodeRequestURL = async (): Promise<string> => {
 export const loginByGhCode = async (ghCode: string): Promise<void> => {
   console.log("Run loginByGhCode()");
   try {
-    const response = await fetch(`${BE_BASE_URL}/auth/login-by-ghcode`, {
+    const response = await fetch(`${BE_BASE_URL}/auth/cookie`, {
       method: "POST",
       mode: "cors",
       headers: {
@@ -39,7 +42,7 @@ export const loginByGhCode = async (ghCode: string): Promise<void> => {
 
 export const getUserByCookie = async (): Promise<IGetUserByCookie> => {
   try {
-    const response = await fetch(`${BE_BASE_URL}/auth/get-user-by-cookie`, {
+    const response = await fetch(`${BE_BASE_URL}/auth/cookie`, {
       method: "GET",
       mode: "cors",
       credentials: "include",
@@ -59,8 +62,8 @@ export const getUserByCookie = async (): Promise<IGetUserByCookie> => {
 
 export const deleteCookie = async (): Promise<void> => {
   try {
-    const response = await fetch(`${BE_BASE_URL}/auth/delete-cookie`, {
-      method: "POST",
+    const response = await fetch(`${BE_BASE_URL}/auth/cookie`, {
+      method: "DELETE",
       mode: "cors",
       credentials: "include",
     });

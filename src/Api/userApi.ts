@@ -26,7 +26,7 @@ export const updateUser = async (user: IUserState): Promise<boolean> => {
 
 export const deleteUser = async (email: string): Promise<boolean> => {
   try {
-    const response = await fetch(`${BE_BASE_URL}/users/delete`, {
+    const response = await fetch(`${BE_BASE_URL}/users`, {
       method: "DELETE",
       mode: "cors",
       credentials: "include",
@@ -54,10 +54,11 @@ export const deleteUser = async (email: string): Promise<boolean> => {
 export const validateNickname = async (nickname: string): Promise<boolean> => {
   try {
     const response = await fetch(
-      `${BE_BASE_URL}/users/validate/nickname?nickname=${nickname}`,
+      `${BE_BASE_URL}/users/validate-nickname?nickname=${nickname}`,
       {
         method: "GET",
         mode: "cors",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
