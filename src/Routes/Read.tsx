@@ -18,6 +18,10 @@ function Read() {
       if (modalResponse.modalId === "modifyDiary") {
         navigateToModifyPage(diary);
       } else if (modalResponse.modalId === "deleteDiary") {
+        if (diaryId === null) {
+          console.error("diaryId: null");
+          return;
+        }
         deleteDiary(diaryId);
       }
     }

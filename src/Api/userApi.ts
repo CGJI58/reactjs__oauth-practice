@@ -24,7 +24,7 @@ export const updateUser = async (user: IUserState): Promise<boolean> => {
   }
 };
 
-export const deleteUser = async (email: string): Promise<boolean> => {
+export const deleteUser = async (githubId: number): Promise<boolean> => {
   try {
     const response = await fetch(`${BE_BASE_URL}/users`, {
       method: "DELETE",
@@ -33,7 +33,7 @@ export const deleteUser = async (email: string): Promise<boolean> => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ githubId }),
     });
     const { ok, status } = response;
     const responseText = await response.text();

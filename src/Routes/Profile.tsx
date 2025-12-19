@@ -41,8 +41,8 @@ function Profile() {
   return (
     <Wrapper>
       <UserInfo className="section">
-        <Label>E-mail</Label>
-        <Value>{userInfo.email}</Value>
+        <Label>github nickname</Label>
+        <Value>{userInfo.githubUsername}</Value>
         <Label>NickName</Label>
         <Value>{userConfig.nickname}</Value>
       </UserInfo>

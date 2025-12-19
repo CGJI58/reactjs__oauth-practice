@@ -10,15 +10,15 @@ import { IUserInfo } from "../types/types";
 import { defaultDiary } from "../constants/defaults";
 
 function Header() {
-  const { email } = useRecoilValue<IUserInfo>(userInfoState);
+  const { githubId } = useRecoilValue<IUserInfo>(userInfoState);
 
   return (
     <Wrapper>
       <HomeBtn />
-      {email === "" && <LoginBtn />}
-      {email !== "" && <WriteBtn />}
-      {email !== "" && <UserInfoBtn />}
-      {email !== "" && <ScrollMeter />}
+      {githubId === null && <LoginBtn />}
+      {githubId !== null && <WriteBtn />}
+      {githubId !== null && <UserInfoBtn />}
+      {githubId !== null && <ScrollMeter />}
     </Wrapper>
   );
 }

@@ -31,7 +31,7 @@ interface LayoutProps {
 const Layout: FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
   const user = useRecoilValue<IUserState>(userState);
-  const { userConfig, userInfo, userRecord, synchronized } = user;
+  const { userConfig, userInfo, synchronized } = user;
   const setSynchronized = useSetRecoilState<boolean>(userSynchronizedState);
   const { loadUser, saveUser } = useUser();
   const { saveDiary, removeTempDiary } = useDiary();
@@ -85,7 +85,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         return false;
       });
     }
-  }, [userConfig, userInfo, userRecord]);
+  }, [userConfig, userInfo]);
 
   useEffect(() => {
     if (!synchronized && !isEqual(user, defaultUserState)) {
@@ -104,7 +104,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         현재 로직 상에서는 사용자 정보가 있을 때도 /login 라우트 접근이 가능한데
         이거 막아야 함
          */}
-        {userInfo.email !== "" || location.pathname === "/login" ? (
+        {userInfo.githubId !== null || location.pathname === "/login" ? (
           <main key={location.pathname} ref={mainRef}>
             {children}
           </main>

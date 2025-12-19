@@ -10,7 +10,7 @@ import { deleteCookie, getCodeRequestURL, loginByGhCode } from "../Api/authApi";
 function useAuth() {
   const navigate = useNavigate();
   const setUser = useSetRecoilState<IUserState>(userState);
-  const { email } = useRecoilValue<IUserInfo>(userInfoState);
+  const { githubId } = useRecoilValue<IUserInfo>(userInfoState);
   const { loadUser } = useUser();
 
   const loadCodeRequestURL = async () => {
@@ -30,7 +30,11 @@ function useAuth() {
   };
 
   const signOut = async () => {
-    await deleteUser(email);
+    if (githubId === null) {
+      console.error("githubId: null");
+      return;
+    }
+    await deleteUser(githubId);
     await logOut();
   };
 

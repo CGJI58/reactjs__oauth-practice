@@ -50,6 +50,7 @@ function UserInfo() {
           >
             Profile
           </DropItem>
+          <DropItem>myDiaries</DropItem>
           <DropItem
             onClick={() =>
               setUserConfig((prev) => ({

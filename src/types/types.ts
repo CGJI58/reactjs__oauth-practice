@@ -8,10 +8,8 @@ export interface IUserState {
 }
 
 export interface IUserInfo {
-  email: string;
-  primary: boolean;
-  verified: boolean;
-  visibility: string;
+  githubId: number | null;
+  githubUsername: string;
 }
 
 export interface IUserRecord {
@@ -30,7 +28,7 @@ export interface IBoardState {
 }
 
 export interface IDiary {
-  id: number;
+  id: number | null;
   writer: string;
   date: string;
   title: string;

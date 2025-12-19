@@ -13,7 +13,7 @@ export const defaultBoardState: IBoardState = {
 };
 
 export const defaultDiary: IDiary = {
-  id: 0,
+  id: null,
   date: "",
   writer: "",
   title: "",
@@ -22,10 +22,8 @@ export const defaultDiary: IDiary = {
 
 export const defaultUserState: IUserState = {
   userInfo: {
-    email: "",
-    primary: false,
-    verified: false,
-    visibility: "",
+    githubId: null,
+    githubUsername: "",
   },
   userRecord: {
     myDiaries: [],
@@ -33,7 +31,7 @@ export const defaultUserState: IUserState = {
   userConfig: {
     nickname: "",
     UIScale: 1,
-    isDarkTheme: false,
+    isDarkTheme: true, //FOUC 방지
   },
   synchronized: false,
 };
