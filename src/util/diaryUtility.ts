@@ -1,4 +1,4 @@
-import { IDiary, ITempDiaryState } from "../types/types";
+import { IDiary } from "../types/types";
 
 type GenerateTimestamp = () => Partial<IDiary>;
 
@@ -13,17 +13,4 @@ export const generateTimestamp: GenerateTimestamp = () => {
   const min = String(now.getMinutes()).padStart(2, "0");
   const date = `${year}${mon}${day} ${hour}:${min}`;
   return { id, date };
-};
-
-type GetTempDiary = () => ITempDiaryState;
-
-export const getTempDiary: GetTempDiary = () => {
-  const rawTempDiary = sessionStorage.getItem("tempDiary");
-
-  if (rawTempDiary) {
-    const tempDiary: IDiary = JSON.parse(rawTempDiary);
-    // 이후 타입가드 검사로직 추가 할 것
-    return { ready: true, diary: { ...tempDiary } };
-  }
-  return { ready: true, diary: null };
 };

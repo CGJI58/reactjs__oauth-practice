@@ -47,16 +47,11 @@ function useDiary() {
     console.log("공사 중...");
   };
 
-  const removeTempDiary = () => {
-    sessionStorage.removeItem("tempDiary");
-  };
-
   return {
     saveDiary,
     clearBoard,
     deleteDiary,
     navigateToModifyPage,
-    removeTempDiary,
   };
 }
 

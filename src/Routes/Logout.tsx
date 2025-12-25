@@ -3,10 +3,6 @@ import { useRecoilValue } from "recoil";
 import { userSynchronizedState } from "../States/userAtom";
 import useAuth from "../Hooks/useAuth";
 
-/**
- * tempDiary 관련 작업 보류 중...
- * useMemo, useCallback 최적화 작업 예정되어 있으니 그 때 같이 진행할 예정
- */
 function Logout() {
   const synchronized = useRecoilValue<boolean>(userSynchronizedState);
   const { logOut } = useAuth();

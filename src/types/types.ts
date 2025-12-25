@@ -41,10 +41,6 @@ export type IDiaryState = {
   diary: IDiary;
 };
 
-export type ITempDiaryState = {
-  ready: boolean;
-  diary?: null | IDiary;
-};
 
 export type UIScaleOption = 0 | 1 | 2 | 3;
 

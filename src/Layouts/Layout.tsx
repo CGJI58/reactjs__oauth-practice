@@ -16,13 +16,11 @@ import Modal from "../Components/modal/ModalIndex";
 import useUser from "../Hooks/useUser";
 import useScrollProgress from "../Hooks/useScrollProgress";
 import useModal from "../Hooks/useModal";
-import useDiary from "../Hooks/useDiary";
 import useFocusTrap from "../Hooks/useFocusTrap";
 import { IUserState } from "../types/types";
 import { defaultUserState } from "../constants/defaults";
 import { userState, userSynchronizedState } from "../States/userAtom";
 import { ModalContext } from "../Contexts/ModalContext";
-import { getTempDiary } from "../util/diaryUtility";
 
 interface LayoutProps {
   children: ReactNode;
@@ -34,10 +32,8 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   const { userConfig, userInfo, synchronized } = user;
   const setSynchronized = useSetRecoilState<boolean>(userSynchronizedState);
   const { loadUser, saveUser } = useUser();
-  const { saveDiary, removeTempDiary } = useDiary();
   const { modalProps, modalAction, modalResponse } = useModal();
   const { noScroll } = useScrollProgress();
-  const { ready, diary } = getTempDiary();
   const contextValue = useMemo(
     () => ({ modalAction, modalResponse }),
     [modalAction, modalResponse]
@@ -51,26 +47,6 @@ const Layout: FC<LayoutProps> = ({ children }) => {
       runFocusTrap({ container });
     }
   }, [location.pathname, children]);
-
-  useEffect(() => {
-    if (location.pathname !== "/write" && ready) {
-      if (diary !== null) {
-        modalAction({ modalId: "saveDiary" });
-      }
-    }
-  }, [location.pathname, ready]);
-
-  useEffect(() => {
-    if (modalResponse.modalId === "saveDiary" && diary) {
-      if (modalResponse.confirm === true) {
-        saveDiary(diary);
-      } else if (modalResponse.confirm === false) {
-        if (location.pathname !== "/write") {
-          removeTempDiary();
-        }
-      }
-    }
-  }, [location.pathname, modalResponse]);
 
   useEffect(() => {
     if (isEqual(user, defaultUserState)) {
