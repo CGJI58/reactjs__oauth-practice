@@ -1,22 +1,28 @@
 import { BE_BASE_URL } from "../constants/urls";
-import { IBoardState, IDiary } from "../types/types";
+import { GetDiariesRes, IDiaryFromBE, ISaveDiaryProps } from "../types/types";
 
-export const getDiaries = async (): Promise<Array<IDiary>> => {
+export const getDiaries = async (): Promise<GetDiariesRes> => {
   try {
     const response = await fetch(`${BE_BASE_URL}/diaries`, {
       method: "GET",
       mode: "cors",
       credentials: "include",
     });
-    const diaries = await response.json();
-    return diaries;
+    const rawDiaries: Array<IDiaryFromBE> = await response.json();
+    const ok = response.ok;
+    return { rawDiaries, ok };
   } catch (error) {
     console.error(error);
-    return [];
+    return { ok: false, rawDiaries: [] };
   }
 };
 
-export const addDiary = async (diary: IDiary): Promise<boolean> => {
+export const addDiary = async ({
+  userId,
+  title,
+  text,
+}: ISaveDiaryProps): Promise<boolean> => {
+  if (!userId) return false;
   try {
     const response = await fetch(`${BE_BASE_URL}/diaries`, {
       method: "POST",
@@ -25,7 +31,7 @@ export const addDiary = async (diary: IDiary): Promise<boolean> => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ diary }),
+      body: JSON.stringify({ userId, title, text }),
     });
     const { saveDone }: { saveDone: boolean } = await response.json();
     return saveDone;
@@ -35,7 +41,7 @@ export const addDiary = async (diary: IDiary): Promise<boolean> => {
   }
 };
 
-export const deleteDiaryDoc = async (diaryId: number): Promise<boolean> => {
+export const deleteDiaryDoc = async (diaryId: string): Promise<boolean> => {
   try {
     const response = await fetch(`${BE_BASE_URL}/diaries/${diaryId}`, {
       method: "DELETE",
@@ -50,7 +56,12 @@ export const deleteDiaryDoc = async (diaryId: number): Promise<boolean> => {
   }
 };
 
-export const updateDiary = async (diary: IDiary): Promise<boolean> => {
+export const updateDiary = async ({
+  diaryId,
+  userId,
+  title,
+  text,
+}: ISaveDiaryProps): Promise<boolean> => {
   try {
     const response = await fetch(`${BE_BASE_URL}/diaries/`, {
       method: "PUT",
@@ -59,7 +70,7 @@ export const updateDiary = async (diary: IDiary): Promise<boolean> => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ diary }),
+      body: JSON.stringify({ diaryId, userId, title, text }),
     });
     const { updateDone }: { updateDone: boolean } = await response.json();
     return updateDone;

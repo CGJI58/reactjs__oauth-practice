@@ -2,53 +2,14 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { IDiary, IDiaryState, IUserConfig } from "../types/types";
+import { IDiary, IDiaryState } from "../types/types";
 import useTypeGuard from "../Hooks/useTypeGuard";
 import useDiary from "../Hooks/useDiary";
 import { defaultDiary } from "../constants/defaults";
 import useModalContext from "../Hooks/useModalContext";
-import { useRecoilValue } from "recoil";
-import { userConfigState } from "../States/userAtom";
 
 function Write() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { nickname } = useRecoilValue<IUserConfig>(userConfigState);
-  const originalDiary: IDiary = location.state?.diary ?? defaultDiary;
-  const query = new URLSearchParams(location.search);
-  const { isWriteOption } = useTypeGuard();
-  const { saveDiary } = useDiary();
-  const { register, setValue, handleSubmit } = useForm<IDiary>({
-    defaultValues: defaultDiary,
-  });
-  const [diaryState, setDiaryState] = useState<IDiaryState>({
-    mode: undefined,
-    ready: false,
-    diary: originalDiary,
-  });
-  const { modalAction, modalResponse } = useModalContext();
-
-  useEffect(() => {
-    if (!diaryState.ready) {
-      // set mode
-      const rawMode = query.get("mode");
-      if (isWriteOption(rawMode)) {
-        setDiaryState((prev) => ({ ...prev, mode: rawMode }));
-        if (rawMode === "modify") {
-          const { title, text, date, id } = diaryState.diary;
-          setValue("id", id);
-          setValue("date", date);
-          setValue("title", title);
-          setValue("text", text);
-        }
-      } else {
-        console.error("Unauthorized access attempt detected.");
-        navigate("/");
-      }
-    } else {
-      modalAction({ modalId: "saveDiary" });
-    }
-  }, [diaryState.ready]);
+  // protect form data
   useEffect(() => {
     // if (user close or refresh page)
     // Pause and show alert message
@@ -63,9 +24,54 @@ function Write() {
     };
   }, []);
 
-  const onValid = (validDiaryForm: IDiary) => {
-    setDiaryState(() => ({
-      diary: { ...validDiaryForm, writer: nickname },
+  const navigate = useNavigate();
+  const location = useLocation();
+  const originalDiary: IDiary = location.state?.diary ?? defaultDiary;
+  const query = new URLSearchParams(location.search);
+  const { isWriteOption } = useTypeGuard();
+  const { saveDiary } = useDiary();
+  const { register, setValue, handleSubmit } = useForm<IDiary>({
+    defaultValues: defaultDiary,
+  });
+  const [diaryState, setDiaryState] = useState<IDiaryState>({
+    mode: undefined,
+    ready: false,
+    diary: originalDiary,
+  });
+  const { modalAction, modalResponse } = useModalContext();
+
+  // handle diaryState
+  useEffect(() => {
+    if (!diaryState.ready) {
+      const rawMode = query.get("mode");
+      if (isWriteOption(rawMode)) {
+        const { title, text, userId } = diaryState.diary;
+
+        if (userId === null) {
+          console.error("Unauthorized access attempt detected.");
+          navigate("/");
+        }
+
+        if (rawMode === "modify") {
+          setValue("title", title);
+          setValue("text", text);
+        }
+
+        setDiaryState((prev) => ({ ...prev, mode: rawMode }));
+      } else {
+        console.error("Unauthorized access attempt detected.");
+        navigate("/");
+      }
+    } else {
+      modalAction({ modalId: "saveDiary" });
+    }
+  }, [diaryState.ready]);
+
+  const onValid = (validDiaryForm: { title: string; text: string }) => {
+    const { title, text } = validDiaryForm;
+    setDiaryState((prev) => ({
+      ...prev,
+      diary: { ...prev.diary, title, text },
       ready: true,
     }));
   };
@@ -73,9 +79,12 @@ function Write() {
   useEffect(() => {
     if (diaryState.ready) {
       const answer = modalResponse.confirm;
+      const { diaryId, userId, title, text } = diaryState.diary;
       if (answer === true) {
-        saveDiary(diaryState.diary);
-      } else if (answer === false) {
+        if (!userId) return;
+        saveDiary({ diaryId, userId, title, text });
+      }
+      if (answer === false) {
         setDiaryState((prev) => ({ ...prev, ready: false }));
       }
     }

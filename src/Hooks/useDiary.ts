@@ -1,42 +1,54 @@
 import { useSetRecoilState } from "recoil";
-import { IBoardState, IDiary } from "../types/types";
+import { IBoardState, IDiary, ISaveDiaryProps } from "../types/types";
 import { useNavigate } from "react-router-dom";
-import { generateTimestamp } from "../util/diaryUtility";
 import { useEffect, useState } from "react";
-import { addDiary, deleteDiaryDoc, updateDiary } from "../Api/diaryApi";
+import {
+  addDiary,
+  deleteDiaryDoc,
+  getDiaries,
+  updateDiary,
+} from "../Api/diaryApi";
 import { boardState } from "../States/boardAtom";
+import { formatDiariesForUI } from "../util/diaryUtility";
 
 function useDiary() {
-  // userRecord.myDiaries 갱신 작업은 백엔드에서 diary 관련 request 받은 시점에 writer 값 보고 users db를 갱신하도록 할 것
-  const setBoard = useSetRecoilState<IBoardState>(boardState);
   const navigate = useNavigate();
-  const [sync, setSync] = useState<boolean>(false);
+  const [done, setDone] = useState<boolean>(false);
+  const setBoard = useSetRecoilState<IBoardState>(boardState);
 
   useEffect(() => {
-    if (sync) {
-      setBoard((prev) => ({ ...prev, synchronized: true }));
+    if (done) {
+      setBoard((prev) => ({ ...prev, synchronized: !done }));
       navigate("/");
     }
-  }, [sync]);
+  }, [done]);
 
-  const saveDiary = async (newDiary: IDiary) => {
-    let diary = newDiary;
-    if (diary.date === "" || diary.id === 0) {
-      // newDiary from create mode
-      const newTimeStamp = generateTimestamp();
-      diary = { ...diary, ...newTimeStamp };
-      const saveDone = await addDiary(diary);
-      setSync(saveDone);
+  const getBoard = async () => {
+    const { rawDiaries, ok } = await getDiaries();
+    const diaries = formatDiariesForUI(rawDiaries);
+    setBoard(() => ({ diaries, synchronized: ok }));
+  };
+
+  const saveDiary = async ({
+    diaryId,
+    userId,
+    title,
+    text,
+  }: ISaveDiaryProps) => {
+    if (!diaryId) {
+      // from create mode
+      const saveDone = await addDiary({ userId, title, text });
+      setDone(saveDone);
     } else {
-      // newDiary from modify mode
-      const modifyDone = await updateDiary(diary);
-      setSync(modifyDone);
+      // from modify mode
+      const modifyDone = await updateDiary({ diaryId, userId, title, text });
+      setDone(modifyDone);
     }
   };
 
-  const deleteDiary = async (diaryId: number) => {
+  const deleteDiary = async (diaryId: string) => {
     const deleteDone = await deleteDiaryDoc(diaryId);
-    setSync(deleteDone);
+    setDone(deleteDone);
   };
 
   const navigateToModifyPage = (diary: IDiary) => {
@@ -44,10 +56,12 @@ function useDiary() {
   };
 
   const clearBoard = () => {
+    //myDiaries 를 보고 해당 사용자의 다이어리들을 모두 지우는 기능으로 사용될 예정
     console.log("공사 중...");
   };
 
   return {
+    getBoard,
     saveDiary,
     clearBoard,
     deleteDiary,

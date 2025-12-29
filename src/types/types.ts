@@ -28,9 +28,10 @@ export interface IBoardState {
 }
 
 export interface IDiary {
-  id: number | null;
-  writer: string;
-  date: string;
+  diaryId?: string;
+  userId?: number;
+  absTime: string;
+  relTime: string;
   title: string;
   text: string;
 }
@@ -41,6 +42,27 @@ export type IDiaryState = {
   diary: IDiary;
 };
 
+export interface ISaveDiaryProps {
+  diaryId?: string;
+  userId: number;
+  title: string;
+  text: string;
+}
+
+export interface IDiaryFromBE {
+  diaryId: string;
+  userId: number;
+  dateValue: number;
+  title: string;
+  text: string;
+}
+
+export type GetDiariesRes = {
+  ok: boolean;
+  rawDiaries: Array<IDiaryFromBE>;
+};
+
+export type IFocusIndexHandler = (index?: string) => void;
 
 export type UIScaleOption = 0 | 1 | 2 | 3;
 

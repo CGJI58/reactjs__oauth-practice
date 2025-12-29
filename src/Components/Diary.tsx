@@ -4,16 +4,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { IDiary } from "../types/types";
+import { IDiary, IFocusIndexHandler } from "../types/types";
 
 interface IDiaryComponent {
   diary: IDiary;
-  focusIndex: number;
-  focusIndexHandler: (index: number) => void;
+  focusIndex?: string;
+  focusIndexHandler: IFocusIndexHandler;
 }
 
 function Diary({ diary, focusIndex, focusIndexHandler }: IDiaryComponent) {
-  const { id, date, writer, title, text } = diary;
+  const { diaryId, userId, relTime, title, text } = diary;
   const [preview, setPreview] = useState<boolean>(false);
   const textRef = useRef<null | HTMLDivElement>(null);
   const [more, setMore] = useState<boolean>(false);
@@ -27,7 +27,7 @@ function Diary({ diary, focusIndex, focusIndexHandler }: IDiaryComponent) {
   }, [more, preview]);
 
   useEffect(() => {
-    if (focusIndex === Number(id)) {
+    if (focusIndex === diaryId) {
       setPreview(true);
     } else {
       setPreview(false);
@@ -45,14 +45,14 @@ function Diary({ diary, focusIndex, focusIndexHandler }: IDiaryComponent) {
             onClick={(event: React.MouseEvent<HTMLDivElement>) => {
               event.stopPropagation();
               event.preventDefault();
-              focusIndexHandler(Number(id));
+              focusIndexHandler(diaryId);
             }}
           >
             <FontAwesomeIcon icon={faAngleRight} />
           </Preview>
           <Title $preview={preview}>{title}</Title>
-          <DiaryInfo>{writer}</DiaryInfo>
-          <DiaryInfo>{date}</DiaryInfo>
+          <DiaryInfo>{userId}</DiaryInfo>
+          <DiaryInfo>{relTime}</DiaryInfo>
         </DiaryHead>
         {preview ? (
           <DiaryBody $isTruncated={isTruncated} $more={more}>

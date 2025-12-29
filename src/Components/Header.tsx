@@ -16,7 +16,7 @@ function Header() {
     <Wrapper>
       <HomeBtn />
       {githubId === null && <LoginBtn />}
-      {githubId !== null && <WriteBtn />}
+      {githubId !== null && <WriteBtn userId={githubId} />}
       {githubId !== null && <UserInfoBtn />}
       {githubId !== null && <ScrollMeter />}
     </Wrapper>
@@ -33,12 +33,12 @@ function HomeBtn() {
   );
 }
 
-function WriteBtn() {
+function WriteBtn({ userId }: { userId: number }) {
   return (
     <Col>
       <StyledLink
         to={{ pathname: "/write", search: "?mode=create" }}
-        state={{ diary: defaultDiary }}
+        state={{ diary: { ...defaultDiary, userId } }}
         tabIndex={-1}
       >
         <div className="headerBtn">Write</div>

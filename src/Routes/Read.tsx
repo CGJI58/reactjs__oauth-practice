@@ -9,7 +9,7 @@ import { backgroundGradient } from "../theme/animations";
 function Read() {
   const location = useLocation();
   const diary: IDiary = location.state.diary;
-  const { title, date, text, id: diaryId } = diary;
+  const { diaryId, absTime, title, text } = diary;
   const { modalAction, modalResponse } = useModalContext();
   const { navigateToModifyPage, deleteDiary } = useDiary();
 
@@ -18,10 +18,7 @@ function Read() {
       if (modalResponse.modalId === "modifyDiary") {
         navigateToModifyPage(diary);
       } else if (modalResponse.modalId === "deleteDiary") {
-        if (diaryId === null) {
-          console.error("diaryId: null");
-          return;
-        }
+        if (!diaryId) return;
         deleteDiary(diaryId);
       }
     }
@@ -32,7 +29,7 @@ function Read() {
       <Headline>
         <DiaryDate>
           <div>작성일</div>
-          <div>{date}</div>
+          <div>{absTime}</div>
         </DiaryDate>
         <Buttons>
           <ModifyBtn
