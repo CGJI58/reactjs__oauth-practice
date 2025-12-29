@@ -64,7 +64,7 @@ export const updateDiary = async ({
 }: ISaveDiaryProps): Promise<boolean> => {
   try {
     const response = await fetch(`${BE_BASE_URL}/diaries/`, {
-      method: "PUT",
+      method: "PATCH",
       mode: "cors",
       credentials: "include",
       headers: {
