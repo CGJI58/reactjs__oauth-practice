@@ -13,7 +13,7 @@ interface IDiaryComponent {
 }
 
 function Diary({ diary, focusIndex, focusIndexHandler }: IDiaryComponent) {
-  const { diaryId, userId, relTime, title, text } = diary;
+  const { diaryId, relTime, title, text } = diary;
   const [preview, setPreview] = useState<boolean>(false);
   const textRef = useRef<null | HTMLDivElement>(null);
   const [more, setMore] = useState<boolean>(false);
@@ -51,7 +51,6 @@ function Diary({ diary, focusIndex, focusIndexHandler }: IDiaryComponent) {
             <FontAwesomeIcon icon={faAngleRight} />
           </Preview>
           <Title $preview={preview}>{title}</Title>
-          <DiaryInfo>{userId}</DiaryInfo>
           <DiaryInfo>{relTime}</DiaryInfo>
         </DiaryHead>
         {preview ? (
