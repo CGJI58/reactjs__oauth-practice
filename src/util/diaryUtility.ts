@@ -17,7 +17,7 @@ export const generateTimestamp: GenerateTimestamp = ({ dateValue, now }) => {
   const day = String(date.getDate()).padStart(2, "0");
   const hour = String(date.getHours()).padStart(2, "0");
   const min = String(date.getMinutes()).padStart(2, "0");
-  const fullStamp = `${year}${mon}${day} ${hour}:${min}`;
+  const fullStamp = `${year}년 ${mon}월 ${day}일 ${hour}:${min}`;
 
   const diffMs = now - dateValue;
   const diffSec = Math.floor(diffMs / 1000);

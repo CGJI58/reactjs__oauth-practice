@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { IDiary } from "../types/types";
 import useModalContext from "../Hooks/useModalContext";
@@ -10,6 +10,7 @@ import rehypeHighlight from "rehype-highlight";
 
 function Read() {
   const location = useLocation();
+  const navigate = useNavigate();
   const diary: IDiary = location.state.diary;
   const { diaryId, absTime, title, text } = diary;
   const { modalAction, modalResponse } = useModalContext();
@@ -29,22 +30,25 @@ function Read() {
   return (
     <Wrapper>
       <Headline>
+        <Buttons>
+          <BackBtn type="button" value="뒤로" onClick={() => navigate("/")} />
+          <div className="rightBtns">
+            <ModifyBtn
+              type="button"
+              value="수정"
+              onClick={() => modalAction({ modalId: "modifyDiary" })}
+            />
+            <DeleteBtn
+              type="button"
+              value="삭제"
+              onClick={() => modalAction({ modalId: "deleteDiary" })}
+            />
+          </div>
+        </Buttons>
         <DiaryDate>
           <div>작성일</div>
           <div>{absTime}</div>
         </DiaryDate>
-        <Buttons>
-          <ModifyBtn
-            type="button"
-            value="수정"
-            onClick={() => modalAction({ modalId: "modifyDiary" })}
-          />
-          <DeleteBtn
-            type="button"
-            value="삭제"
-            onClick={() => modalAction({ modalId: "deleteDiary" })}
-          />
-        </Buttons>
       </Headline>
       <Context>
         <DiaryTitle>{title}</DiaryTitle>
@@ -71,24 +75,16 @@ const Wrapper = styled.div`
 `;
 
 const Headline = styled.div`
-  display: grid;
-  grid-template-columns: 1fr auto;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const DiaryDate = styled.div`
   display: flex;
-  margin-left: 10px;
+  flex-direction: column;
   gap: 20px;
 `;
 
 const Buttons = styled.div`
   display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  gap: 10px;
-  & > * {
+  justify-content: space-between;
+  align-items: center;
+  input {
     color: ${(props) => props.theme.text};
     font-size: ${(props) => props.theme.fontSizes.l}px;
     font-weight: bold;
@@ -99,7 +95,19 @@ const Buttons = styled.div`
   }
 `;
 
+const BackBtn = styled.input`
+  &:focus {
+    animation: ${({ theme }) =>
+        backgroundGradient(theme.backgroundDarker, theme.highlightPositive)}
+      1s infinite linear;
+  }
+  &:hover {
+    background-color: ${(props) => props.theme.highlightPositive};
+  }
+`;
+
 const ModifyBtn = styled.input`
+  margin-right: 10px;
   &:focus {
     animation: ${({ theme }) =>
         backgroundGradient(theme.backgroundDarker, theme.highlightPositive)}
@@ -119,6 +127,13 @@ const DeleteBtn = styled.input`
   &:hover {
     background-color: ${(props) => props.theme.highlightNegative};
   }
+`;
+
+const DiaryDate = styled.div`
+  display: flex;
+  margin-left: 10px;
+  gap: 20px;
+  justify-content: flex-end;
 `;
 
 const Context = styled.div`
@@ -147,6 +162,7 @@ const DiaryText = styled.div`
 
   /* 코드 블록 전체 스타일 */
   pre {
+    border-radius: 5px;
     line-height: 200%;
     overflow-x: auto; // 가로 스크롤 허용
     white-space: pre; // 줄바꿈 대신 원본 유지
