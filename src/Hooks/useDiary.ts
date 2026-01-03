@@ -19,6 +19,7 @@ function useDiary() {
   useEffect(() => {
     if (done) {
       setBoard((prev) => ({ ...prev, synchronized: !done }));
+      sessionStorage.clear();
       navigate("/");
     }
   }, [done]);

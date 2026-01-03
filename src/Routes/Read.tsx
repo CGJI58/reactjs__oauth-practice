@@ -166,7 +166,7 @@ const DiaryText = styled.div`
     line-height: 200%;
     overflow-x: auto; // 가로 스크롤 허용
     white-space: pre; // 줄바꿈 대신 원본 유지
-    font-size: ${(props) => props.theme.fontSizes.fixed}px;
+    font-size: ${(props) => props.theme.fontSizes.s}px;
     font-weight: 600;
   }
 
