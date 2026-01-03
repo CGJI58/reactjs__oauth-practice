@@ -15,6 +15,7 @@ function useUserTheme({ isDarkTheme, UIScale }: IUserConfig) {
         m: baseFontSize * 1,
         s: baseFontSize * 0.7,
         xs: baseFontSize * 0.4,
+        fixed: 12,
       },
       UIMaxWidth,
     };

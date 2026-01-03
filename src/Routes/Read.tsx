@@ -5,6 +5,8 @@ import useModalContext from "../Hooks/useModalContext";
 import { useEffect } from "react";
 import useDiary from "../Hooks/useDiary";
 import { backgroundGradient } from "../theme/animations";
+import ReactMarkdown from "react-markdown";
+import rehypeHighlight from "rehype-highlight";
 
 function Read() {
   const location = useLocation();
@@ -46,7 +48,11 @@ function Read() {
       </Headline>
       <Context>
         <DiaryTitle>{title}</DiaryTitle>
-        <DiaryText>{text}</DiaryText>
+        <DiaryText>
+          <ReactMarkdown rehypePlugins={[[rehypeHighlight, { detect: true }]]}>
+            {text}
+          </ReactMarkdown>
+        </DiaryText>
       </Context>
     </Wrapper>
   );
@@ -123,7 +129,7 @@ const Context = styled.div`
     margin: 0;
     padding: 10px;
     border-radius: 5px;
-    background: ${(props) => props.theme.backgroundLighter};
+    background-color: ${(props) => props.theme.backgroundLighter};
     box-shadow: ${(props) => props.theme.boxShadow};
     width: 100%;
     line-height: 180%;
@@ -138,6 +144,94 @@ const DiaryTitle = styled.div`
 
 const DiaryText = styled.div`
   white-space: pre-wrap;
+
+  /* 코드 블록 전체 스타일 */
+  pre {
+    line-height: 200%;
+    overflow-x: auto; // 가로 스크롤 허용
+    white-space: pre; // 줄바꿈 대신 원본 유지
+    font-size: ${(props) => props.theme.fontSizes.fixed}px;
+    font-weight: 600;
+  }
+
+  /* 인라인 코드 스타일 */
+  code {
+    font-family: "Courier New", monospace;
+  }
 `;
 
 export default Read;
+
+// /* 제목 */
+// h1,
+// h2,
+// h3,
+// h4,
+// h5,
+// h6 {
+//   font-weight: bold;
+//   margin: 1.2em 0 0.6em;
+// }
+// h1 {
+//   font-size: 2em;
+// }
+// h2 {
+//   font-size: 1.6em;
+// }
+// h3 {
+//   font-size: 1.3em;
+// }
+
+// /* 문단 */
+// p {
+//   margin: 0.8em 0;
+// }
+
+// /* 리스트 */
+// ul,
+// ol {
+//   margin: 0.8em 0 0.8em 1.5em;
+//   list-style: disc;
+// }
+// ol {
+//   list-style: decimal;
+// }
+// li {
+//   margin: 0.4em 0;
+// }
+
+// /* 인용문 */
+// blockquote {
+//   margin: 1em 0;
+//   padding-left: 1em;
+//   border-left: 4px solid ${({ theme }) => theme.colors.text};
+//   opacity: 0.8;
+// }
+
+// /* 구분선 */
+// hr {
+//   border: none;
+//   border-top: 1px solid ${({ theme }) => theme.colors.text};
+//   margin: 1.5em 0;
+// }
+
+// /* 테이블 */
+// table {
+//   border-collapse: collapse;
+//   margin: 1em 0;
+//   width: 100%;
+// }
+// th,
+// td {
+//   border: 1px solid ${({ theme }) => theme.colors.text};
+//   padding: 6px 12px;
+// }
+// th {
+//   background: ${({ theme }) => theme.colors.codeBackground};
+// }
+
+// /* 링크 */
+// a {
+//   color: ${({ theme }) => theme.colors.primary || "#1e90ff"};
+//   text-decoration: underline;
+// }

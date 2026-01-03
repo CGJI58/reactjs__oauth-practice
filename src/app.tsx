@@ -15,6 +15,7 @@ import { Helmet } from "react-helmet";
 import { IUserConfig } from "./types/types";
 import EditNickname from "./Routes/edit/EditNickname";
 import { FE_BASE_URL } from "./constants/urls";
+import "highlight.js/styles/atom-one-dark.css";
 
 function App() {
   const userConfig = useRecoilValue<IUserConfig>(userConfigState);
