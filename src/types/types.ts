@@ -30,8 +30,14 @@ export interface IBoardState {
 export interface IDiary {
   diaryId?: string;
   userId?: number;
-  absTime: string;
-  relTime: string;
+  createdAt: {
+    absTime: string;
+    relTime: string;
+  };
+  modifiedAt: {
+    absTime: string;
+    relTime: string;
+  };
   title: string;
   text: string;
 }
@@ -52,7 +58,7 @@ export interface ISaveDiaryProps {
 export interface IDiaryFromBE {
   diaryId: string;
   userId: number;
-  dateValue: number;
+  dateValue: Array<number>;
   title: string;
   text: string;
 }

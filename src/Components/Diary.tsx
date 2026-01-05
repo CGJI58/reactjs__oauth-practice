@@ -13,7 +13,7 @@ interface IDiaryComponent {
 }
 
 function Diary({ diary, focusIndex, focusIndexHandler }: IDiaryComponent) {
-  const { diaryId, relTime, title, text } = diary;
+  const { diaryId, createdAt, modifiedAt, title, text } = diary;
   const [preview, setPreview] = useState<boolean>(false);
   const textRef = useRef<null | HTMLDivElement>(null);
   const [more, setMore] = useState<boolean>(false);
@@ -51,7 +51,12 @@ function Diary({ diary, focusIndex, focusIndexHandler }: IDiaryComponent) {
             <FontAwesomeIcon icon={faAngleRight} />
           </Preview>
           <Title $preview={preview}>{title}</Title>
-          <DiaryInfo>{relTime}</DiaryInfo>
+          <DiaryInfo>
+            <span className="createdAt">{createdAt.relTime}</span>
+            {createdAt.absTime !== modifiedAt.absTime && (
+              <span className="isModified">(수정됨)</span>
+            )}
+          </DiaryInfo>
         </DiaryHead>
         {preview ? (
           <DiaryBody $isTruncated={isTruncated} $more={more}>
@@ -102,7 +107,7 @@ const StyledLink = styled(Link)`
 
 const DiaryHead = styled.div`
   display: grid;
-  grid-template-columns: auto 1fr auto auto;
+  grid-template-columns: auto 1fr auto;
   height: 50px;
   min-height: max-content;
   gap: 10px;
@@ -110,6 +115,23 @@ const DiaryHead = styled.div`
     padding: 10px 0px;
     display: flex;
     align-items: center;
+  }
+`;
+
+const DiaryInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 0 10px;
+  .createdAt {
+    text-align: right;
+    white-space: nowrap;
+    font-size: ${(props) => props.theme.fontSizes.s}px;
+  }
+  .isModified {
+    font-size: ${(props) => props.theme.fontSizes.xs}px;
   }
 `;
 
@@ -132,13 +154,6 @@ const Title = styled.div<{ $preview: boolean }>`
   line-height: 180%;
   word-break: break-all;
   overflow: ${(props) => (props.$preview ? "visible" : "hidden")};
-`;
-
-const DiaryInfo = styled.div`
-  text-align: right;
-  white-space: nowrap;
-  font-size: ${(props) => props.theme.fontSizes.s}px;
-  padding: 0 10px;
 `;
 
 const DiaryBody = styled.div<{ $isTruncated: boolean; $more: boolean }>`

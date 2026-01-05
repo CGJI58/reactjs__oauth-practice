@@ -12,7 +12,7 @@ function Read() {
   const location = useLocation();
   const navigate = useNavigate();
   const diary: IDiary = location.state.diary;
-  const { diaryId, absTime, title, text } = diary;
+  const { diaryId, createdAt, modifiedAt, title, text } = diary;
   const { modalAction, modalResponse } = useModalContext();
   const { navigateToModifyPage, deleteDiary } = useDiary();
 
@@ -47,8 +47,14 @@ function Read() {
         </Buttons>
         <DiaryDate>
           <div>작성일</div>
-          <div>{absTime}</div>
+          <div>{createdAt.absTime}</div>
         </DiaryDate>
+        {createdAt.absTime !== modifiedAt.absTime && (
+          <DiaryDate>
+            <div>수정일</div>
+            <div>{modifiedAt.absTime}</div>
+          </DiaryDate>
+        )}
       </Headline>
       <Context>
         <DiaryTitle>{title}</DiaryTitle>
@@ -77,7 +83,7 @@ const Wrapper = styled.div`
 const Headline = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
 `;
 
 const Buttons = styled.div`

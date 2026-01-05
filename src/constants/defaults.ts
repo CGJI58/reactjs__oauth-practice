@@ -15,8 +15,14 @@ export const defaultBoardState: IBoardState = {
 export const defaultDiary: IDiary = {
   diaryId: undefined,
   userId: undefined,
-  absTime: "",
-  relTime: "",
+  createdAt: {
+    absTime: "",
+    relTime: "",
+  },
+  modifiedAt: {
+    absTime: "",
+    relTime: "",
+  },
   title: "",
   text: "",
 };

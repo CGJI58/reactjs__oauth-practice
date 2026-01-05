@@ -5,10 +5,10 @@ interface IGenerateTimestamp {
   now: number;
 }
 
-type GenerateTimestamp = ({
-  dateValue,
-  now,
-}: IGenerateTimestamp) => Pick<IDiary, "absTime" | "relTime">;
+type GenerateTimestamp = ({ dateValue, now }: IGenerateTimestamp) => {
+  relTime: string;
+  absTime: string;
+};
 
 export const generateTimestamp: GenerateTimestamp = ({ dateValue, now }) => {
   const date = new Date(dateValue);
@@ -44,11 +44,15 @@ export const formatDiariesForUI: FormDiariesForUI = (rawDiaries) => {
   if (rawDiaries.length === 0) return [];
   const now = Date.now();
   const formated: Array<IDiary> = rawDiaries.map((rawDiary) => {
-    const { relTime, absTime } = generateTimestamp({
-      dateValue: rawDiary.dateValue,
+    const createdAt = generateTimestamp({
+      dateValue: rawDiary.dateValue[0],
       now,
     });
-    return { ...rawDiary, relTime, absTime };
+    const modifiedAt = generateTimestamp({
+      dateValue: rawDiary.dateValue[1],
+      now,
+    });
+    return { ...rawDiary, createdAt, modifiedAt };
   });
   return formated;
 };
