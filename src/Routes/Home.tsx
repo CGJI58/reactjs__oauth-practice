@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import UserRecord from "../Components/UserRecord";
+import Board from "../Components/Board";
 
 function Home() {
   return (
     <Wrapper>
-      <UserRecord />
+      <Board />
     </Wrapper>
   );
 }
