@@ -26,6 +26,7 @@ function App() {
         <Helmet>
           <meta
             name="viewport"
+            title="my memo"
             content="width=device-width, initial-scale=1, minimum-scale=1"
           />
         </Helmet>
