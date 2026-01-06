@@ -34,7 +34,7 @@ function useAuth() {
       console.error("githubId: null");
       return;
     }
-    await deleteUser(githubId);
+    await deleteUser();
     await logOut();
   };
 
