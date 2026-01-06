@@ -55,15 +55,9 @@ function useDiary() {
     navigate(`../write?mode=modify`, { state: { diary } });
   };
 
-  const clearBoard = () => {
-    //myDiaries 를 보고 해당 사용자의 다이어리들을 모두 지우는 기능으로 사용될 예정
-    console.log("공사 중...");
-  };
-
   return {
     getBoard,
     saveDiary,
-    clearBoard,
     deleteDiary,
     navigateToModifyPage,
   };
