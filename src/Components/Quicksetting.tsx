@@ -11,13 +11,15 @@ import { useRecoilState } from "recoil";
 import { userConfigState } from "../States/userAtom";
 import { IUserConfig } from "../types/types";
 import useModalContext from "../Hooks/useModalContext";
+import useUISettings from "../Hooks/useUISettings";
 
-function UserInfo() {
+function QuickSetting() {
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [{ isDarkTheme }, setUserConfig] =
     useRecoilState<IUserConfig>(userConfigState);
   const { modalAction, modalResponse } = useModalContext();
+  const { handleUIScale, handleDarkMode } = useUISettings();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleMouseLeave = () => {
@@ -34,8 +36,8 @@ function UserInfo() {
   };
 
   useEffect(() => {
-    if (modalResponse.confirm && modalResponse.modalId === "logOut") {
-      navigate("/logout");
+    if (modalResponse.confirm && modalResponse.modalId === "UIScale") {
+      handleUIScale(modalResponse.rangeValue);
     }
   }, [modalResponse]);
 
@@ -44,20 +46,7 @@ function UserInfo() {
       <FontAwesomeIcon icon={faCircleUser} className="headerBtn" />
       {isHovered && (
         <DropList>
-          <DropItem
-            className="dropItemBtn"
-            onClick={() => navigate("/profile")}
-          >
-            Profile
-          </DropItem>
-          <DropItem
-            onClick={() =>
-              setUserConfig((prev) => ({
-                ...prev,
-                isDarkTheme: !prev.isDarkTheme,
-              }))
-            }
-          >
+          <DropItem onClick={() => handleDarkMode()}>
             <Label className="dropItemBtn">Dark mode:</Label>
             {isDarkTheme ? (
               <FontAwesomeIcon className="dropItemBtn" icon={faToggleOn} />
@@ -67,9 +56,15 @@ function UserInfo() {
           </DropItem>
           <DropItem
             className="dropItemBtn"
-            onClick={() => modalAction({ modalId: "logOut" })}
+            onClick={() => modalAction({ modalId: "UIScale" })}
           >
-            Log out
+            화면 크기
+          </DropItem>
+          <DropItem
+            className="dropItemBtn"
+            onClick={() => navigate("/setting")}
+          >
+            setting
           </DropItem>
         </DropList>
       )}
@@ -126,4 +121,4 @@ const DropItem = styled.div`
   }
 `;
 
-export default UserInfo;
+export default QuickSetting;

@@ -4,7 +4,7 @@ import Home from "./Routes/Home";
 import Login from "./Routes/Login";
 import Write from "./Routes/Write";
 import Logout from "./Routes/Logout";
-import Profile from "./Routes/Profile";
+import Setting from "./Routes/Setting";
 import { ThemeProvider } from "styled-components";
 import { useRecoilValue } from "recoil";
 import { userConfigState } from "./States/userAtom";
@@ -37,7 +37,7 @@ function App() {
             <Route path="/write" element={<Write />} />
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/setting" element={<Setting />} />
             <Route path="/edit/nickname" element={<EditNickname />} />
           </Routes>
         </Layout>

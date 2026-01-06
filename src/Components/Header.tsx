@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { userInfoState } from "../States/userAtom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse } from "@fortawesome/free-solid-svg-icons";
-import UserInfo from "./UserInfo";
+import QuickSetting from "./Quicksetting";
 import ScrollMeter from "./ScrollMeter";
 import { IUserInfo } from "../types/types";
 import { defaultDiary } from "../constants/defaults";
@@ -17,7 +17,7 @@ function Header() {
       <HomeBtn />
       {githubId === null && <LoginBtn />}
       {githubId !== null && <WriteBtn userId={githubId} />}
-      {githubId !== null && <UserInfoBtn />}
+      {githubId !== null && <QuickSettingBtn />}
       {githubId !== null && <ScrollMeter />}
     </Wrapper>
   );
@@ -57,10 +57,10 @@ function LoginBtn() {
   );
 }
 
-function UserInfoBtn() {
+function QuickSettingBtn() {
   return (
     <Col>
-      <UserInfo />
+      <QuickSetting />
     </Col>
   );
 }

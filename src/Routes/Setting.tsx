@@ -1,21 +1,18 @@
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { IUserConfig, IUserState } from "../types/types";
-import { userConfigState, userState } from "../States/userAtom";
+import { IUserState } from "../types/types";
+import { userState } from "../States/userAtom";
 import useModalContext from "../Hooks/useModalContext";
 import useNickname from "../Hooks/useNickname";
-import useUIScale from "../Hooks/useUIScale";
-import useDiary from "../Hooks/useDiary";
+import useUISettings from "../Hooks/useUISettings";
 import useAuth from "../Hooks/useAuth";
 import { useEffect } from "react";
 import { backgroundGradient } from "../theme/animations";
 
-function Profile() {
-  const { userInfo, userConfig } = useRecoilValue<IUserState>(userState);
-  const setUserConfig = useSetRecoilState<IUserConfig>(userConfigState);
+function Setting() {
+  const { userConfig } = useRecoilValue<IUserState>(userState);
   const { nicknameForm } = useNickname();
-  const { handleUIScale } = useUIScale();
-  const { clearBoard } = useDiary();
+  const { handleUIScale, handleDarkMode } = useUISettings();
   const { signOut } = useAuth();
   const { modalAction, modalResponse } = useModalContext();
 
@@ -28,9 +25,6 @@ function Profile() {
         case "UIScale":
           handleUIScale(modalResponse.rangeValue);
           break;
-        case "clearBoard":
-          clearBoard();
-          break;
         case "signOut":
           signOut();
           break;
@@ -40,12 +34,10 @@ function Profile() {
 
   return (
     <Wrapper>
-      <UserInfo className="section">
-        <Label>github nickname</Label>
-        <Value>{userInfo.githubUsername}</Value>
+      <Info className="section">
         <Label>NickName</Label>
         <Value>{userConfig.nickname}</Value>
-      </UserInfo>
+      </Info>
       <UserConfig className="section">
         <Button
           value="닉네임 변경"
@@ -53,15 +45,10 @@ function Profile() {
         />
         <Button
           value={`테마 변경: ${userConfig.isDarkTheme ? "밝게" : "어둡게"}`}
-          onClick={() =>
-            setUserConfig((prev) => ({
-              ...prev,
-              isDarkTheme: !prev.isDarkTheme,
-            }))
-          }
+          onClick={() => handleDarkMode()}
         />
         <Button
-          value="화면 확대 / 축소"
+          value="화면 크기"
           onClick={() => modalAction({ modalId: "UIScale" })}
         />
         <Button
@@ -70,10 +57,6 @@ function Profile() {
         />
       </UserConfig>
       <DangerZone className="section">
-        <Button
-          value="모든 다이어리 삭제"
-          onClick={() => modalAction({ modalId: "clearBoard" })}
-        />
         <Button
           value="회원 탈퇴"
           onClick={() => modalAction({ modalId: "signOut" })}
@@ -99,7 +82,7 @@ const Label = styled.div``;
 
 const Value = styled.div``;
 
-const UserInfo = styled.div`
+const Info = styled.div`
   display: grid;
   grid-template-columns: 2fr 3fr;
 `;
@@ -141,4 +124,4 @@ const Button = styled.input.attrs({ type: "button" })`
   cursor: pointer;
 `;
 
-export default Profile;
+export default Setting;
