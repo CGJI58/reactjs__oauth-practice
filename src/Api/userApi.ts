@@ -1,16 +1,18 @@
-import { IUserState } from "../types/types";
+import { IUserConfig } from "../types/types";
 import { BE_BASE_URL } from "../constants/urls";
 
-export const updateUser = async (user: IUserState): Promise<boolean> => {
+export const updateUserConfig = async (
+  userConfig: IUserConfig
+): Promise<boolean> => {
   try {
-    const response = await fetch(`${BE_BASE_URL}/users/update`, {
+    const response = await fetch(`${BE_BASE_URL}/users/update/config`, {
       method: "POST",
       mode: "cors",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ user }),
+      body: JSON.stringify({ userConfig }),
     });
     const { ok, status } = response;
     if (ok) {
@@ -24,16 +26,12 @@ export const updateUser = async (user: IUserState): Promise<boolean> => {
   }
 };
 
-export const deleteUser = async (githubId: number): Promise<boolean> => {
+export const deleteUser = async (): Promise<boolean> => {
   try {
     const response = await fetch(`${BE_BASE_URL}/users`, {
       method: "DELETE",
       mode: "cors",
       credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ githubId }),
     });
     const { ok, status } = response;
     const responseText = await response.text();

@@ -1,13 +1,12 @@
 import { useSetRecoilState } from "recoil";
-import { userState, userSynchronizedState } from "../States/userAtom";
-import { updateUser } from "../Api/userApi";
-import { IGetUserByCookie, IUserState } from "../types/types";
+import { userState } from "../States/userAtom";
+import { updateUserConfig } from "../Api/userApi";
+import { IGetUserByCookie, IUserConfig, IUserState } from "../types/types";
 import { useNavigate } from "react-router-dom";
 import { getUserByCookie } from "../Api/authApi";
 
 function useUser() {
   const setUser = useSetRecoilState<IUserState>(userState);
-  const setUserSynchronized = useSetRecoilState<boolean>(userSynchronizedState);
   const navigate = useNavigate();
 
   //DB userSchema 정보를 FE userState 에 동기화
@@ -26,20 +25,13 @@ function useUser() {
     })();
   };
 
-  //FE userState 정보를 -> DB userSchema 에 동기화
-  const saveUser = async (user: IUserState) => {
-    const ok = await updateUser(user);
-    if (ok) {
-      setUserSynchronized(() => {
-        console.log("동기화 성공.");
-        return true;
-      });
-    } else {
-      console.error("saveUser: 동기화 실패.");
-    }
+  //FE userConfig 정보를 -> DB 에 동기화
+  const saveUserConfig = async (userConfig: IUserConfig) => {
+    const ok = await updateUserConfig(userConfig);
+    return ok;
   };
 
-  return { loadUser, saveUser };
+  return { loadUser, saveUserConfig };
 }
 
 export default useUser;

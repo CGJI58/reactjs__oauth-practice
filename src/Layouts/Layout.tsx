@@ -8,8 +8,7 @@ import {
 } from "react";
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { isEqual } from "lodash";
+import { useRecoilValue } from "recoil";
 import Header from "../Components/Header";
 import ScrollTopBtn from "../Components/ScrollTopBtn";
 import Modal from "../Components/modal/ModalIndex";
@@ -17,9 +16,8 @@ import useUser from "../Hooks/useUser";
 import useScrollProgress from "../Hooks/useScrollProgress";
 import useModal from "../Hooks/useModal";
 import useFocusTrap from "../Hooks/useFocusTrap";
-import { IUserState } from "../types/types";
-import { defaultUserState } from "../constants/defaults";
-import { userState, userSynchronizedState } from "../States/userAtom";
+import { IUserInfo } from "../types/types";
+import { userInfoState } from "../States/userAtom";
 import { ModalContext } from "../Contexts/ModalContext";
 
 interface LayoutProps {
@@ -28,10 +26,8 @@ interface LayoutProps {
 
 const Layout: FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
-  const user = useRecoilValue<IUserState>(userState);
-  const { userConfig, userInfo, synchronized } = user;
-  const setSynchronized = useSetRecoilState<boolean>(userSynchronizedState);
-  const { loadUser, saveUser } = useUser();
+  const { githubId } = useRecoilValue<IUserInfo>(userInfoState);
+  const { loadUser } = useUser();
   const { modalProps, modalAction, modalResponse } = useModal();
   const { noScroll } = useScrollProgress();
   const contextValue = useMemo(
@@ -49,25 +45,10 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   }, [location.pathname, children]);
 
   useEffect(() => {
-    if (isEqual(user, defaultUserState)) {
+    if (githubId === null) {
       loadUser();
     }
-  }, [user]);
-
-  useEffect(() => {
-    if (!isEqual(user, defaultUserState)) {
-      setSynchronized(() => {
-        console.log("변화 감지됨.");
-        return false;
-      });
-    }
-  }, [userConfig, userInfo]);
-
-  useEffect(() => {
-    if (!synchronized && !isEqual(user, defaultUserState)) {
-      saveUser(user);
-    }
-  }, [synchronized]);
+  }, [githubId]);
 
   return (
     <Wrapper>
@@ -76,11 +57,12 @@ const Layout: FC<LayoutProps> = ({ children }) => {
       <ModalContext.Provider value={contextValue}>
         <Header />
         {/* 
-        여기 개선 필요.
-        현재 로직 상에서는 사용자 정보가 있을 때도 /login 라우트 접근이 가능한데
-        이거 막아야 함
+        로그인 라우트 삭제해버리고, 
+        githubId === null 이면 로그인 모달을 띄우고,
+        else면 main 렌더하는 방식으로 수정할 것
+        헤더에서도 로그인 컬럼은 삭제해야 함
          */}
-        {userInfo.githubId !== null || location.pathname === "/login" ? (
+        {githubId !== null || location.pathname === "/login" ? (
           <main key={location.pathname} ref={mainRef}>
             {children}
           </main>

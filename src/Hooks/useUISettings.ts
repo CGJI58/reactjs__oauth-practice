@@ -1,10 +1,29 @@
 import { useRecoilState } from "recoil";
-import { userConfigState } from "../States/userAtom";
+import { userConfigState, userSynchronizedState } from "../States/userAtom";
 import { IUserConfig, UIScaleOption } from "../types/types";
+import { useEffect } from "react";
+import useUser from "./useUser";
 
 function useUISettings() {
-  const [{ isDarkTheme }, setUserConfig] =
+  const [{ isDarkTheme, UIScale, nickname }, setUserConfig] =
     useRecoilState<IUserConfig>(userConfigState);
+  const [sync, setSync] = useRecoilState<boolean>(userSynchronizedState);
+  const { saveUserConfig } = useUser();
+
+  useEffect(() => {
+    if (sync) {
+      setSync(false);
+    }
+  }, [isDarkTheme, UIScale]);
+
+  useEffect(() => {
+    if (!sync) {
+      (async () => {
+        const done = await saveUserConfig({ isDarkTheme, UIScale, nickname });
+        setSync(done);
+      })();
+    }
+  }, [sync]);
 
   const handleUIScale = (rangeValue?: UIScaleOption) => {
     if (rangeValue !== undefined) {
