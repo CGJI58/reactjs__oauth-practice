@@ -1,5 +1,5 @@
 import {
-  faCircleUser,
+  faGear,
   faToggleOff,
   faToggleOn,
 } from "@fortawesome/free-solid-svg-icons";
@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { userConfigState } from "../States/userAtom";
 import { IUserConfig } from "../types/types";
 import useModalContext from "../Hooks/useModalContext";
@@ -16,8 +16,7 @@ import useUISettings from "../Hooks/useUISettings";
 function QuickSetting() {
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState<boolean>(false);
-  const [{ isDarkTheme }, setUserConfig] =
-    useRecoilState<IUserConfig>(userConfigState);
+  const { isDarkTheme } = useRecoilValue<IUserConfig>(userConfigState);
   const { modalAction, modalResponse } = useModalContext();
   const { handleUIScale, handleDarkMode } = useUISettings();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -43,7 +42,7 @@ function QuickSetting() {
 
   return (
     <Wrapper onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-      <FontAwesomeIcon icon={faCircleUser} className="headerBtn" />
+      <FontAwesomeIcon icon={faGear} className="headerBtn" />
       {isHovered && (
         <DropList>
           <DropItem onClick={() => handleDarkMode()}>
@@ -64,7 +63,7 @@ function QuickSetting() {
             className="dropItemBtn"
             onClick={() => navigate("/setting")}
           >
-            setting
+            Settings
           </DropItem>
         </DropList>
       )}
